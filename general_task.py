@@ -1,3 +1,5 @@
+import time
+import math
 import keyboard
 import pyautogui
 from services.config import load_config, wait_timer, logger
@@ -312,6 +314,7 @@ def move_cell_horizontal():
     wait_timer(CONFIG["WAIT_TIME"]["TENTH_SECOND"])
     pyautogui.hotkey("ctrl", "left")
     wait_timer(CONFIG["WAIT_TIME"]["TENTH_SECOND"])
+
 
 def move_or_copy_as_newbook():
     wait_timer(CONFIG["WAIT_TIME"]["HALF_SECOND"])
@@ -653,6 +656,7 @@ def switch_to_table_cells():
     pyautogui.press("right", presses=3)
     wait_timer(CONFIG["WAIT_TIME"]["ONEHALF_SECOND"])
 
+
 def entering_operation():
     wait_timer(CONFIG["WAIT_TIME"]["HALF_SECOND"])
     logger.info("[SYSTEM] PRESSING ENTER KEY TO HANDLE OPERATION DIALOG")
@@ -663,4 +667,46 @@ def entering_operation():
     pyautogui.hotkey("enter")
     wait_timer(CONFIG["WAIT_TIME"]["THREE_SECOND"])
     pyautogui.hotkey("enter")
+    wait_timer(CONFIG["WAIT_TIME"]["HALF_SECOND"])
+
+
+def move_cursor_figure_eight():
+    wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
+    pyautogui.PAUSE = 0
+    screen_width, screen_height = pyautogui.size()
+    center_x = screen_width // 2
+    center_y = screen_height // 2
+    radius_x = 250
+    radius_y = 200
+    total_duration = 5.0
+
+    for iteration in range(2):
+        start_time = time.perf_counter()
+
+        while True:
+            elapsed = time.perf_counter() - start_time
+            if elapsed >= total_duration:
+                break
+
+            progress = (elapsed / total_duration) * (2 * math.pi)
+            x = center_x + radius_x * math.sin(progress)
+            y = center_y + radius_y * math.sin(2 * progress) / 2
+            pyautogui.moveTo(x, y, duration=0)
+
+        if iteration == 0:
+            pyautogui.click()
+
+    wait_timer(CONFIG["WAIT_TIME"]["HALF_SECOND"])
+
+def scroller_page(scroll_amount: int = 500) -> None:
+    if not isinstance(scroll_amount, int):
+        raise TypeError("scroll_amount must be integer")
+
+    wait_timer(CONFIG["WAIT_TIME"]["HALF_SECOND"])
+    pyautogui.PAUSE = 0
+    pyautogui.scroll(scroll_amount)
+
+    wait_timer(CONFIG["WAIT_TIME"]["HALF_SECOND"])
+    pyautogui.scroll(-scroll_amount)
+
     wait_timer(CONFIG["WAIT_TIME"]["HALF_SECOND"])

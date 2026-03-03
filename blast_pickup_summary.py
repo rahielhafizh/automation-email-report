@@ -28,9 +28,10 @@ def excel_config():
     switch_to_first_cells()
 
     refresh_excel_data()
-    wait_timer(CONFIG["WAIT_TIME"]["THIRTY_SECOND"])
+    wait_timer(CONFIG["WAIT_TIME"]["ONE_MINUTE"])
     entering_operation()
-
+    save_file()
+    
     switch_to_last_sheet()
     switch_to_first_cells()
 

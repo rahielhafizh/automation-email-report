@@ -32,13 +32,12 @@ def excel_config():
     maximize_app_window()
     switch_to_first_sheet()
     switch_to_first_cells()
-    move_cell_horizontal()
 
     refresh_excel_data()
-    wait_timer(CONFIG["WAIT_TIME"]["FOUR_MINUTE"])
-
-    move_cell_horizontal()
-    wait_timer(CONFIG["WAIT_TIME"]["ONE_MINUTE"])
+    wait_timer(CONFIG["WAIT_TIME"]["TWOHALF_MINUTE"])
+    move_cursor_figure_eight()
+    scroller_page()
+    wait_timer(CONFIG["WAIT_TIME"]["TWOHALF_MINUTE"])
     entering_operation()
 
     switch_to_first_cells()
@@ -50,6 +49,8 @@ def excel_config():
     move_or_copy_menu()
     move_or_copy_as_newbook()
     wait_timer(CONFIG["WAIT_TIME"]["ONEHALF_MINUTE"])
+    move_cursor_figure_eight()
+    wait_timer(CONFIG["WAIT_TIME"]["THIRTY_SECOND"])
 
     switch_to_table_cells()
     break_excel_link()
@@ -61,7 +62,7 @@ def excel_config():
     save_new_book()
     pyautogui.write(CONFIG["SUBMISSION_FLOWRATE"])
     confirm()
-    wait_timer(CONFIG["WAIT_TIME"]["SEVEN_SECOND"])
+    wait_timer(CONFIG["WAIT_TIME"]["FIVE_SECOND"])
 
     set_new_book_name()
     today = datetime.now()
@@ -81,12 +82,12 @@ def excel_config():
     switch_to_first_cells()
     switch_to_right_sheet()
     switch_to_first_cells()
-    wait_timer(CONFIG["WAIT_TIME"]["TEN_SECOND"])
+    wait_timer(CONFIG["WAIT_TIME"]["FIVE_SECOND"])
 
     save_file()
-    wait_timer(CONFIG["WAIT_TIME"]["TEN_SECOND"])
+    wait_timer(CONFIG["WAIT_TIME"]["TWENTY_SECOND"])
     closing_tab()
-    wait_timer(CONFIG["WAIT_TIME"]["THREE_SECOND"])
+    wait_timer(CONFIG["WAIT_TIME"]["FIVE_SECOND"])
 
     created_file_path = os.path.join(
         CONFIG["SUBMISSION_FLOWRATE"], f"{flowrate_filename}.xlsx"
