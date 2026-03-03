@@ -24,7 +24,7 @@ from services.email_sender import send_certification_email
 CONFIG = load_config()
 
 
-def process_combined_certification_reminders(
+def process_certification_reminders(
     filter_preset: Optional[str] = None, minimize_after_send: bool = True
 ) -> bool:
     if filter_preset:
@@ -37,16 +37,15 @@ def process_combined_certification_reminders(
         return False
 
     try:
-        logger.info("[SYSTEM] FETCHING INTERNAL CERTIFICATION DATA FROM DATABASE")
+        logger.info("[SYSTEM] FETCHING INTERNAL & EXTERNAL CERTIFICATION DATA")
         columns_internal, rows_internal = fetch_certification_data_internal(conn)
-
-        logger.info("[SYSTEM] FETCHING EXTERNAL CERTIFICATION DATA FROM DATABASE")
         columns_external, rows_external = fetch_certification_data_external(conn)
 
         if columns_internal is None or columns_external is None:
             logger.error("[ERROR] FAILED TO FETCH DATA FROM DATABASE")
             return False
 
+        active_filter = get_certification_filter_config()
         filtered_internal = filter_expiring_certifications(
             columns_internal, rows_internal, "EXPIRED_DATE"
         )
@@ -54,10 +53,9 @@ def process_combined_certification_reminders(
             columns_external, rows_external, "EXPIRED_DATE"
         )
 
-        active_filter = get_certification_filter_config()
         logger.info(
-            f"[SYSTEM] FILTERED {len(filtered_internal)} INTERNAL + "
-            f"{len(filtered_external)} EXTERNAL"
+            f"[SYSTEM] FILTER={active_filter.get('MODE')} | "
+            f"INTERNAL={len(filtered_internal)} ROWS, EXTERNAL={len(filtered_external)} ROWS"
         )
 
         branch_groups_internal = group_by_branch(
@@ -70,11 +68,18 @@ def process_combined_certification_reminders(
         all_branches = set(branch_groups_internal.keys()) | set(
             branch_groups_external.keys()
         )
-        logger.info(f"[SYSTEM] GROUPED DATA INTO {len(all_branches)} BRANCHES")
 
         if len(all_branches) == 0:
             logger.info("[SYSTEM] NO EXPIRING CERTIFICATIONS FOUND")
             return True
+
+        logger.info(f"[SYSTEM] GROUPED INTO {len(all_branches)} BRANCHES")
+        for branch in sorted(all_branches):
+            internal_count = len(branch_groups_internal.get(branch, []))
+            external_count = len(branch_groups_external.get(branch, []))
+            logger.info(
+                f"[BRANCH] {branch:<20} INTERNAL = {internal_count}, EXTERNAL = {external_count}"
+            )
 
         column_indices_internal = {col: idx for idx, col in enumerate(columns_internal)}
         column_indices_external = {col: idx for idx, col in enumerate(columns_external)}
@@ -108,9 +113,7 @@ def process_combined_certification_reminders(
                 )
 
             if not branch_manager or not bm_mail:
-                logger.warning(
-                    f"[WARNING] MISSING BRANCH MANAGER INFO FOR {branch_name}, SKIPPING"
-                )
+                logger.warning(f"[WARNING] MISSING BRANCH MANAGER INFO : {branch_name}, SKIPPING")
                 failed_count += 1
                 continue
 
@@ -135,13 +138,12 @@ def process_combined_certification_reminders(
             wait_timer(CONFIG["WAIT_TIME"]["THREE_SECOND"])
 
         logger.info(
-            f"[SYSTEM] COMBINED CERTIFICATION REMINDER PROCESS COMPLETED : "
-            f"{processed_count} EMAILS SENT, {failed_count} FAILED"
+            f"[SYSTEM] COMPLETED : {processed_count} SENT, {failed_count} FAILED"
         )
         return True
 
     except Exception as e:
-        logger.error(f"[ERROR] COMBINED CERTIFICATION REMINDER PROCESS FAILED : {e}")
+        logger.error(f"[ERROR] COMBINED CERTIFICATION REMINDER FAILED : {e}")
         return False
     finally:
         conn.close()
@@ -149,10 +151,9 @@ def process_combined_certification_reminders(
 
 
 if __name__ == "__main__":
-    # process_combined_certification_reminders()  # DEFAULT VALUE (NEXT_MONTH)
-    # process_combined_certification_reminders(filter_preset="TWO_MONTHS")
-    # process_combined_certification_reminders(filter_preset="THREE_MONTHS")
-    # process_combined_certification_reminders(filter_preset="SIX_MONTHS")
-    # process_combined_certification_reminders(filter_preset="SIXTY_DAYS")
+    process_certification_reminders()  # DEFAULT VALUE (NEXT_MONTH)
 
-    process_combined_certification_reminders(filter_preset="SIX_MONTHS")
+    # process_certification_reminders(filter_preset="TWO_MONTHS")
+    # process_certification_reminders(filter_preset="THREE_MONTHS")
+    # process_certification_reminders(filter_preset="SIX_MONTHS")
+    # process_certification_reminders(filter_preset="SIXTY_DAYS")

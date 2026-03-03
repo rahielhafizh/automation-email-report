@@ -204,7 +204,7 @@ def entering_operation():
 def finish_outlook():
     wait_timer(CONFIG["WAIT_TIME"]["HALF_SECOND"])
     logger.info("[SYSTEM] SEND EMAIL AND CLOSE OUTLOOK")
-    pyautogui.hotkey("alt", "s")
+    # pyautogui.hotkey("alt", "s")
     wait_timer(CONFIG["WAIT_TIME"]["TEN_SECOND"])
     pyautogui.hotkey("alt", "f4")
     wait_timer(CONFIG["WAIT_TIME"]["FIVE_SECOND"])
@@ -213,7 +213,7 @@ def finish_outlook():
 def minimize_outlook():
     wait_timer(CONFIG["WAIT_TIME"]["HALF_SECOND"])
     logger.info("[SYSTEM] SEND EMAIL AND MINIMIZE OUTLOOK")
-    pyautogui.hotkey("alt", "s")
+    # pyautogui.hotkey("alt", "s")
     wait_timer(CONFIG["WAIT_TIME"]["TEN_SECOND"])
     pyautogui.hotkey("win", "m")
     wait_timer(CONFIG["WAIT_TIME"]["FIVE_SECOND"])
@@ -264,6 +264,15 @@ def input_hyperlink():
     pyautogui.press("i")
     wait_timer(CONFIG["WAIT_TIME"]["HALF_SECOND"])
 
+def make_important_mail():
+    wait_timer(CONFIG["WAIT_TIME"]["HALF_SECOND"])
+    logger.info("[SYSTEM] OPEN HYPERLINK DIALOG")
+    pyautogui.press("alt")
+    wait_timer(CONFIG["WAIT_TIME"]["TENTH_SECOND"])
+    pyautogui.press("h")
+    wait_timer(CONFIG["WAIT_TIME"]["TENTH_SECOND"])
+    pyautogui.press("h")
+    wait_timer(CONFIG["WAIT_TIME"]["HALF_SECOND"])
 
 def make_new_pivot_sheet():
     wait_timer(CONFIG["WAIT_TIME"]["HALF_SECOND"])

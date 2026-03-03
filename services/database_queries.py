@@ -15,9 +15,7 @@ def fetch_certification_data_internal(
         rows = cursor.fetchall()
 
         cursor.close()
-        logger.info(
-            f"[DATABASE] FETCHED {len(rows)} ROWS FROM Dashboard_Certification_Date"
-        )
+        logger.info(f"[DATABASE] FETCHED {len(rows)} ROWS")
         return columns, rows
     except pyodbc.Error as e:
         logger.error(f"[ERROR] QUERY FAILED (INTERNAL) : {e}")
@@ -36,9 +34,7 @@ def fetch_certification_data_external(
         rows = cursor.fetchall()
 
         cursor.close()
-        logger.info(
-            f"[DATABASE] FETCHED {len(rows)} ROWS FROM Dashboard_Certification_Eksternal"
-        )
+        logger.info(f"[DATABASE] FETCHED {len(rows)} ROWS (EXTERNAL)")
         return columns, rows
     except pyodbc.Error as e:
         logger.error(f"[ERROR] QUERY FAILED (EXTERNAL) : {e}")

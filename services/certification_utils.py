@@ -6,7 +6,6 @@ from services.config import (
     get_certification_filter_config,
     set_certification_filter_preset,
     get_month_id,
-    get_branch_order,
 )
 
 
@@ -188,7 +187,9 @@ def build_email_header(branch_name: str, branch_manager: str) -> List[str]:
     return [
         f"Dear Bapak {branch_manager_formatted},",
         "",
+        "",
         f"Dengan ini kami sampaikan pemberitahuan terkait Tim Collection cabang {branch_name_formatted}.",
+        "",
         "Berdasarkan data, terdapat PIC dengan masa berlaku Sertifikasi SPPI yang akan segera berakhir, dengan rincian sebagai berikut",
         "",
     ]
@@ -197,7 +198,7 @@ def build_email_header(branch_name: str, branch_manager: str) -> List[str]:
 def build_email_footer() -> List[str]:
     return [
         "",
-        "Sehubungan dengan hal tersebut, mohon agar dapat berkoordinasi dengan Divisi HR untuk penjadwalan Ujian Sertifikasi Penagihan.",
+        "Sehubungan dengan hal tersebut, mohon agar dapat berkoordinasi dengan Divisi HR untuk penjadwalan Ujian Sertifikasi Penagihan. "
         "Jangan sampai terdapat petugas lapangan yang melakukan penagihan tanpa memiliki sertifikasi yang masih aktif atau dalam kondisi kedaluwarsa (expired).",
         "",
         "Atas perhatian dan kerja samanya, kami ucapkan terima kasih.",
@@ -205,16 +206,15 @@ def build_email_footer() -> List[str]:
         "",
         "Hormat kami,",
         "Asset Management Division.",
-        "Collection HO – PT Suzuki Finance Indonesia.",
+        "Collection HO  PT Suzuki Finance Indonesia.",
     ]
 
 
 def format_pic_line(pic_name: str, pic_role: str, expired_date: Any) -> str:
-
     pic_name_formatted = format_name_title_case(pic_name)
     expired_date_str = format_date_indonesian(expired_date)
 
-    return f"👨🏼 {pic_name_formatted} 🔰 {pic_role}\t\t📅  Masa Berlaku SPPI : {expired_date_str}"
+    return f"👮 {pic_name_formatted}  💼 {pic_role}\n📅 Masa Berlaku SPPI : {expired_date_str}"
 
 
 def get_email_subject(branch_name: str) -> str:

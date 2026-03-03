@@ -21,7 +21,7 @@ from services.email_sender import send_certification_email
 CONFIG = load_config()
 
 
-def process_internal_certification_reminders(
+def process_certification_reminders(
     filter_preset: Optional[str] = None, minimize_after_send: bool = True
 ) -> bool:
     if filter_preset:
@@ -36,7 +36,7 @@ def process_internal_certification_reminders(
         return False
 
     try:
-        logger.info("[SYSTEM] FETCHING INTERNAL CERTIFICATION DATA FROM DATABASE")
+        logger.info("[SYSTEM] FETCHING INTERNAL CERTIFICATION DATA")
         columns, rows = fetch_certification_data_internal(conn)
 
         if columns is None or rows is None:
@@ -47,16 +47,22 @@ def process_internal_certification_reminders(
             logger.warning("[WARNING] NO DATA FOUND IN DATABASE")
             return False
 
-        filtered_rows = filter_expiring_certifications(columns, rows, "EXPIRED_DATE")
         active_filter = get_certification_filter_config()
-        logger.info(f"[SYSTEM] FILTERED {len(filtered_rows)} ROWS")
+        filtered_rows = filter_expiring_certifications(columns, rows, "EXPIRED_DATE")
+
+        logger.info(
+            f"[SYSTEM] FILTER={active_filter.get('MODE')} | INTERNAL={len(filtered_rows)} ROWS"
+        )
 
         if len(filtered_rows) == 0:
             logger.info("[SYSTEM] NO EXPIRING CERTIFICATIONS FOUND")
             return True
 
         branch_groups = group_by_branch(columns, filtered_rows, "BRANCH_NAME")
-        logger.info(f"[SYSTEM] GROUPED DATA INTO {len(branch_groups)} BRANCHES")
+
+        logger.info(f"[SYSTEM] GROUPED INTO {len(branch_groups)} BRANCHES")
+        for branch in sorted(branch_groups.keys()):
+            logger.info(f"[BRANCH] {branch:<20} INTERNAL={len(branch_groups[branch])}")
 
         column_indices = {col: idx for idx, col in enumerate(columns)}
         branch_order = get_branch_order()
@@ -75,7 +81,7 @@ def process_internal_certification_reminders(
 
             if not branch_manager or not bm_mail:
                 logger.warning(
-                    f"[WARNING] MISSING BRANCH MANAGER INFO FOR {branch_name}, SKIPPING"
+                    f"[WARNING] MISSING BRANCH MANAGER INFO : {branch_name}, SKIPPING"
                 )
                 failed_count += 1
                 continue
@@ -96,13 +102,12 @@ def process_internal_certification_reminders(
             wait_timer(CONFIG["WAIT_TIME"]["THREE_SECOND"])
 
         logger.info(
-            f"[SYSTEM] INTERNAL CERTIFICATION REMINDER PROCESS COMPLETED : "
-            f"{processed_count} EMAILS SENT, {failed_count} FAILED"
+            f"[SYSTEM] COMPLETED : {processed_count} SENT, {failed_count} FAILED"
         )
         return True
 
     except Exception as e:
-        logger.error(f"[ERROR] INTERNAL CERTIFICATION REMINDER PROCESS FAILED : {e}")
+        logger.error(f"[ERROR] INTERNAL CERTIFICATION REMINDER FAILED : {e}")
         return False
     finally:
         conn.close()
@@ -110,10 +115,9 @@ def process_internal_certification_reminders(
 
 
 if __name__ == "__main__":
-    # process_internal_certification_reminders()  # DEFAULT VALUE (NEXT_MONTH)
-    # process_internal_certification_reminders(filter_preset="TWO_MONTHS")
-    # process_internal_certification_reminders(filter_preset="THREE_MONTHS")
-    # process_internal_certification_reminders(filter_preset="SIX_MONTHS")
-    # process_internal_certification_reminders(filter_preset="SIXTY_DAYS")
+    process_certification_reminders()  # DEFAULT VALUE (NEXT_MONTH)
 
-    process_internal_certification_reminders(filter_preset="SIX_MONTHS")
+    # process_certification_reminders(filter_preset="TWO_MONTHS")
+    # process_certification_reminders(filter_preset="THREE_MONTHS")
+    # process_certification_reminders(filter_preset="SIX_MONTHS")
+    # process_certification_reminders(filter_preset="SIXTY_DAYS")

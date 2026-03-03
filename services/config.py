@@ -287,7 +287,6 @@ BRANCH_ORDER = [
     "YOGYAKARTA",
 ]
 
-# process_certification_reminders(filter_preset="SIX_MONTHS")
 CERTIFICATION_FILTER_PRESETS = {
     "NEXT_MONTH": {"MODE": "NEXT_MONTH"},
     "TWO_MONTHS": {"MODE": "NEXT_N_MONTHS", "MONTHS_AHEAD": 2},
@@ -401,11 +400,9 @@ def get_certification_filter_config(preset: Optional[str] = None) -> Dict[str, A
         preset = CERTIFICATION_FILTER_CONFIG["ACTIVE_PRESET"]
 
     if CERTIFICATION_FILTER_CONFIG["CUSTOM_CONFIG"] is not None:
-        logger.info("[CONFIG] USING CUSTOM CERTIFICATION FILTER CONFIGURATION")
         return CERTIFICATION_FILTER_CONFIG["CUSTOM_CONFIG"]
 
     if preset in CERTIFICATION_FILTER_PRESETS:
-        logger.info(f"[CONFIG] USING CERTIFICATION FILTER PRESET : {preset}")
         return CERTIFICATION_FILTER_PRESETS[preset].copy()
     else:
         logger.warning(
@@ -418,10 +415,10 @@ def set_certification_filter_preset(preset: str) -> bool:
     if preset in CERTIFICATION_FILTER_PRESETS:
         CERTIFICATION_FILTER_CONFIG["ACTIVE_PRESET"] = preset
         CERTIFICATION_FILTER_CONFIG["CUSTOM_CONFIG"] = None
-        logger.info(f"[CONFIG] CERTIFICATION FILTER PRESET SET TO : {preset}")
+        logger.info(f"[CONFIG] FILTER PRESET : {preset}")
         return True
     else:
-        logger.error(f"[CONFIG] INVALID PRESET NAME : {preset}")
+        logger.error(f"[CONFIG] INVALID PRESET : {preset}")
         return False
 
 
@@ -437,7 +434,7 @@ def set_custom_certification_filter(custom_config: Dict[str, Any]) -> bool:
         return False
 
     CERTIFICATION_FILTER_CONFIG["CUSTOM_CONFIG"] = custom_config
-    logger.info("[CONFIG] CUSTOM CERTIFICATION FILTER CONFIGURATION APPLIED")
+    logger.info("[CONFIG] CUSTOM FILTER APPLIED")
     return True
 
 

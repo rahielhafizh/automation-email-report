@@ -5,6 +5,7 @@ from general_task import (
     maximize_app_window,
     creating_new_task,
     blank_mail_space,
+    make_important_mail,
     finish_outlook,
     minimize_outlook,
     confirm,
@@ -18,28 +19,25 @@ from services.certification_utils import get_email_subject
 CONFIG = load_config()
 
 
-def _normalize_recipients(recipients: Union[str, List[str], None]) -> List[str]:
+def normalizing_recipients(recipients: Union[str, List[str], None]) -> List[str]:
     if recipients is None:
         return []
 
     if isinstance(recipients, str):
-        recipients = recipients.strip()
-        return [recipients] if recipients else []
+        value = recipients.strip().lower()
+        return [value] if value else []
 
-    # Assume iterable of strings
-    cleaned = []
+    cleaned: List[str] = []
     for r in recipients:
         if not r:
             continue
-        value = str(r).strip()
+        value = str(r).strip().lower()
         if value:
             cleaned.append(value)
     return cleaned
 
 
-def _write_recipients(recipient_list: List[str]) -> None:
-    from general_task import confirm  # local import to avoid circular surprises
-
+def write_recipients(recipient_list: List[str]) -> None:
     for idx, recipient in enumerate(recipient_list):
         pyautogui.write(recipient)
         confirm()
@@ -57,18 +55,17 @@ def send_certification_email(
 ) -> bool:
     subject_email = get_email_subject(branch_name)
 
-    logger.info(
-        "[SYSTEM] START CERTIFICATION EMAIL "
-        f"(BRANCH='{branch_name}', MANAGER='{branch_manager}', TO='{bm_mail}')"
-    )
+    primary_recipients = normalizing_recipients(bm_mail)
+    primary_log_email = primary_recipients[0] if primary_recipients else ""
+
+    logger.info(f"[SYSTEM] START BRANCH ='{branch_name}' TO '{primary_log_email}')")
 
     try:
-        primary_recipients = _normalize_recipients(bm_mail)
         if not primary_recipients:
             logger.error("[ERROR] PRIMARY RECIPIENT EMAIL (BM_MAIL) IS EMPTY")
             return False
 
-        cc_list = _normalize_recipients(cc_recipients)
+        cc_list = normalizing_recipients(cc_recipients)
 
         if not open_outlook():
             logger.error("[ERROR] FAILED TO ACTIVATE OR LAUNCH OUTLOOK")
@@ -78,30 +75,18 @@ def send_certification_email(
         maximize_app_window()
         capslock_checking()
         wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
-
-        # Handle potential startup dialogs if any (safe to call even if none)
-        try:
-            from general_task import handle_office  # type: ignore
-
-            handle_office()
-        except Exception:
-            # Jika tidak ada dialog khusus tidak masalah, lanjut saja
-            pass
-
+        make_important_mail()
+        wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
         creating_new_task()
 
-        # TO field
-        _write_recipients(primary_recipients)
+        write_recipients(primary_recipients)
 
-        # Move to CC field
         pyautogui.press("tab")
         wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
 
-        # CC recipients (optional)
         if cc_list:
-            _write_recipients(cc_list)
+            write_recipients(cc_list)
 
-        # Move to Subject field
         pyautogui.press("tab")
         wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
         pyautogui.write(subject_email)
@@ -109,7 +94,7 @@ def send_certification_email(
         pyautogui.press("tab")
         wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
 
-        pyautogui.write(email_body)
+        pyautogui.hotkey("ctrl", "v")
         wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
 
         blank_mail_space()
@@ -120,10 +105,7 @@ def send_certification_email(
         else:
             finish_outlook()
 
-        logger.info(
-            "[SYSTEM] CERTIFICATION EMAIL SENT SUCCESSFULLY "
-            f"FOR BRANCH '{branch_name}'"
-        )
+        logger.info(f"[SYSTEM] BRANCH '{branch_name}' SUCCESS")
         return True
 
     except Exception as e:
