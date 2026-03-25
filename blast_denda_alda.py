@@ -52,7 +52,7 @@ def excel_config():
     switch_to_first_cells()
 
     save_new_book()
-    pyautogui.write(CONFIG["c"])
+    pyautogui.write(CONFIG["SUBMISSION_ALDA"])
     confirm()
     wait_timer(CONFIG["WAIT_TIME"]["FIVE_SECOND"])
 

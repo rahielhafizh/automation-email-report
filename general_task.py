@@ -206,7 +206,7 @@ def entering_operation():
 def finish_outlook():
     wait_timer(CONFIG["WAIT_TIME"]["HALF_SECOND"])
     logger.info("[SYSTEM] SEND EMAIL AND CLOSE OUTLOOK")
-    # pyautogui.hotkey("alt", "s")
+    pyautogui.hotkey("alt", "s")
     wait_timer(CONFIG["WAIT_TIME"]["TEN_SECOND"])
     pyautogui.hotkey("alt", "f4")
     wait_timer(CONFIG["WAIT_TIME"]["FIVE_SECOND"])
