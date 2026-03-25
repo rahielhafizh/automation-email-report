@@ -292,7 +292,7 @@ class OutlookManager(BaseAppManager):
     def send_command(self, keys, desc: str = "") -> bool:
         hwnd = self.window_checker()
         if hwnd and self.controller.activate(hwnd):
-            wait_timer(CONFIG["WAIT_TIME"]["TEN_SECOND"])
+            wait_timer(CONFIG["WAIT_TIME"]["THREE_SECOND"])
             try:
                 if isinstance(keys, list):
                     pyautogui.hotkey(*keys)
