@@ -1,11 +1,11 @@
 import os
 import pyautogui
-from datetime import datetime
+from datetime import datetime, timedelta
 from general_task import *
 from pynput.keyboard import Controller
-from services.remover_denda_alda import clear_submission_folder
+from services.remover_cwo import clear_submission_folder
 from services.config import load_config, wait_timer, logger, get_month_id
-from outlook_denda_alda import send_outlook_email
+from outlook_cwo import send_outlook_email
 from services.capslock_checker import capslock_checking
 from services.duration_counter import start_counter, stop_counter, get_duration_result
 from screen_keeper import (
@@ -20,22 +20,20 @@ keyboard = Controller()
 
 
 def excel_config():
-    logger.info("[SYSTEM] ALDA FINE REPORT EXCEL WORKFLOW")
-    os.startfile(CONFIG["WORKSOURCE_ALDA"])
+    logger.info("[SYSTEM] CWO/WO REPORT EXCEL WORKFLOW")
+    os.startfile(CONFIG["WORKSOURCE_CWO"])
     wait_timer(CONFIG["WAIT_TIME"]["TWENTY_SECOND"])
     maximize_app_window()
 
-    switch_to_right_sheet()
     switch_to_first_sheet()
-
     refresh_excel_data()
-    wait_timer(CONFIG["WAIT_TIME"]["ONEHALF_MINUTE"])
+    wait_timer(CONFIG["WAIT_TIME"]["ONE_MINUTE"])
     entering_operation()
 
     switch_to_first_cells()
     switch_to_right_sheet()
+    switch_to_right_sheet()
 
-    switch_to_first_cells()
     select_sheet_down()
     move_or_copy_menu()
     move_or_copy_as_newbook()
@@ -44,72 +42,67 @@ def excel_config():
     switch_to_first_sheet()
     break_excel_link()
     switch_to_first_cells()
-    switch_to_right_sheet()
-
-    switch_to_first_cells()
     switch_to_table_cells()
     capture_table_as_picture()
     switch_to_first_cells()
 
     save_new_book()
-    pyautogui.write(CONFIG["c"])
+    pyautogui.write(CONFIG["SUBMISSION_CWO"])
     confirm()
     wait_timer(CONFIG["WAIT_TIME"]["FIVE_SECOND"])
 
     set_new_book_name()
-    today = datetime.now()
-    fine_day = today.strftime("%d")
+    today = datetime.now() - timedelta(days=1)
+    cwo_day = today.strftime("%d")
     month_eng = today.strftime("%B")
     month_idn_title = get_month_id(month_eng, case="title")
-
-    fine_filename = f"Summary Report Performance Denda Alda {fine_day} {month_idn_title} ({today.strftime('%H.%M')})"
-
-    pyautogui.write(fine_filename, interval=0.05)
+    cwo_filename = f"Summary Report Dashboard CWO {cwo_day} {month_idn_title}"
+    pyautogui.write(cwo_filename, interval=0.05)
     confirm()
     wait_timer(CONFIG["WAIT_TIME"]["FIVE_SECOND"])
+
     closing_tab()
-    wait_timer(CONFIG["WAIT_TIME"]["FIVE_SECOND"])
-    entering_operation()
+    wait_timer(CONFIG["WAIT_TIME"]["FIFTEEN_SECOND"])
 
     switch_to_first_sheet()
     switch_to_first_cells()
-    switch_to_right_sheet()
-    switch_to_first_cells()
-
     save_file()
-    wait_timer(CONFIG["WAIT_TIME"]["TEN_SECOND"])
+    wait_timer(CONFIG["WAIT_TIME"]["FIFTEEN_SECOND"])
     closing_tab()
-    wait_timer(CONFIG["WAIT_TIME"]["FIVE_SECOND"])
+    wait_timer(CONFIG["WAIT_TIME"]["THREE_SECOND"])
 
 
 def send_email():
     outlook_recipients = ["asset.mgmt@sfi.co.id"]
     secondary_recipients = "collho.3@sfi.co.id"
 
-    today = datetime.now()
+    today = datetime.now() - timedelta(days=1)
+    cwo_day = today.strftime("%d")
+    cwo_year = today.strftime("%Y")
     month_eng = today.strftime("%B")
-    fine_year = today.strftime("%Y")
     month_idn_title = get_month_id(month_eng, case="title")
-    subject_email = f"Summary Update Denda Alda | {datetime.now().strftime('%d')} {month_idn_title} ({today.strftime('%H:%M')})"
+    subject_email = (
+        f"Summary Update Dashboard CWO | {cwo_day} {month_idn_title} {cwo_year}"
+    )
 
     core_email = f"""Dear All,
 
 Dengan hormat,
 
-Berikut terlampir Summary Report Performance Denda Alda As Of {month_idn_title} {fine_year} Pukul {today.strftime('%H:%M')} WIB.
+Berikut terlampir Summary Report Dashboard CWO {cwo_day} {month_idn_title} {cwo_year}
 
 Catatan
 - Laporan ini dihasilkan secara otomatis dan disusun oleh sistem.
-Seluruh data diperoleh secara real-time namun harap diperhatikan dan dievaluasi kembali.
+Seluruh data harap diperhatikan dan dievaluasi kembali.
 
 """
 
     footer_template = """
-
+    
 
 Hormat kami,
-Asset Management Division.
-Collection HO - PT Suzuki Finance Indonesia.
+Asset Management Division
+Collection HO - PT Suzuki Finance Indonesia
 """
 
     send_outlook_email(
@@ -122,7 +115,7 @@ Collection HO - PT Suzuki Finance Indonesia.
 
 
 if __name__ == "__main__":
-    logger.info("[SYSTEM] START ACTIVE FINE REPORT")
+    logger.info("[SYSTEM] START CWO / WO REPORT")
     start_counter()
 
     capslock_checking()
@@ -132,18 +125,18 @@ if __name__ == "__main__":
     stop_screen_keeper()
     wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
 
-    clear_submission_folder(target_folder=CONFIG["SUBMISSION_ALDA"])
+    clear_submission_folder(target_folder=CONFIG["SUBMISSION_CWO"])
     wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
 
     excel_config()
     wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
 
     send_email()
-    logger.info("[SYSTEM] ACTIVE FINE REPORT SENT")
+    logger.info("[SYSTEM] CWO / WO REPORT SENT")
 
     stop_counter()
     execution_time = get_duration_result()
-    logger.info(f"[SYSTEM] TOTAL EXECUTION TIME : {execution_time}")
+    logger.info(f"[SYSTEM] TOTAL EXECUTION TIME: {execution_time}")
 
     wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
     logger.warning("[SYSTEM] RESTARTING SCREEN KEEPER")

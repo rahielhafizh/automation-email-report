@@ -1,0 +1,2 @@
+git checkout 2b38e7d -- blast_*.py
+git checkout 2b38e7d -- services/remover_*.py
