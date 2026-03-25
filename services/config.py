@@ -1,11 +1,13 @@
 import logging
 import sys
 import time
+import random
 from typing import Dict, Any, List, Optional
 from colorlog import ColoredFormatter
 
 import pyautogui
 
+_pyautogui_configured = False
 pyautogui.FAILSAFE = False
 pyautogui.PAUSE = 0.1
 
@@ -60,6 +62,35 @@ APPLICATION_PATHS = {
     "OUTLOOK_PATH": "C:\\ProgramData\\Microsoft\\Windows\\Start Menu\\Programs\\Microsoft Office 2013\\Outlook 2013.lnk",
 }
 
+FOLDER_PATHS = {
+    # SUBMISSION PATH
+    "SUBMISSION_ALDA": rf"D:\Rahiel Hafizh\REPORT_DENDA_ALDA\SUBMISSION",
+    "SUBMISSION_CWO": rf"D:\Rahiel Hafizh\REPORT_CWO\SUBMISSION",
+    "SUBMISSION_REDUCE_WO": rf"D:\Rahiel Hafizh\\REPORT_PROGRESS_REDUCE_WO\SUBMISSION",
+    "SUBMISSION_DENDA": rf"D:\Rahiel Hafizh\REPORT_DENDA_AKTIF\SUBMISSION",
+    "SUBMISSION_FLOWRATE": rf"D:\Rahiel Hafizh\REPORT_FLOWRATE\SUBMISSION",
+    "SUBMISSION_LOR": rf"D:\Rahiel Hafizh\REPORT_LOR_EMAIL\SUBMISSION",
+    "SUBMISSION_PAYMENT": rf"D:\Rahiel Hafizh\REPORT_PENERIMAAN_ANGSURAN\SUBMISSION",
+    "SUBMISSION_PIC": rf"D:\Rahiel Hafizh\REPORT_MOBCOLL_REGULER\SUBMISSION",
+    "SUBMISSION_PICKUP": rf"D:\Rahiel Hafizh\REPORT_SUMMARY_PICKUP\SUBMISSION",
+    "SUBMISSION_STOPSELL": rf"D:\Rahiel Hafizh\REPORT_STOPSELL\SUBMISSION",
+    "SUBMISSION_TOD": rf"D:\Rahiel Hafizh\REPORT_AR_TOD\SUBMISSION",
+    # WORKSOURCE FILE
+    "CEK-REPORT-FR": rf"D:\Rahiel Hafizh\REPORT_FLOWRATE\SUBMISSION\CEK-REPORT.xlsx",
+    "WORKSOURCE_ALDA": rf"D:\Rahiel Hafizh\REPORT_DENDA_ALDA\REPORT-DENDA-ALDA.xlsx",
+    "WORKSOURCE_CWO": rf"D:\Rahiel Hafizh\REPORT_CWO\REPORT-CWO-SRC.xlsx",
+    "WORKSOURCE_REDUCE_WO": rf"D:\Rahiel Hafizh\\REPORT_PROGRESS_REDUCE_WO\REDUCE-WO-SRC.xlsx",
+    "WORKSOURCE_DENDA": rf"D:\Rahiel Hafizh\REPORT_DENDA_AKTIF\REPORT-DENDA-SOURCE.xlsx",
+    "WORKSOURCE_FLOWRATE": rf"D:\Rahiel Hafizh\REPORT_FLOWRATE\UPDATE-FR-SOURCE.xlsx",
+    "WORKSOURCE_LOR": rf"D:\Rahiel Hafizh\REPORT_LOR_EMAIL\REPORT-LOR-SOURCE.xlsx",
+    "WORKSOURCE_ORDER_IN": rf"C:\EL\MARKETING\FOLDER\SOURCE-ORDER-IN.xlsx",
+    "WORKSOURCE_PAYMENT": rf"D:\Rahiel Hafizh\REPORT_PENERIMAAN_ANGSURAN\PENERIMAAN-ANGSURAN-SRC.xlsx",
+    "WORKSOURCE_PIC": rf"D:\Rahiel Hafizh\REPORT_MOBCOLL_REGULER\SUBMISSION\REPORT-MOBCOLL-REGULER-4W.xlsx",
+    "WORKSOURCE_PICKUP": rf"D:\Rahiel Hafizh\REPORT_SUMMARY_PICKUP\UPDATE-PICKUP-SOURCE.xlsx",
+    "WORKSOURCE_PPD": rf"C:\EL\MARKETING\FOLDER\NEW-REFRESH-PPD.xlsx",
+    "WORKSOURCE_STOPSELL": rf"D:\Rahiel Hafizh\REPORT_STOPSELL\STOP-SELL-SOURCE.xlsx",
+    "WORKSOURCE_TOD": rf"D:\Rahiel Hafizh\REPORT_AR_TOD\REPORT-TOD-SOURCE.xlsx",
+}
 
 CONTACT_INFO = {
     "ASSET_GROUP": "https://web.whatsapp.com/accept?code=KblwmcubP6g04LzqwooTYV",
@@ -72,24 +103,28 @@ CONTACT_INFO = {
     "PERSONAL_FIVE": "+628988171583",
 }
 
-
 WAIT_TIMES = {
+    # MICROSECOND
     "HUNDRED_MICROSECOND": 0.0001,
     "TWO_HUNDRED_MICROSECOND": 0.0002,
     "FIVE_HUNDRED_MICROSECOND": 0.0005,
+    # MILLISECOND
     "ONE_MILLISECOND": 0.001,
     "TWO_MILLISECOND": 0.002,
     "FIVE_MILLISECOND": 0.005,
     "TEN_MILLISECOND": 0.01,
     "TWENTY_MILLISECOND": 0.02,
     "FIFTY_MILLISECOND": 0.05,
+    "HUNDRED_MILLISECOND": 0.1,
     "TWO_HUNDRED_MILLISECOND": 0.2,
+    # SUB-SECOND
     "TENTH_SECOND": 0.1,
     "EIGHTH_SECOND": 0.125,
     "QUARTER_SECOND": 0.25,
     "THIRD_SECOND": 0.33,
     "HALF_SECOND": 0.5,
     "THREE_QUARTER_SECOND": 0.75,
+    # STANDARD SECOND
     "ONE_SECOND": 1,
     "ONEHALF_SECOND": 1.5,
     "TWO_SECOND": 2,
@@ -113,6 +148,7 @@ WAIT_TIMES = {
     "FORTYFIVE_SECOND": 45,
     "FIFTY_SECOND": 50,
     "FIFTYFIVE_SECOND": 55,
+    # MINUTE-BASED TIMERS
     "ONE_MINUTE": 60,
     "ONEHALF_MINUTE": 90,
     "TWO_MINUTE": 120,
@@ -136,6 +172,7 @@ WAIT_TIMES = {
     "FIFTY_MINUTE": 3000,
     "FIFTYFIVE_MINUTE": 3300,
     "SIXTY_MINUTE": 3600,
+    # EXTENDED TIMERS
     "NORMAL": 1,
     "EXTENDED": 2,
     "LONG": 5,
@@ -158,6 +195,29 @@ PYAUTOGUI_SETTINGS = {
     "DEFAULT_PAUSE": 0.1,
     "DEFAULT_DURATION": 0.1,
     "DEFAULT_INTERVAL": 0.05,
+}
+
+JITTER_SETTINGS = {
+    "STANDARD": {
+        "MIN": 0.1,
+        "MAX": 0.3,
+        "FACTOR": 0.2,
+    },
+    "AGGRESSIVE": {
+        "MIN": 0.2,
+        "MAX": 0.5,
+        "FACTOR": 0.35,
+    },
+    "CONSERVATIVE": {
+        "MIN": 0.05,
+        "MAX": 0.15,
+        "FACTOR": 0.1,
+    },
+    "NONE": {
+        "MIN": 0.0,
+        "MAX": 0.0,
+        "FACTOR": 0.0,
+    },
 }
 
 MONTHS_ID = {
@@ -319,9 +379,11 @@ CERTIFICATION_FILTER_CONFIG = {
 
 DEFAULT_CONFIG = {
     **APPLICATION_PATHS,
+    **FOLDER_PATHS,
     **CONTACT_INFO,
     "WAIT_TIME": WAIT_TIMES,
     "PYAUTOGUI": PYAUTOGUI_SETTINGS,
+    "JITTER": JITTER_SETTINGS,
     "MONTHS_ID": MONTHS_ID,
     "AREA_BRANCH_MAPPING": AREA_BRANCH_MAPPING,
     "BRANCH_ORDER": BRANCH_ORDER,
@@ -330,7 +392,22 @@ DEFAULT_CONFIG = {
 }
 
 
+def setup_pyautogui_config() -> None:
+    global _pyautogui_configured
+    if _pyautogui_configured:
+        return
+
+    try:
+        pyautogui.FAILSAFE = PYAUTOGUI_SETTINGS["FALSE_CONDITION"]
+        pyautogui.PAUSE = PYAUTOGUI_SETTINGS["PAUSE"]
+        _pyautogui_configured = True
+    except Exception as e:
+        logger.error(f"FAILED TO CONFIGURE PYAUTOGUI : {e}")
+        raise
+
+
 def load_config() -> Dict[str, Any]:
+    setup_pyautogui_config()
     return DEFAULT_CONFIG
 
 
@@ -339,6 +416,17 @@ def wait_timer(base_time: float) -> None:
         logger.warning(f"[TIMER] INVALID NEGATIVE VALUE : {base_time}")
         return
     time.sleep(base_time)
+
+
+def wait_with_jitter(base_time: float, jitter_type: str = "STANDARD") -> None:
+    jitter_config = JITTER_SETTINGS.get(jitter_type, JITTER_SETTINGS["STANDARD"])
+    if jitter_config["FACTOR"] > 0:
+        jitter = random.uniform(jitter_config["MIN"], jitter_config["MAX"])
+        total_time = base_time + (base_time * jitter)
+    else:
+        total_time = base_time
+
+    wait_timer(total_time)
 
 
 def adaptive_wait(operation_type: str = "NORMAL") -> None:
@@ -374,6 +462,11 @@ def get_pyautogui_setting(setting_name: str, default: Any = None) -> Any:
     return PYAUTOGUI_SETTINGS.get(setting_name, default)
 
 
+def get_jitter_setting(jitter_type: str, default: float = 0.5) -> float:
+    jitter_config = JITTER_SETTINGS.get(jitter_type, JITTER_SETTINGS["STANDARD"])
+    return jitter_config.get("FACTOR", default)
+
+
 def get_month_id(english_month: str, case: str = "as-is") -> str:
     indonesian_month = MONTHS_ID.get(english_month, english_month)
 
@@ -400,9 +493,11 @@ def get_certification_filter_config(preset: Optional[str] = None) -> Dict[str, A
         preset = CERTIFICATION_FILTER_CONFIG["ACTIVE_PRESET"]
 
     if CERTIFICATION_FILTER_CONFIG["CUSTOM_CONFIG"] is not None:
+        logger.info("[CONFIG] USING CUSTOM CERTIFICATION FILTER CONFIGURATION")
         return CERTIFICATION_FILTER_CONFIG["CUSTOM_CONFIG"]
 
     if preset in CERTIFICATION_FILTER_PRESETS:
+        logger.info(f"[CONFIG] USING CERTIFICATION FILTER PRESET : {preset}")
         return CERTIFICATION_FILTER_PRESETS[preset].copy()
     else:
         logger.warning(
@@ -415,10 +510,10 @@ def set_certification_filter_preset(preset: str) -> bool:
     if preset in CERTIFICATION_FILTER_PRESETS:
         CERTIFICATION_FILTER_CONFIG["ACTIVE_PRESET"] = preset
         CERTIFICATION_FILTER_CONFIG["CUSTOM_CONFIG"] = None
-        logger.info(f"[CONFIG] FILTER PRESET : {preset}")
+        logger.info(f"[CONFIG] CERTIFICATION FILTER PRESET SET TO : {preset}")
         return True
     else:
-        logger.error(f"[CONFIG] INVALID PRESET : {preset}")
+        logger.error(f"[CONFIG] INVALID PRESET NAME : {preset}")
         return False
 
 
@@ -434,9 +529,5 @@ def set_custom_certification_filter(custom_config: Dict[str, Any]) -> bool:
         return False
 
     CERTIFICATION_FILTER_CONFIG["CUSTOM_CONFIG"] = custom_config
-    logger.info("[CONFIG] CUSTOM FILTER APPLIED")
+    logger.info("[CONFIG] CUSTOM CERTIFICATION FILTER CONFIGURATION APPLIED")
     return True
-
-
-def list_certification_filter_presets() -> List[str]:
-    return list(CERTIFICATION_FILTER_PRESETS.keys())

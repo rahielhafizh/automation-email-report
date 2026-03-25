@@ -266,6 +266,7 @@ def input_hyperlink():
     pyautogui.press("i")
     wait_timer(CONFIG["WAIT_TIME"]["HALF_SECOND"])
 
+
 def make_important_mail():
     wait_timer(CONFIG["WAIT_TIME"]["HALF_SECOND"])
     logger.info("[SYSTEM] OPEN HYPERLINK DIALOG")
@@ -275,6 +276,7 @@ def make_important_mail():
     wait_timer(CONFIG["WAIT_TIME"]["TENTH_SECOND"])
     pyautogui.press("h")
     wait_timer(CONFIG["WAIT_TIME"]["HALF_SECOND"])
+
 
 def make_new_pivot_sheet():
     wait_timer(CONFIG["WAIT_TIME"]["HALF_SECOND"])
@@ -671,7 +673,6 @@ def switch_to_table_cells():
     wait_timer(CONFIG["WAIT_TIME"]["ONEHALF_SECOND"])
     pyautogui.press("right", presses=3)
     wait_timer(CONFIG["WAIT_TIME"]["ONEHALF_SECOND"])
-<<<<<<< HEAD
 
 
 def entering_operation():
@@ -715,6 +716,7 @@ def move_cursor_figure_eight():
 
     wait_timer(CONFIG["WAIT_TIME"]["HALF_SECOND"])
 
+
 def scroller_page(scroll_amount: int = 500) -> None:
     if not isinstance(scroll_amount, int):
         raise TypeError("scroll_amount must be integer")
@@ -727,5 +729,3 @@ def scroller_page(scroll_amount: int = 500) -> None:
     pyautogui.scroll(-scroll_amount)
 
     wait_timer(CONFIG["WAIT_TIME"]["HALF_SECOND"])
-=======
->>>>>>> 368e8ba264fcdec0f62f3eb62a1430dda21e1290
