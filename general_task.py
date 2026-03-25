@@ -427,6 +427,8 @@ def save_new_book():
     wait_timer(CONFIG["WAIT_TIME"]["HALF_SECOND"])
     pyautogui.press("space")
     wait_timer(CONFIG["WAIT_TIME"]["HALF_SECOND"])
+    pyautogui.press("backspace")
+    wait_timer(CONFIG["WAIT_TIME"]["HALF_SECOND"])
 
 
 def save_new_copy():
