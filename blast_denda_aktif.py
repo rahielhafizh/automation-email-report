@@ -14,58 +14,58 @@ from screen_keeper import (
     run_screen_keeper,
 )
 
-# ─── RUNTIME INITIALISATION
+# ───────── RUNTIME INITIALISATION
 pyautogui.FAILSAFE = False
 CONFIG = load_config()
 keyboard = Controller()
 
 
-# ─── CORE WORKFLOW
+# ───────── CORE WORKFLOW
 def excel_config():
     logger.info("[SYSTEM] ACTIVE FINE REPORT EXCEL WORKFLOW")
 
-    # ── OPEN THE SOURCE WORKBOOK
+    # ──────── OPEN THE SOURCE WORKBOOK
     os.startfile(CONFIG["WORKSOURCE_DENDA"])
     wait_timer(CONFIG["WAIT_TIME"]["TWENTYFIVE_SECOND"])
     maximize_app_window()
 
-    # ── NAVIGATE TO THE STARTING POSITION
+    # ──────── NAVIGATE TO THE STARTING POSITION
     switch_to_right_sheet()
     switch_to_first_sheet()
 
-    # ── REFRESH ALL DATA CONNECTIONS
+    # ──────── REFRESH ALL DATA CONNECTIONS
     refresh_excel_data()
     wait_timer(CONFIG["WAIT_TIME"]["TWOHALF_MINUTE"])
     entering_operation()
 
-    # ── NAVIGATE TO THE TARGET SHEET
+    # ──────── NAVIGATE TO THE TARGET SHEET
     switch_to_first_cells()
     switch_to_right_sheet()
 
-    # ── EXTRACT THE TARGET SHEET INTO A STANDALONE WORKBOOK
+    # ──────── EXTRACT THE TARGET SHEET INTO A STANDALONE WORKBOOK
     switch_to_first_cells()
     select_sheet_down()
     move_or_copy_menu()
     move_or_copy_as_newbook()
     wait_timer(CONFIG["WAIT_TIME"]["THIRTY_SECOND"])
 
-    # ── SEVER ALL EXTERNAL LINKS
+    # ──────── SEVER ALL EXTERNAL LINKS
     switch_to_first_sheet()
     break_excel_link()
 
-    # ── CAPTURE THE TABLE AS AN IMAGE
+    # ──────── CAPTURE THE TABLE AS AN IMAGE
     switch_to_first_cells()
     switch_to_table_cells()
     capture_table_as_picture()
     switch_to_first_cells()
 
-    # ── SAVE THE NEW WORKBOOK
+    # ──────── SAVE THE NEW WORKBOOK
     save_new_book()
     pyautogui.write(CONFIG["SUBMISSION_DENDA"])
     confirm()
     wait_timer(CONFIG["WAIT_TIME"]["FIVE_SECOND"])
 
-    # ── ASSIGN THE STANDARDISED FILENAME
+    # ──────── ASSIGN THE STANDARDISED FILENAME
     set_new_book_name()
     today = datetime.now()
     fine_day = today.strftime("%d")
@@ -79,7 +79,7 @@ def excel_config():
     closing_tab()
     wait_timer(CONFIG["WAIT_TIME"]["THREE_SECOND"])
 
-    # ── SAVE AND CLOSE THE SOURCE FILE
+    # ──────── SAVE AND CLOSE THE SOURCE FILE
     switch_to_first_sheet()
     switch_to_first_cells()
     switch_to_right_sheet()
@@ -91,7 +91,7 @@ def excel_config():
 
 
 def send_email():
-    # ── DEFINE RECIPIENTS AND COMPOSE THE SUBJECT LINE
+    # ──────── DEFINE RECIPIENTS AND SUBJECT LINE
     outlook_recipients = ["asset.mgmt@sfi.co.id"]
     secondary_recipients = "collho.3@sfi.co.id"
     today = datetime.now()
@@ -100,7 +100,7 @@ def send_email():
     month_idn_title = get_month_id(month_eng, case="title")
     subject_email = f"Summary Update Denda Aktif | {datetime.now().strftime('%d')} {month_idn_title} ({today.strftime('%H:%M')})"
 
-    # ── COMPOSE THE EMAIL BODY
+    # ──────── SET EMAIL BODY
     core_email = f"""Dear All,
 
 Dengan hormat,
@@ -121,7 +121,7 @@ Asset Management Division.
 Collection HO - PT Suzuki Finance Indonesia.
 """
 
-    # ── DISPATCH THE EMAIL VIA OUTLOOK
+    # ──────── DISPATCH THE EMAIL VIA OUTLOOK
     send_outlook_email(
         outlook_recipients,
         secondary_recipients,
@@ -131,11 +131,11 @@ Collection HO - PT Suzuki Finance Indonesia.
     )
 
 
-# ─── ENTRY POINT
+# ───────── ENTRY POINT
 if __name__ == "__main__":
     logger.info("[SYSTEM] START ACTIVE FINE REPORT")
 
-    # ── INITIALISE THE REPORT RUN
+    # ──────── INITIALISE THE REPORT RUN
     start_counter()
     capslock_checking()
     wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
@@ -144,18 +144,18 @@ if __name__ == "__main__":
     stop_screen_keeper()
     wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
 
-    # ── CLEAR THE SUBMISSIONS DIRECTORY
+    # ──────── CLEAR THE SUBMISSIONS DIRECTORY
     clear_submission_folder(target_folder=CONFIG["SUBMISSION_DENDA"])
     wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
 
-    # ── EXECUTE THE AUTOMATION WORKFLOW
+    # ──────── EXECUTE THE AUTOMATION WORKFLOW
     excel_config()
     wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
 
     send_email()
     logger.info("[SYSTEM] ACTIVE FINE REPORT SENT")
 
-    # ── FINALISE AND RESTORE THE ENVIRONMENT
+    # ──────── FINALISE AND RESTORE THE ENVIRONMENT
     stop_counter()
     execution_time = get_duration_result()
     logger.info(f"[SYSTEM] TOTAL EXECUTION TIME: {execution_time}")

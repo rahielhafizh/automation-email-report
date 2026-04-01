@@ -14,13 +14,17 @@ from screen_keeper import (
     run_screen_keeper,
 )
 
+# ───────── RUNTIME INITIALISATION
 pyautogui.FAILSAFE = False
 CONFIG = load_config()
 keyboard = Controller()
 
 
+# ───────── CORE WORKFLOW
 def excel_config():
     logger.info("[SYSTEM] REDUCE WO REPORT EXCEL WORKFLOW")
+
+    # ──────── OPEN THE SOURCE WORKBOOK
     os.startfile(CONFIG["WORKSOURCE_REDUCE_WO"])
     wait_timer(CONFIG["WAIT_TIME"]["TWENTY_SECOND"])
     maximize_app_window()
@@ -28,54 +32,61 @@ def excel_config():
     switch_to_right_sheet()
     switch_to_first_sheet()
 
+    # ──────── REFRESH ALL DATA CONNECTIONS
     refresh_excel_data()
     wait_timer(CONFIG["WAIT_TIME"]["TWOHALF_MINUTE"])
     entering_operation()
 
+    # ──────── NAVIGATE TO THE TARGET SHEET
     switch_to_first_cells()
     switch_to_right_sheet()
     switch_to_right_sheet()
     switch_to_right_sheet()
 
+    # ──────── EXTRACT THE TARGET SHEET INTO A STANDALONE WORKBOOK
     switch_to_first_cells()
     select_sheet_down()
     move_or_copy_menu()
     move_or_copy_as_newbook()
     wait_timer(CONFIG["WAIT_TIME"]["TEN_SECOND"])
 
+    # ──────── SEVER ALL EXTERNAL LINKS
     switch_to_right_sheet()
     break_excel_link()
     wait_timer(CONFIG["WAIT_TIME"]["TEN_SECOND"])
 
+    # ──────── CAPTURE THE TABLE AS AN IMAGE
     switch_to_first_sheet()
     switch_to_first_cells()
     switch_to_table_cells()
     capture_table_as_picture()
     switch_to_first_cells()
 
+    # ──────── SAVE THE NEW WORKBOOK
     save_new_book()
     pyautogui.write(CONFIG["SUBMISSION_REDUCE_WO"])
     confirm()
     wait_timer(CONFIG["WAIT_TIME"]["FIVE_SECOND"])
 
+    # ──────── ASSIGN THE STANDARDISED FILENAME
     set_new_book_name()
     today = datetime.now()
     reduce_wo_day = today.strftime("%d")
     month_eng = today.strftime("%B")
     month_idn_title = get_month_id(month_eng, case="title")
-
     reduce_wo_filename = f"Summary Report Progress Reduce WO & RR WO {reduce_wo_day} {month_idn_title} ({today.strftime('%H.%M')})"
-
     pyautogui.write(reduce_wo_filename, interval=0.05)
     confirm()
     wait_timer(CONFIG["WAIT_TIME"]["FIVE_SECOND"])
+
+    # ──────── CLOSE THE EXPORTED WORKBOOK
     closing_tab()
     wait_timer(CONFIG["WAIT_TIME"]["FIVE_SECOND"])
 
+    # ──────── SAVE AND CLOSE THE SOURCE FILE
     switch_to_first_cells()
     switch_to_first_sheet()
     switch_to_first_cells()
-
     save_file()
     wait_timer(CONFIG["WAIT_TIME"]["TEN_SECOND"])
     closing_tab()
@@ -83,9 +94,9 @@ def excel_config():
 
 
 def send_email():
+    # ──────── DEFINE RECIPIENTS AND SUBJECT LINE
     outlook_recipients = ["asset.mgmt@sfi.co.id"]
     secondary_recipients = "collho.3@sfi.co.id"
-
     today = datetime.now()
     month_eng = today.strftime("%B")
     reduce_wo_day = today.strftime("%d")
@@ -93,6 +104,7 @@ def send_email():
     month_idn_title = get_month_id(month_eng, case="title")
     subject_email = f"Summary Update Progress Reduce WO & RR WO | {datetime.now().strftime('%d')} {month_idn_title} ({today.strftime('%H:%M')})"
 
+    # ──────── SET EMAIL BODY
     core_email = f"""Dear All,
 
 Dengan hormat,
@@ -113,35 +125,47 @@ Asset Management Division.
 Collection HO - PT Suzuki Finance Indonesia.
 """
 
-    send_outlook_email(
-        outlook_recipients,
-        secondary_recipients,
-        subject_email,
-        core_email,
-        footer_template,
-    )
+    # ──────── DISPATCH THE EMAIL VIA OUTLOOK
+    try:
+        send_outlook_email(
+            outlook_recipients,
+            secondary_recipients,
+            subject_email,
+            core_email,
+            footer_template,
+        )
+    except Exception as exc:
+        logger.error(f"[ERROR] FAILED TO SEND EMAIL : {exc}")
+        raise
 
 
+# ───────── ENTRY POINT
 if __name__ == "__main__":
     logger.info("[SYSTEM] START ACTIVE FINE REPORT")
+
+    # ──────── INITIALISE THE REPORT RUN
     start_counter()
 
     capslock_checking()
     wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
+
     find_screen_keeper_process()
     wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
     stop_screen_keeper()
     wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
 
+    # ──────── CLEAR THE SUBMISSIONS DIRECTORY
     clear_submission_folder(target_folder=CONFIG["SUBMISSION_REDUCE_WO"])
     wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
 
+    # ──────── EXECUTE THE AUTOMATION WORKFLOW
     excel_config()
     wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
 
     send_email()
     logger.info("[SYSTEM] ACTIVE FINE REPORT SENT")
 
+    # ──────── FINALISE AND RESTORE THE ENVIRONMENT
     stop_counter()
     execution_time = get_duration_result()
     logger.info(f"[SYSTEM] TOTAL EXECUTION TIME : {execution_time}")

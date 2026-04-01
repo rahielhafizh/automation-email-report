@@ -15,21 +15,26 @@ from data_validate_pic_mail import (
     get_pic_validation_details,
 )
 
+# ───────── RUNTIME INITIALISATION
 CONFIG = load_config()
 
 
+# ───────── CORE WORKFLOW
 def excel_config():
     logger.info("[SYSTEM] MOBCOLL REGULER EXCEL WORKFLOW")
+
+    # ──────── OPEN THE SOURCE WORKBOOK
     os.startfile(CONFIG["WORKSOURCE_PIC"])
     wait_timer(CONFIG["WAIT_TIME"]["TEN_SECOND"])
-
     maximize_app_window()
     switch_to_first_sheet()
 
+    # ──────── REFRESH ALL DATA CONNECTIONS
     refresh_excel_data()
     wait_timer(CONFIG["WAIT_TIME"]["FORTYFIVE_SECOND"])
     entering_operation()
 
+    # ──────── CAPTURE THE TABLE AS AN IMAGE
     switch_to_right_sheet()
     switch_to_first_cells()
     switch_to_table_cells()
@@ -40,6 +45,7 @@ def excel_config():
     switch_to_first_cells()
     wait_timer(CONFIG["WAIT_TIME"]["THREE_SECOND"])
 
+    # ──────── SAVE AND CLOSE THE SOURCE FILE
     save_file()
     wait_timer(CONFIG["WAIT_TIME"]["FIVE_SECOND"])
     closing_tab()
@@ -47,14 +53,15 @@ def excel_config():
 
 
 def send_email():
+    # ──────── DEFINE RECIPIENTS AND SUBJECT LINE
     outlook_recipients = "herberth.simbolon@sfi.co.id"
     secondary_recipients = ["asset.mgmt@sfi.co.id"]
-
     today = datetime.now()
     month_eng = today.strftime("%B")
     month_idn_title = get_month_id(month_eng, case="title")
-
     subject_email = f"Summary Penugasan & Kunjungan Mobcoll Reguler | {datetime.now().strftime('%d')} {month_idn_title} ({today.strftime('%H:%M')})"
+
+    # ──────── SET EMAIL BODY
     core_email = f"""Yth. Bapak Chief of Operating Officer,
 
 Dengan hormat,
@@ -73,37 +80,48 @@ Asset Management Division.
 Collection HO - PT Suzuki Finance Indonesia.
 """
 
-    send_outlook_email(
-        outlook_recipients,
-        secondary_recipients,
-        subject_email,
-        core_email,
-        footer_template,
-    )
+    # ──────── DISPATCH THE EMAIL VIA OUTLOOK
+    try:
+        send_outlook_email(
+            outlook_recipients,
+            secondary_recipients,
+            subject_email,
+            core_email,
+            footer_template,
+        )
+    except Exception as exc:
+        logger.error(f"[ERROR] FAILED TO SEND EMAIL : {exc}")
+        raise
+
     logger.info("[DATA] MOBCOLL REGULER REPORT SENT")
 
 
 def validate_and_send_email():
+    # ──────── VALIDATE DATA INTEGRITY AND DISPATCH THE EMAIL
     is_valid = validate_pic_data_for_email()
+
     if is_valid:
         logger.info("[VALIDATION] MOBCOLL REGULER DATA SUCCESS")
         send_email()
         return
 
-    else:
-        logger.warning("[VALIDATION] MOBCOLL REGULER DATA FAILED")
-        details = get_pic_validation_details()
+    # ──────── LOG CELL-LEVEL FAILURES AND ABORT
+    logger.warning("[VALIDATION] MOBCOLL REGULER DATA FAILED")
+    details = get_pic_validation_details()
 
-        if "results" in details:
-            for result in details["results"]:
-                if not result["valid"]:
-                    logger.warning(f"[WARNING] CELL {result['cell']} VAKUE | ")
+    if "results" in details:
+        for result in details["results"]:
+            if not result["valid"]:
+                logger.warning(f"[WARNING] CELL {result['cell']} VAKUE | ")
 
-        return False
+    return False
 
 
+# ───────── ENTRY POINT
 if __name__ == "__main__":
     logger.info("[SYSTEM] START MOBCOLL REGULER REPORT")
+
+    # ──────── INITIALISE THE REPORT RUN
     start_counter()
 
     capslock_checking()
@@ -114,6 +132,7 @@ if __name__ == "__main__":
     stop_screen_keeper()
     wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
 
+    # ──────── EXECUTE THE AUTOMATION WORKFLOW
     excel_config()
     wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
 
@@ -124,6 +143,7 @@ if __name__ == "__main__":
     else:
         logger.warning("[SYSTEM] MOBCOLL REGULER REPORT FAILED")
 
+    # ──────── FINALISE AND RESTORE THE ENVIRONMENT
     stop_counter()
     execution_time = get_duration_result()
     logger.info(f"[SYSTEM] TOTAL EXECUTION TIME: {execution_time}")
