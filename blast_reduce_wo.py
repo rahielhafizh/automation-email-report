@@ -41,11 +41,11 @@ def excel_config():
     select_sheet_down()
     move_or_copy_menu()
     move_or_copy_as_newbook()
-    wait_timer(CONFIG["WAIT_TIME"]["THIRTY_SECOND"])
+    wait_timer(CONFIG["WAIT_TIME"]["TEN_SECOND"])
 
     switch_to_right_sheet()
     break_excel_link()
-    wait_timer(CONFIG["WAIT_TIME"]["THIRTY_SECOND"])
+    wait_timer(CONFIG["WAIT_TIME"]["TEN_SECOND"])
 
     switch_to_first_sheet()
     switch_to_first_cells()
@@ -71,8 +71,8 @@ def excel_config():
     wait_timer(CONFIG["WAIT_TIME"]["FIVE_SECOND"])
     closing_tab()
     wait_timer(CONFIG["WAIT_TIME"]["FIVE_SECOND"])
-    entering_operation()
 
+    switch_to_first_cells()
     switch_to_first_sheet()
     switch_to_first_cells()
 
