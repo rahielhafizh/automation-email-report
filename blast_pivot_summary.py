@@ -31,8 +31,9 @@ def excel_config():
 
     # ──────── REFRESH ALL DATA CONNECTIONS
     refresh_excel_data()
-    wait_timer(CONFIG["WAIT_TIME"]["FORTYFIVE_SECOND"])
+    wait_timer(CONFIG["WAIT_TIME"]["ONE_MINUTE"])
     entering_operation()
+    switch_to_first_cells()
 
     # ──────── CAPTURE THE TABLE AS AN IMAGE
     switch_to_right_sheet()
@@ -54,8 +55,8 @@ def excel_config():
 
 def send_email():
     # ──────── DEFINE RECIPIENTS AND SUBJECT LINE
-    outlook_recipients = "herberth.simbolon@sfi.co.id"
-    secondary_recipients = ["asset.mgmt@sfi.co.id"]
+    outlook_recipients = ["herberth.simbolon@sfi.co.id"]
+    secondary_recipients = ["collho.3@sfi.co.id", "asset.mgmt@sfi.co.id"]
     today = datetime.now()
     month_eng = today.strftime("%B")
     month_idn_title = get_month_id(month_eng, case="title")

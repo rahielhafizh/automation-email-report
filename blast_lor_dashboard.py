@@ -88,7 +88,7 @@ def excel_config():
 def send_email():
     # ──────── DEFINE RECIPIENTS AND SUBJECT LINE
     outlook_recipients = ["asset.mgmt@sfi.co.id"]
-    secondary_recipients = "collho.3@sfi.co.id"
+    secondary_recipients = ["collho.3@sfi.co.id", "herberth.simbolon@sfi.co.id"]
     yesterday = datetime.now() - timedelta(days=1)
     year = yesterday.strftime("%Y")
     month_eng = yesterday.strftime("%B")

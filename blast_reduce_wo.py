@@ -48,12 +48,12 @@ def excel_config():
     select_sheet_down()
     move_or_copy_menu()
     move_or_copy_as_newbook()
-    wait_timer(CONFIG["WAIT_TIME"]["TEN_SECOND"])
+    wait_timer(CONFIG["WAIT_TIME"]["FIFTEEN_SECOND"])
 
     # ──────── SEVER ALL EXTERNAL LINKS
     switch_to_right_sheet()
     break_excel_link()
-    wait_timer(CONFIG["WAIT_TIME"]["TEN_SECOND"])
+    wait_timer(CONFIG["WAIT_TIME"]["FIFTEEN_SECOND"])
 
     # ──────── CAPTURE THE TABLE AS AN IMAGE
     switch_to_first_sheet()
@@ -96,7 +96,7 @@ def excel_config():
 def send_email():
     # ──────── DEFINE RECIPIENTS AND SUBJECT LINE
     outlook_recipients = ["asset.mgmt@sfi.co.id"]
-    secondary_recipients = "collho.3@sfi.co.id"
+    secondary_recipients = ["collho.3@sfi.co.id", "herberth.simbolon@sfi.co.id"]
     today = datetime.now()
     month_eng = today.strftime("%B")
     reduce_wo_day = today.strftime("%d")

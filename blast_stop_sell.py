@@ -99,7 +99,7 @@ def excel_config():
 def send_email(subject_text, body_text):
     # ──────── DEFINE RECIPIENTS AND SUBJECT LINE
     outlook_recipients = ["asset.mgmt@sfi.co.id"]
-    secondary_recipients = "collho.3@sfi.co.id"
+    secondary_recipients = ["collho.3@sfi.co.id", "herberth.simbolon@sfi.co.id"]
     subject_email = (
         f"Summary Penugasan & Kunjungan Cabang Stop Sell As Of | {subject_text}"
     )

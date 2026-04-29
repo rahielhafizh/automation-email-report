@@ -76,8 +76,8 @@ def excel_config():
 
 def send_email():
     # ──────── DEFINE RECIPIENTS AND SUBJECT LINE
-    outlook_recipients = "herberth.simbolon@sfi.co.id"
-    secondary_recipients = ["asset.mgmt@sfi.co.id"]
+    outlook_recipients = ["herberth.simbolon@sfi.co.id"]
+    secondary_recipients = ["collho.3@sfi.co.id", "asset.mgmt@sfi.co.id"]
     today = datetime.now()
     month_eng = today.strftime("%B")
     month_idn_title = get_month_id(month_eng, case="title")
