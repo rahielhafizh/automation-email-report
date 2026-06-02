@@ -75,7 +75,7 @@ def excel_config():
     fine_filename = f"Summary Report Performance Denda Aktif {fine_day} {month_idn_title} ({today.strftime('%H.%M')})"
     pyautogui.write(fine_filename, interval=0.05)
     confirm()
-    wait_timer(CONFIG["WAIT_TIME"]["FIFTEEN_SECOND"])
+    wait_timer(CONFIG["WAIT_TIME"]["TEN_SECOND"])
     closing_tab()
     wait_timer(CONFIG["WAIT_TIME"]["THREE_SECOND"])
 
@@ -85,9 +85,9 @@ def excel_config():
     switch_to_right_sheet()
     switch_to_first_cells()
     save_file()
-    wait_timer(CONFIG["WAIT_TIME"]["TWENTY_SECOND"])
+    wait_timer(CONFIG["WAIT_TIME"]["FIFTEEN_SECOND"])
     closing_tab()
-    wait_timer(CONFIG["WAIT_TIME"]["TEN_SECOND"])
+    wait_timer(CONFIG["WAIT_TIME"]["FIVE_SECOND"])
 
 
 def send_email():

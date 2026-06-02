@@ -35,10 +35,10 @@ def excel_config():
 
     # ──────── REFRESH ALL DATA CONNECTIONS
     refresh_excel_data()
-    wait_timer(CONFIG["WAIT_TIME"]["FOUR_MINUTE"])
+    wait_timer(CONFIG["WAIT_TIME"]["THREE_MINUTE"])
     move_cursor_figure_eight()
     scroller_page()
-    wait_timer(CONFIG["WAIT_TIME"]["ONE_MINUTE"])
+    wait_timer(CONFIG["WAIT_TIME"]["ONEHALF_MINUTE"])
     entering_operation()
     switch_to_first_cells()
 
@@ -50,7 +50,7 @@ def excel_config():
     # ──────── EXTRACT THE TARGET SHEET INTO A STANDALONE WORKBOOK
     move_or_copy_menu()
     move_or_copy_as_newbook()
-    wait_timer(CONFIG["WAIT_TIME"]["TWO_MINUTE"])
+    wait_timer(CONFIG["WAIT_TIME"]["ONEHALF_MINUTE"])
     move_cursor_figure_eight()
     scroller_page()
     wait_timer(CONFIG["WAIT_TIME"]["THIRTY_SECOND"])
@@ -80,7 +80,7 @@ def excel_config():
     payment_filename = f"Summary Report Penerimaan Angsuran - {payment_day} {month_idn_title} ({today.strftime('%H.%M')})"
     pyautogui.write(payment_filename, interval=0.05)
     confirm()
-    wait_timer(CONFIG["WAIT_TIME"]["ONE_MINUTE"])
+    wait_timer(CONFIG["WAIT_TIME"]["THIRTY_SECOND"])
 
     # ──────── CLOSE THE EXPORTED WORKBOOK
     switch_to_right_sheet()

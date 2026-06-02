@@ -34,21 +34,20 @@ def excel_config():
 
     # ──────── REFRESH ALL DATA CONNECTIONS
     refresh_excel_data()
-    wait_timer(CONFIG["WAIT_TIME"]["TWOHALF_MINUTE"])
+    wait_timer(CONFIG["WAIT_TIME"]["TWO_MINUTE"])
     entering_operation()
 
     # ──────── NAVIGATE TO THE TARGET SHEET
     switch_to_first_cells()
-    switch_to_right_sheet()
-    switch_to_right_sheet()
-    switch_to_right_sheet()
+    for _ in range(4):
+        switch_to_right_sheet()
 
     # ──────── EXTRACT THE TARGET SHEET INTO A STANDALONE WORKBOOK
     switch_to_first_cells()
     select_sheet_down()
     move_or_copy_menu()
     move_or_copy_as_newbook()
-    wait_timer(CONFIG["WAIT_TIME"]["FIFTEEN_SECOND"])
+    wait_timer(CONFIG["WAIT_TIME"]["TWENTY_SECOND"])
 
     # ──────── SEVER ALL EXTERNAL LINKS
     switch_to_right_sheet()

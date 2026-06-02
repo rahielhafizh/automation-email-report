@@ -42,7 +42,7 @@ def excel_config():
     wait_timer(CONFIG["WAIT_TIME"]["TWOHALF_MINUTE"])
     move_cursor_figure_eight()
     scroller_page()
-    wait_timer(CONFIG["WAIT_TIME"]["TWOHALF_MINUTE"])
+    wait_timer(CONFIG["WAIT_TIME"]["TWO_MINUTE"])
     entering_operation()
     switch_to_first_cells()
 
@@ -57,7 +57,7 @@ def excel_config():
     move_or_copy_as_newbook()
     wait_timer(CONFIG["WAIT_TIME"]["ONEHALF_MINUTE"])
     move_cursor_figure_eight()
-    wait_timer(CONFIG["WAIT_TIME"]["THIRTY_SECOND"])
+    wait_timer(CONFIG["WAIT_TIME"]["FIFTEEN_SECOND"])
 
     # ──────── SEVER ALL EXTERNAL LINKS
     switch_to_table_cells()
@@ -83,7 +83,7 @@ def excel_config():
     flowrate_filename = f"Summary Report Flowrate {datetime.now().strftime('%d')} {month_idn_title} ({today.strftime('%H.%M')})"
     pyautogui.write(flowrate_filename, interval=0.05)
     confirm()
-    wait_timer(CONFIG["WAIT_TIME"]["THIRTY_SECOND"])
+    wait_timer(CONFIG["WAIT_TIME"]["TEN_SECOND"])
 
     # ──────── CLOSE THE EXPORTED WORKBOOK
     switch_to_right_sheet()
@@ -98,7 +98,7 @@ def excel_config():
     switch_to_first_cells()
     wait_timer(CONFIG["WAIT_TIME"]["FIVE_SECOND"])
     save_file()
-    wait_timer(CONFIG["WAIT_TIME"]["TWENTY_SECOND"])
+    wait_timer(CONFIG["WAIT_TIME"]["FIFTEEN_SECOND"])
     closing_tab()
     wait_timer(CONFIG["WAIT_TIME"]["FIVE_SECOND"])
 

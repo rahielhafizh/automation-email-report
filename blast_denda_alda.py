@@ -84,7 +84,7 @@ def excel_config():
     switch_to_first_sheet()
     switch_to_first_cells()
     save_file()
-    wait_timer(CONFIG["WAIT_TIME"]["TWENTY_SECOND"])
+    wait_timer(CONFIG["WAIT_TIME"]["FIFTEEN_SECOND"])
     closing_tab()
     wait_timer(CONFIG["WAIT_TIME"]["FIVE_SECOND"])
 

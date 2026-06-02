@@ -69,7 +69,7 @@ def excel_config():
 
     # ──────── CLOSE THE EXPORTED WORKBOOK
     confirm()
-    wait_timer(CONFIG["WAIT_TIME"]["TEN_SECOND"])
+    wait_timer(CONFIG["WAIT_TIME"]["FIVE_SECOND"])
     closing_tab()
     wait_timer(CONFIG["WAIT_TIME"]["THREE_SECOND"])
 
