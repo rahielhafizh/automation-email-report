@@ -35,7 +35,7 @@ def excel_config():
 
     # ──────── REFRESH ALL DATA CONNECTIONS
     refresh_excel_data()
-    wait_timer(CONFIG["WAIT_TIME"]["THREE_MINUTE"])
+    wait_timer(CONFIG["WAIT_TIME"]["TWOHALF_MINUTE"])
     move_cursor_figure_eight()
     scroller_page()
     wait_timer(CONFIG["WAIT_TIME"]["ONEHALF_MINUTE"])
@@ -53,7 +53,7 @@ def excel_config():
     wait_timer(CONFIG["WAIT_TIME"]["ONEHALF_MINUTE"])
     move_cursor_figure_eight()
     scroller_page()
-    wait_timer(CONFIG["WAIT_TIME"]["THIRTY_SECOND"])
+    wait_timer(CONFIG["WAIT_TIME"]["TWENTY_SECOND"])
 
     # ──────── SEVER ALL EXTERNAL LINKS
     switch_to_first_sheet()
@@ -80,13 +80,13 @@ def excel_config():
     payment_filename = f"Summary Report Penerimaan Angsuran - {payment_day} {month_idn_title} ({today.strftime('%H.%M')})"
     pyautogui.write(payment_filename, interval=0.05)
     confirm()
-    wait_timer(CONFIG["WAIT_TIME"]["THIRTY_SECOND"])
+    wait_timer(CONFIG["WAIT_TIME"]["TWENTY_SECOND"])
 
     # ──────── CLOSE THE EXPORTED WORKBOOK
     switch_to_right_sheet()
     switch_to_first_sheet()
     closing_tab()
-    wait_timer(CONFIG["WAIT_TIME"]["TEN_SECOND"])
+    wait_timer(CONFIG["WAIT_TIME"]["FIVE_SECOND"])
 
     # ──────── SAVE AND CLOSE THE SOURCE FILE
     move_cell_horizontal()

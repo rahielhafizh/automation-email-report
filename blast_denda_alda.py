@@ -35,7 +35,7 @@ def excel_config():
 
     # ──────── REFRESH ALL DATA CONNECTIONS
     refresh_excel_data()
-    wait_timer(CONFIG["WAIT_TIME"]["TWO_MINUTE"])
+    wait_timer(CONFIG["WAIT_TIME"]["ONE_MINUTE"])
     entering_operation()
     switch_to_first_cells()
 
@@ -47,14 +47,14 @@ def excel_config():
     select_sheet_down()
     move_or_copy_menu()
     move_or_copy_as_newbook()
-    wait_timer(CONFIG["WAIT_TIME"]["FIVE_SECOND"])
+    wait_timer(CONFIG["WAIT_TIME"]["FIFTEEN_SECOND"])
 
     # ──────── SEVER ALL EXTERNAL LINKS
     switch_to_first_sheet()
     break_excel_link()
 
     # ──────── CAPTURE THE TABLE AS AN IMAGE
-    switch_to_first_cells()
+    switch_to_first_sheet()
     switch_to_first_cells()
     switch_to_table_cells()
     capture_table_as_picture()
@@ -64,7 +64,7 @@ def excel_config():
     save_new_book()
     pyautogui.write(CONFIG["SUBMISSION_ALDA"])
     confirm()
-    wait_timer(CONFIG["WAIT_TIME"]["FIVE_SECOND"])
+    wait_timer(CONFIG["WAIT_TIME"]["THREE_SECOND"])
 
     # ──────── ASSIGN THE STANDARDISED FILENAME
     set_new_book_name()
@@ -75,9 +75,9 @@ def excel_config():
     fine_filename = f"Summary Report Performance Denda Alda {fine_day} {month_idn_title} ({today.strftime('%H.%M')})"
     pyautogui.write(fine_filename, interval=0.05)
     confirm()
-    wait_timer(CONFIG["WAIT_TIME"]["FIVE_SECOND"])
+    wait_timer(CONFIG["WAIT_TIME"]["THREE_SECOND"])
     closing_tab()
-    wait_timer(CONFIG["WAIT_TIME"]["FIVE_SECOND"])
+    wait_timer(CONFIG["WAIT_TIME"]["THREE_SECOND"])
 
     # ──────── SAVE AND CLOSE THE SOURCE FILE
     switch_to_first_cells()
@@ -86,7 +86,7 @@ def excel_config():
     save_file()
     wait_timer(CONFIG["WAIT_TIME"]["FIFTEEN_SECOND"])
     closing_tab()
-    wait_timer(CONFIG["WAIT_TIME"]["FIVE_SECOND"])
+    wait_timer(CONFIG["WAIT_TIME"]["THREE_SECOND"])
 
 
 def send_email():
