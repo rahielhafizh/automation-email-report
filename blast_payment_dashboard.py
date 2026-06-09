@@ -3,7 +3,7 @@ import pyautogui
 from datetime import datetime
 from general_task import *
 from pynput.keyboard import Controller
-from services.remover_payment import clear_submission_folder
+from remover.remover_payment import clear_submission_folder
 from services.config import load_config, wait_timer, logger, get_month_id
 from outlook_payment import send_outlook_email
 from services.capslock_checker import capslock_checking

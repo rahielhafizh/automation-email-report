@@ -3,7 +3,7 @@ import pyautogui
 from datetime import datetime, timedelta
 from general_task import *
 from pynput.keyboard import Controller
-from services.remover_tod_report import clear_submission_folder
+from remover.remover_tod_report import clear_submission_folder
 from services.config import load_config, wait_timer, logger, get_month_id
 from outlook_tod_report import send_outlook_email
 from services.capslock_checker import capslock_checking

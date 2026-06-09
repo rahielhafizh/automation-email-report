@@ -7,7 +7,7 @@ from outlook_lor import send_outlook_email
 from services.capslock_checker import capslock_checking
 from services.config import load_config, wait_timer, logger, get_month_id
 from services.duration_counter import start_counter, stop_counter, get_duration_result
-from services.remover_lor import clear_submission_folder
+from remover.remover_lor import clear_submission_folder
 from screen_keeper import (
     find_screen_keeper_process,
     stop_screen_keeper,

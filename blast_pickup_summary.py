@@ -5,7 +5,7 @@ from general_task import *
 from outlook_pickup import send_outlook_email
 from services.capslock_checker import capslock_checking
 from services.config import load_config, wait_timer, logger, get_month_id
-from services.remover_pickup import clear_submission_folder
+from remover.remover_pickup import clear_submission_folder
 from services.duration_counter import start_counter, stop_counter, get_duration_result
 from screen_keeper import (
     find_screen_keeper_process,
