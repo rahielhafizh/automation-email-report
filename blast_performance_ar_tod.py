@@ -3,9 +3,9 @@ import pyautogui
 from datetime import datetime, timedelta
 from general_task import *
 from pynput.keyboard import Controller
-from remover.remover_tod_report import clear_submission_folder
+from remover.remover_performance_ar_tod import clear_submission_folder
 from services.config import load_config, wait_timer, logger, get_month_id
-from outlook_tod_report import send_outlook_email
+from mail.outlook_performance_ar_tod import send_outlook_email
 from services.capslock_checker import capslock_checking
 from services.duration_counter import start_counter, stop_counter, get_duration_result
 from screen_keeper import (

@@ -3,11 +3,11 @@ import pyautogui
 from datetime import datetime, timedelta
 from pynput.keyboard import Controller
 from general_task import *
-from outlook_cwo import send_outlook_email
+from mail.outlook_performance_cwo_wo import send_outlook_email
 from services.capslock_checker import capslock_checking
 from services.config import load_config, wait_timer, logger, get_month_id
 from services.duration_counter import start_counter, stop_counter, get_duration_result
-from remover.remover_cwo import clear_submission_folder
+from remover.remover_performance_cwo_wo import clear_submission_folder
 from screen_keeper import (
     find_screen_keeper_process,
     stop_screen_keeper,

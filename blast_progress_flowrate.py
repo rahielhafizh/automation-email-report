@@ -3,12 +3,12 @@ import pyautogui
 from datetime import datetime
 from pynput.keyboard import Controller
 from general_task import *
-from outlook_flowrate import send_outlook_email
+from mail.outlook_progress_flowrate import send_outlook_email
 from data_validate_flowrate_mail import validate_flowrate_file
 from services.capslock_checker import capslock_checking
 from services.config import load_config, wait_timer, logger, get_month_id
 from services.duration_counter import start_counter, stop_counter, get_duration_result
-from remover.remover_flowrate import clear_submission_folder
+from remover.remover_progress_flowrate import clear_submission_folder
 from screen_keeper import (
     find_screen_keeper_process,
     stop_screen_keeper,
