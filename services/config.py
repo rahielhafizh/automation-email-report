@@ -56,6 +56,22 @@ def setup_logger() -> logging.Logger:
 
 logger = setup_logger()
 
+DEFAULT_CC_SPPI = [
+    "agnes.tri@sfi.co.id",
+    "ardi.supriyono@sfi.co.id",
+    "swacita.apriyanti@sfi.co.id",
+    "rio.maulana@sfi.co.id",
+    "hermawan.nugroho@sfi.co.id",
+    "ugi.lugina@sfi.co.id",
+]
+
+
+DEFAULT_CC_MOKAS = [
+    "angelita.roma@sfi.co.id",
+    "alfian.tejo@sfi.co.id",
+    "aris.sumartono@sfi.co.id",
+    "brian.yektibudi@sfi.co.id",
+]
 
 APPLICATION_PATHS = {
     "CHROME_PATH": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
