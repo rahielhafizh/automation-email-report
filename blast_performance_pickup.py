@@ -6,7 +6,7 @@ from mail.outlook_performance_pickup import send_outlook_email
 from services.capslock_checker import capslock_checking
 from services.config import load_config, wait_timer, logger, get_month_id
 from remover.remover_performance_pickup import clear_submission_folder
-from services.duration_counter import start_counter, stop_counter, get_duration_result
+from services.duration_counter import start_counter, stop_counter, start_counter_result
 from screen_keeper import (
     find_screen_keeper_process,
     stop_screen_keeper,
@@ -36,7 +36,6 @@ def excel_config():
     wait_timer(CONFIG["WAIT_TIME"]["ONE_MINUTE"])
     entering_operation()
     switch_to_first_cells()
-    save_file()
 
     # ──────── CONVERT THE SUMMARY TABLE TO STATIC VALUES
     switch_to_last_sheet()
@@ -148,7 +147,7 @@ if __name__ == "__main__":
 
     # ──────── FINALISE AND RESTORE THE ENVIRONMENT
     stop_counter()
-    execution_time = get_duration_result()
+    execution_time = start_counter_result()
     logger.info(f"[SYSTEM] TOTAL EXECUTION TIME : {execution_time}")
 
     wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])

@@ -4,7 +4,7 @@ from remover.base_remover import clear_submission_folder
 
 def run_remover(dry_run: bool = False):
     config = load_config()
-    target = str(config.get("SUB_MOBCOLL_LOR_MAIL", ""))
+    target = str(config.get("SUB_MOBCOLL_MAIL", ""))
     return clear_submission_folder(
         target_folder=target, filename_pattern="*", dry_run=dry_run
     )

@@ -18,7 +18,7 @@ from services.config import (
     wait_timer,
 )
 from services.duration_counter import (
-    get_duration_result,
+    start_counter_result,
     start_counter,
     stop_counter,
 )
@@ -110,14 +110,14 @@ def send_email():
     reduce_wo_day = today.strftime("%d")
     reduce_wo_year = today.strftime("%Y")
     month_idn_title = get_month_id(month_eng, case="title")
-    subject_email = f"Summary Update Progress Reduce WO & RR WO | {datetime.now().strftime('%d')} {month_idn_title} ({today.strftime('%H:%M')})"
+    subject_email = f"Summary Report Progress Reduce WO & RR WO | {datetime.now().strftime('%d')} {month_idn_title} ({today.strftime('%H:%M')})"
 
     # ──────── SET EMAIL BODY
     core_email = f"""Dear All,
 
 Dengan hormat,
 
-Berikut terlampir Summary Report Progress Reduce WO & RR WOpada {reduce_wo_day} {month_idn_title} {reduce_wo_year} Pukul {today.strftime('%H:%M')} WIB.
+Berikut terlampir Summary Report Progress Reduce WO & RR WO pada {reduce_wo_day} {month_idn_title} {reduce_wo_year} pukul {today.strftime('%H:%M')} WIB.
 
 Catatan
 - Laporan ini dihasilkan secara otomatis dan disusun oleh sistem.
@@ -175,7 +175,7 @@ if __name__ == "__main__":
 
     # ──────── FINALISE AND RESTORE THE ENVIRONMENT
     stop_counter()
-    execution_time = get_duration_result()
+    execution_time = start_counter_result()
     logger.info(f"[SYSTEM] TOTAL EXECUTION TIME : {execution_time}")
 
     wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])

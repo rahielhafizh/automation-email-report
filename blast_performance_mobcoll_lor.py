@@ -6,7 +6,7 @@ from general_task import *
 from mail.outlook_performance_mobcoll_lor import send_outlook_email
 from services.capslock_checker import capslock_checking
 from services.config import load_config, wait_timer, logger, get_month_id
-from services.duration_counter import start_counter, stop_counter, get_duration_result
+from services.duration_counter import start_counter, stop_counter, start_counter_result
 from remover.remover_performance_mobcoll_lor import clear_submission_folder
 from screen_keeper import (
     find_screen_keeper_process,
@@ -24,7 +24,7 @@ def excel_config():
     logger.info("[SYSTEM] MOBCOLL LOR REPORT EXCEL WORKFLOW")
 
     # ──────── OPEN THE SOURCE WORKBOOK
-    os.startfile(CONFIG["WORKSOURCE_MOBCOLL_LOR_MAIL"])
+    os.startfile(CONFIG["WORKSOURCE_MOBCOLL_LOR"])
     wait_timer(CONFIG["WAIT_TIME"]["TWENTY_SECOND"])
     maximize_app_window()
     switch_to_first_sheet()
@@ -56,7 +56,7 @@ def excel_config():
 
     # ──────── SAVE THE NEW WORKBOOK
     save_new_book()
-    pyautogui.write(CONFIG["SUB_MOBCOLL_LOR_MAIL"])
+    pyautogui.write(CONFIG["SUB_MOBCOLL_MAIL"])
     confirm()
 
     # ──────── ASSIGN THE STANDARDISED FILENAME
@@ -132,7 +132,7 @@ if __name__ == "__main__":
     start_counter()
     capslock_checking()
     wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
-    clear_submission_folder(target_folder=CONFIG["SUB_MOBCOLL_LOR_MAIL"])
+    clear_submission_folder(target_folder=CONFIG["SUB_MOBCOLL_MAIL"])
     wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
     find_screen_keeper_process()
     wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
@@ -148,7 +148,7 @@ if __name__ == "__main__":
 
     # ──────── FINALISE AND RESTORE THE ENVIRONMENT
     stop_counter()
-    execution_time = get_duration_result()
+    execution_time = start_counter_result()
     logger.info(f"[SYSTEM] TOTAL EXECUTION TIME : {execution_time}")
     wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
     logger.warning("[SYSTEM] RESTARTING SCREEN KEEPER")

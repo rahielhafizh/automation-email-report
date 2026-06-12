@@ -7,7 +7,7 @@ from mail.outlook_performance_mobcoll_reguler import *
 from general_task import *
 from services.capslock_checker import capslock_checking
 from services.config import load_config, wait_timer, logger, get_month_id
-from services.duration_counter import start_counter, stop_counter, get_duration_result
+from services.duration_counter import start_counter, stop_counter, start_counter_result
 from screen_keeper import (
     find_screen_keeper_process,
     stop_screen_keeper,
@@ -271,7 +271,7 @@ def excel_config():
     wait_timer(CONFIG["WAIT_TIME"]["THREE_SECOND"])
 
     save_file()
-    wait_timer(CONFIG["WAIT_TIME"]["FIVE_SECOND"])
+    wait_timer(CONFIG["WAIT_TIME"]["TEN_SECOND"])
     closing_tab()
     wait_timer(CONFIG["WAIT_TIME"]["THREE_SECOND"])
 
@@ -362,7 +362,7 @@ if __name__ == "__main__":
         logger.warning("[SYSTEM] MOBCOLL REGULER REPORT FAILED")
 
     stop_counter()
-    execution_time = get_duration_result()
+    execution_time = start_counter_result()
     logger.info(f"[SYSTEM] TOTAL EXECUTION TIME: {execution_time}")
 
     wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])

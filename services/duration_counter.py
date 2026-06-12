@@ -3,19 +3,19 @@ import datetime
 from services.config import logger
 
 
-start_timer = None
+start_counter = None
 end_timer = None
 on_going = False
 
 
 def start_counter():
-    global start_timer, on_going
-    start_timer = time.time()
+    global start_counter, on_going
+    start_counter = time.time()
     on_going = True
     logger.warning(
         f"[SYSTEM] TIMER START AT {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
     )
-    return start_timer
+    return start_counter
 
 
 def stop_counter():
@@ -31,12 +31,12 @@ def stop_counter():
     return end_timer
 
 
-def get_duration_result(format_output=True):
-    global start_timer, end_timer
-    if start_timer is None:
+def start_counter_result(format_output=True):
+    global start_counter, end_timer
+    if start_counter is None:
         logger.error("[ERROR] TIMER NOT STARTED, DURATION UNAVAILABLE")
         return None
-    execution_seconds = (time.time() if end_timer is None else end_timer) - start_timer
+    execution_seconds = (time.time() if end_timer is None else end_timer) - start_counter
     if format_output:
         hours, remainder = divmod(execution_seconds, 3600)
         minutes, seconds = divmod(remainder, 60)
@@ -45,7 +45,7 @@ def get_duration_result(format_output=True):
 
 
 def log_counter_execution(process_name=None):
-    execution_time = get_duration_result()
+    execution_time = start_counter_result()
     process_str = f" FOR {process_name.upper()}" if process_name else ""
     log_message = f"[SYSTEM] TOTAL EXECUTION TIME{process_str} : {execution_time}"
     logger.info(log_message)
@@ -53,8 +53,8 @@ def log_counter_execution(process_name=None):
 
 
 def reset_timer():
-    global start_timer, end_timer, on_going
-    start_timer = None
+    global start_counter, end_timer, on_going
+    start_counter = None
     end_timer = None
     on_going = False
     logger.debug("[SYSTEM] TIMER RESET")

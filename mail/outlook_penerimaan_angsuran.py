@@ -10,6 +10,6 @@ def send_outlook_email(
         subject_email,
         core_email,
         footer_template,
-        attachment_key="SUB_PENERIMAAN_ANGURAN",
+        attachment_key="SUB_PENERIMAAN_ANGSURAN",
         report_label="REPORT PENERIMAAN ANGSURAN",
     )

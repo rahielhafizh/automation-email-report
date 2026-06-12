@@ -7,7 +7,7 @@ from mail.outlook_progress_flowrate import send_outlook_email
 from data_validate_flowrate_mail import validate_flowrate_file
 from services.capslock_checker import capslock_checking
 from services.config import load_config, wait_timer, logger, get_month_id
-from services.duration_counter import start_counter, stop_counter, get_duration_result
+from services.duration_counter import start_counter, stop_counter, start_counter_result
 from remover.remover_progress_flowrate import clear_submission_folder
 from screen_keeper import (
     find_screen_keeper_process,
@@ -34,7 +34,7 @@ def excel_config():
 
     # ──────── REFRESH ALL DATA CONNECTIONS
     refresh_excel_data()
-    wait_timer(CONFIG["WAIT_TIME"]["TWOHALF_MINUTE"])
+    wait_timer(CONFIG["WAIT_TIME"]["TWO_MINUTE"])
     move_cursor_figure_eight()
     scroller_page()
     wait_timer(CONFIG["WAIT_TIME"]["ONEHALF_MINUTE"])
@@ -76,7 +76,7 @@ def excel_config():
     today = datetime.now()
     month_eng = today.strftime("%B")
     month_idn_title = get_month_id(month_eng, case="title")
-    flowrate_filename = f"Summary Report Flowrate {datetime.now().strftime('%d')} {month_idn_title} ({today.strftime('%H.%M')})"
+    flowrate_filename = f"Summary Report Progress Flowrate {datetime.now().strftime('%d')} {month_idn_title} ({today.strftime('%H.%M')})"
     pyautogui.write(flowrate_filename, interval=0.05)
     confirm()
     wait_timer(CONFIG["WAIT_TIME"]["TEN_SECOND"])
@@ -111,14 +111,14 @@ def send_email():
     today = datetime.now()
     month_eng = today.strftime("%B")
     month_idn_title = get_month_id(month_eng, case="title")
-    subject_email = f"Summary Update Prediksi Flowrate | {datetime.now().strftime('%d')} {month_idn_title} ({today.strftime('%H:%M')})"
+    subject_email = f"Summary Report Progress Flowrate | {datetime.now().strftime('%d')} {month_idn_title} ({today.strftime('%H:%M')})"
 
     # ──────── SET EMAIL BODY
     core_email = f"""Yth. Bapak Chief of Operating Officer,
 
 Dengan hormat,
 
-Berikut terlampir Summary Update Daily Flowrate per tanggal {datetime.now().strftime('%d')} {month_idn_title} pukul {today.strftime('%H:%M')} WIB.
+Berikut terlampir Summary Report Progress Flowrate per tanggal {datetime.now().strftime('%d')} {month_idn_title} pukul {today.strftime('%H:%M')} WIB.
 
 Catatan
 - Laporan ini dihasilkan secara otomatis dan disusun oleh sistem.
@@ -220,7 +220,7 @@ def main():
     finally:
         # ──────── FINALISE AND RESTORE THE ENVIRONMENT
         stop_counter()
-        execution_time = get_duration_result()
+        execution_time = start_counter_result()
         logger.info(f"[TIMER] TOTAL : {execution_time}")
         wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
         run_screen_keeper()

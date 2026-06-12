@@ -7,7 +7,7 @@ from remover.remover_penerimaan_angsuran import clear_submission_folder
 from services.config import load_config, wait_timer, logger, get_month_id
 from mail.outlook_penerimaan_angsuran import send_outlook_email
 from services.capslock_checker import capslock_checking
-from services.duration_counter import start_counter, stop_counter, get_duration_result
+from services.duration_counter import start_counter, stop_counter, start_counter_result
 from screen_keeper import (
     find_screen_keeper_process,
     stop_screen_keeper,
@@ -25,26 +25,23 @@ def excel_config():
     logger.info("[SYSTEM] INSTALLMENT PAYMENT REPORT EXCEL WORKFLOW")
 
     # ──────── OPEN THE SOURCE WORKBOOK
-    os.startfile(CONFIG["WORKSOURCE_PENERIMAAN_ANGURAN"])
+    os.startfile(CONFIG["WORKSOURCE_PENERIMAAN_ANGSURAN"])
     wait_timer(CONFIG["WAIT_TIME"]["THIRTY_SECOND"])
     maximize_app_window()
-    switch_to_right_sheet()
     switch_to_first_sheet()
+    switch_to_right_sheet()
     switch_to_first_cells()
-    move_cell_horizontal()
 
     # ──────── REFRESH ALL DATA CONNECTIONS
     refresh_excel_data()
     wait_timer(CONFIG["WAIT_TIME"]["TWO_MINUTE"])
     move_cursor_figure_eight()
     scroller_page()
-    wait_timer(CONFIG["WAIT_TIME"]["ONE_MINUTE"])
+    wait_timer(CONFIG["WAIT_TIME"]["TWO_MINUTE"])
     entering_operation()
     switch_to_first_cells()
 
     # ──────── NAVIGATE TO THE TARGET SHEET
-    switch_to_right_sheet()
-    switch_to_first_cells()
     select_sheet_down()
 
     # ──────── EXTRACT THE TARGET SHEET INTO A STANDALONE WORKBOOK
@@ -53,11 +50,11 @@ def excel_config():
     wait_timer(CONFIG["WAIT_TIME"]["ONEHALF_MINUTE"])
     move_cursor_figure_eight()
     scroller_page()
-    wait_timer(CONFIG["WAIT_TIME"]["TWENTY_SECOND"])
 
     # ──────── SEVER ALL EXTERNAL LINKS
     switch_to_first_sheet()
     break_excel_link()
+    wait_timer(CONFIG["WAIT_TIME"]["FIVE_SECOND"])
 
     # ──────── CAPTURE THE TABLE AS AN IMAGE
     switch_to_first_cells()
@@ -67,9 +64,9 @@ def excel_config():
 
     # ──────── SAVE THE NEW WORKBOOK
     save_new_book()
-    pyautogui.write(CONFIG["SUB_PENERIMAAN_ANGURAN"])
+    pyautogui.write(CONFIG["SUB_PENERIMAAN_ANGSURAN"])
     confirm()
-    wait_timer(CONFIG["WAIT_TIME"]["FIVE_SECOND"])
+    wait_timer(CONFIG["WAIT_TIME"]["THREE_SECOND"])
 
     # ──────── ASSIGN THE STANDARDISED FILENAME
     set_new_book_name()
@@ -77,7 +74,7 @@ def excel_config():
     payment_day = today.strftime("%d")
     month_eng = today.strftime("%B")
     month_idn_title = get_month_id(month_eng, case="title")
-    payment_filename = f"Summary Report Penerimaan Angsuran - {payment_day} {month_idn_title} ({today.strftime('%H.%M')})"
+    payment_filename = f"Summary Report Update Penerimaan Angsuran - {payment_day} {month_idn_title} ({today.strftime('%H.%M')})"
     pyautogui.write(payment_filename, interval=0.05)
     confirm()
     wait_timer(CONFIG["WAIT_TIME"]["TWENTY_SECOND"])
@@ -115,7 +112,7 @@ def send_email():
 
 Dengan hormat,
 
-Berikut terlampir Summary Update Performance Penerimaan Angsuran As Of {month_idn_title} {year} pukul {today.strftime('%H:%M')} WIB.
+Berikut terlampir Summary Update Penerimaan Angsuran As Of {month_idn_title} {year} pukul {today.strftime('%H:%M')} WIB.
 
 Catatan
 - Laporan ini dihasilkan secara otomatis dan disusun oleh sistem.
@@ -160,7 +157,7 @@ if __name__ == "__main__":
     wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
 
     # ──────── CLEAR THE SUBMISSIONS DIRECTORY
-    clear_submission_folder(target_folder=CONFIG["SUB_PENERIMAAN_ANGURAN"])
+    clear_submission_folder(target_folder=CONFIG["SUB_PENERIMAAN_ANGSURAN"])
     wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
 
     # ──────── EXECUTE THE AUTOMATION WORKFLOW
@@ -172,7 +169,7 @@ if __name__ == "__main__":
 
     # ──────── FINALISE AND RESTORE THE ENVIRONMENT
     stop_counter()
-    execution_time = get_duration_result()
+    execution_time = start_counter_result()
     logger.info(f"[SYSTEM] TOTAL EXECUTION TIME : {execution_time}")
 
     wait_timer(CONFIG["WAIT_TIME"]["FIVE_SECOND"])

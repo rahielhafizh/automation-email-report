@@ -30,7 +30,7 @@ class ScreenKeeperState:
     def record_click(self) -> None:
         self.click_times.append(time.time())
 
-    def setup_stop_keeper(self) -> bool:
+    def setup_stop_screen_keeper(self) -> bool:
         if (
             len(self.click_times) == 3
             and (self.click_times[-1] - self.click_times[0]) <= 2
@@ -139,7 +139,7 @@ class ScreenKeeperService:
         try:
             if button == mouse.Button.right and pressed:
                 self.state.record_click()
-                if self.state.setup_stop_keeper():
+                if self.state.setup_stop_screen_keeper():
                     logger.info("[SCREEN] RIGHT CLICK STOP SEQUENCE DETECTED")
                     return False
         except Exception:

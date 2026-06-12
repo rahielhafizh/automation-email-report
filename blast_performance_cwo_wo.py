@@ -6,7 +6,7 @@ from general_task import *
 from mail.outlook_performance_cwo_wo import send_outlook_email
 from services.capslock_checker import capslock_checking
 from services.config import load_config, wait_timer, logger, get_month_id
-from services.duration_counter import start_counter, stop_counter, get_duration_result
+from services.duration_counter import start_counter, stop_counter, start_counter_result
 from remover.remover_performance_cwo_wo import clear_submission_folder
 from screen_keeper import (
     find_screen_keeper_process,
@@ -60,7 +60,7 @@ def excel_config():
     save_new_book()
     pyautogui.write(CONFIG["SUB_PERFORMANCE_CWO_WO"])
     confirm()
-    wait_timer(CONFIG["WAIT_TIME"]["FIVE_SECOND"])
+    wait_timer(CONFIG["WAIT_TIME"]["THREE_SECOND"])
 
     # ──────── ASSIGN THE STANDARDISED FILENAME
     set_new_book_name()
@@ -68,23 +68,23 @@ def excel_config():
     cwo_day = today.strftime("%d")
     month_eng = today.strftime("%B")
     month_idn_title = get_month_id(month_eng, case="title")
-    cwo_filename = f"Summary Report Dashboard CWO {cwo_day} {month_idn_title}"
+    cwo_filename = f"Summary Performance Dashboard CWO - WO {cwo_day} {month_idn_title}"
     pyautogui.write(cwo_filename, interval=0.05)
     confirm()
-    wait_timer(CONFIG["WAIT_TIME"]["FIVE_SECOND"])
+    wait_timer(CONFIG["WAIT_TIME"]["THREE_SECOND"])
 
     # ──────── CLOSE THE EXPORTED WORKBOOK
     closing_tab()
-    wait_timer(CONFIG["WAIT_TIME"]["FIFTEEN_SECOND"])
+    wait_timer(CONFIG["WAIT_TIME"]["THREE_SECOND"])
 
     # ──────── SAVE AND CLOSE THE SOURCE FILE
     switch_to_first_sheet()
     switch_to_first_cells()
     save_file()
-    wait_timer(CONFIG["WAIT_TIME"]["FIFTEEN_SECOND"])
+    wait_timer(CONFIG["WAIT_TIME"]["TEN_SECOND"])
     closing_tab()
     wait_timer(CONFIG["WAIT_TIME"]["THREE_SECOND"])
-
+ 
 
 def send_email():
     # ──────── DEFINE RECIPIENTS AND SUBJECT LINE
@@ -96,7 +96,7 @@ def send_email():
     month_eng = today.strftime("%B")
     month_idn_title = get_month_id(month_eng, case="title")
     subject_email = (
-        f"Summary Update Dashboard CWO | {cwo_day} {month_idn_title} {cwo_year}"
+        f"Summary Performance Dashboard CWO - WO | {cwo_day} {month_idn_title} {cwo_year}"
     )
 
     # ──────── SET EMAIL BODY
@@ -104,7 +104,7 @@ def send_email():
 
 Dengan hormat,
 
-Berikut terlampir Summary Report Dashboard CWO {cwo_day} {month_idn_title} {cwo_year}
+Berikut terlampir Summary Performance Dashboard CWO - WO & Estimasi WO {cwo_day} {month_idn_title} {cwo_year}
 
 Catatan
 - Laporan ini dihasilkan secara otomatis dan disusun oleh sistem.
@@ -156,7 +156,7 @@ if __name__ == "__main__":
 
     # ──────── FINALISE AND RESTORE THE ENVIRONMENT
     stop_counter()
-    execution_time = get_duration_result()
+    execution_time = start_counter_result()
     logger.info(f"[SYSTEM] TOTAL EXECUTION TIME: {execution_time}")
     wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
     logger.warning("[SYSTEM] RESTARTING SCREEN KEEPER")

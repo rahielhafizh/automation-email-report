@@ -44,12 +44,12 @@ def setup_logger() -> logging.Logger:
 
     logging.getLogger("urllib3.connectionpool").setLevel(logging.WARNING)
     logging.getLogger("urllib3.util.retry").setLevel(logging.WARNING)
-    logging.getLogger("requests.packages.urllib3.connectionpool").setLevel(
-        logging.WARNING
-    )
     logging.getLogger("requests.packages.urllib3.util.retry").setLevel(logging.WARNING)
     logging.getLogger("requests").setLevel(logging.WARNING)
     logging.getLogger("urllib3").setLevel(logging.WARNING)
+    logging.getLogger("requests.packages.urllib3.connectionpool").setLevel(
+        logging.WARNING
+    )
 
     return logger
 
@@ -77,37 +77,59 @@ APPLICATION_PATHS = {
     "CHROME_PATH": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
     "OUTLOOK_PATH": "C:\\ProgramData\\Microsoft\\Windows\\Start Menu\\Programs\\Microsoft Office 2013\\Outlook 2013.lnk",
 }
-
 FOLDER_PATHS = {
-    # SUBMISSION PATH
-    "SUB_MOBCOLL_LOR_MAIL": rf"D:\Rahiel Hafizh\Submission\Outlook\Perfomance_Kunjungan_Mobcoll_LoR",
-    "SUB_MOBCOLL_REGULER": rf"D:\Rahiel Hafizh\Submission\Outlook\Perfomance_Kunjungan_Mobcoll",
-    "SUB_PENERIMAAN_ANGURAN": rf"D:\Rahiel Hafizh\Submission\Outlook\Penerimaan_Angsuran",
-    "SUB_PENERIMAAN_DENDA_AKTIF": rf"D:\Rahiel Hafizh\Submission\Outlook\Penerimaan_Denda_Aktif",
-    "SUB_PENERIMAAN_DENDA_ALDA": rf"D:\Rahiel Hafizh\Submission\Outlook\Penerimaan_Denda_Alda",
-    "SUB_PERFORMANCE_AR_ASSET": rf"D:\Rahiel Hafizh\Submission\Outlook\Performance_AR_Remedial_Asset",
-    "SUB_PERFORMANCE_AR_TOD": rf"D:\Rahiel Hafizh\Submission\Outlook\Performance_AR_TOD",
-    "SUB_PERFORMANCE_BUCKET_CURRENT": rf"D:\Rahiel Hafizh\Submission\Outlook\Performance_Bucket_Current",
-    "SUB_PERFORMANCE_BUCKET_OVERDUE": rf"D:\Rahiel Hafizh\Submission\Outlook\Performance_Bucket_Overdue",
-    "SUB_PERFORMANCE_CWO_WO": rf"D:\Rahiel Hafizh\Submission\Outlook\Performance_CWO_WO_Estimasi_WO",
-    "SUB_PERFORMANCE_PICKUP": rf"D:\Rahiel Hafizh\Submission\Outlook\Performance_Update_Pickup",
-    "SUB_PERFORMANCE_STOPSELL": rf"D:\Rahiel Hafizh\Submission\Outlook\Perfomance_Kunjungan_StopSell",
-    "SUB_PROGRESS_FLOWRATE": rf"D:\Rahiel Hafizh\Submission\Outlook\Progress_Update_Flowrate",
-    "SUB_PROGRESS_REDUCE_WO": rf"D:\Rahiel Hafizh\Submission\Outlook\Progress_Reduce_WO",
+    # SUBMISSION OUTLOOK
+    "SUB_OUTLOOK_MOBCOLL_LOR":               rf"D:\Rahiel Hafizh\Submission\Outlook\Performance_Kunjungan_Mobcoll_LoR",
+    "SUB_OUTLOOK_MOBCOLL_REGULER":           rf"D:\Rahiel Hafizh\Submission\Outlook\Performance_Kunjungan_Mobcoll",
+    "SUB_OUTLOOK_PENERIMAAN_ANGSURAN":       rf"D:\Rahiel Hafizh\Submission\Outlook\Penerimaan_Angsuran",
+    "SUB_OUTLOOK_PENERIMAAN_CASH_IN":        rf"D:\Rahiel Hafizh\Submission\Outlook\Penerimaan_CashIn",
+    "SUB_OUTLOOK_PENERIMAAN_DENDA_AKTIF":    rf"D:\Rahiel Hafizh\Submission\Outlook\Penerimaan_Denda_Aktif",
+    "SUB_OUTLOOK_PENERIMAAN_DENDA_ALDA":     rf"D:\Rahiel Hafizh\Submission\Outlook\Penerimaan_Denda_Alda",
+    "SUB_OUTLOOK_PERFORMANCE_AR_ASSET":      rf"D:\Rahiel Hafizh\Submission\Outlook\Performance_AR_Remedial_Asset",
+    "SUB_OUTLOOK_PERFORMANCE_AR_TOD":        rf"D:\Rahiel Hafizh\Submission\Outlook\Performance_AR_TOD",
+    "SUB_OUTLOOK_PERFORMANCE_BUCKET_CURRENT": rf"D:\Rahiel Hafizh\Submission\Outlook\Performance_Bucket_Current",
+    "SUB_OUTLOOK_PERFORMANCE_BUCKET_OVERDUE": rf"D:\Rahiel Hafizh\Submission\Outlook\Performance_Bucket_Overdue",
+    "SUB_OUTLOOK_PERFORMANCE_CWO_WO":        rf"D:\Rahiel Hafizh\Submission\Outlook\Performance_CWO_WO_Estimasi_WO",
+    "SUB_OUTLOOK_PERFORMANCE_PICKUP":        rf"D:\Rahiel Hafizh\Submission\Outlook\Performance_Update_Pickup",
+    "SUB_OUTLOOK_PERFORMANCE_RECOVERY_WO":   rf"D:\Rahiel Hafizh\Submission\Outlook\Performance_Recovery_WO",
+    "SUB_OUTLOOK_PERFORMANCE_STOPSELL":      rf"D:\Rahiel Hafizh\Submission\Outlook\Performance_Kunjungan_StopSell",
+    "SUB_OUTLOOK_PROGRESS_FLOWRATE":         rf"D:\Rahiel Hafizh\Submission\Outlook\Progress_Update_Flowrate",
+    "SUB_OUTLOOK_PROGRESS_REDUCE_WO":        rf"D:\Rahiel Hafizh\Submission\Outlook\Progress_Reduce_WO",
+
+    # SUBMISSION WHATSAPP
+    "SUB_WHATSAPP_MOBCOLL_LOR":              rf"D:\Rahiel Hafizh\Submission\Whatsapp\Performance_Kunjungan_Mobcoll_LoR",
+    "SUB_WHATSAPP_MOBCOLL_REGULER":          rf"D:\Rahiel Hafizh\Submission\Whatsapp\Performance_Kunjungan_Mobcoll",
+    "SUB_WHATSAPP_PENERIMAAN_CASH_IN":       rf"D:\Rahiel Hafizh\Submission\Whatsapp\Penerimaan_CashIn",
+    "SUB_WHATSAPP_PENERIMAAN_DENDA_AKTIF":   rf"D:\Rahiel Hafizh\Submission\Whatsapp\Penerimaan_Denda_Aktif",
+    "SUB_WHATSAPP_PENERIMAAN_DENDA_ALDA":    rf"D:\Rahiel Hafizh\Submission\Whatsapp\Penerimaan_Denda_Alda",
+    "SUB_WHATSAPP_PERFORMANCE_AR_ASSET":     rf"D:\Rahiel Hafizh\Submission\Whatsapp\Performance_AR_Remedial_Asset",
+    "SUB_WHATSAPP_PERFORMANCE_AR_TOD":       rf"D:\Rahiel Hafizh\Submission\Whatsapp\Performance_AR_TOD",
+    "SUB_WHATSAPP_PERFORMANCE_BUCKET_CURRENT": rf"D:\Rahiel Hafizh\Submission\Whatsapp\Performance_Bucket_Current",
+    "SUB_WHATSAPP_PERFORMANCE_BUCKET_OVERDUE": rf"D:\Rahiel Hafizh\Submission\Whatsapp\Performance_Bucket_Overdue",
+    "SUB_WHATSAPP_PERFORMANCE_CWO_WO":       rf"D:\Rahiel Hafizh\Submission\Whatsapp\Performance_CWO_WO_Estimasi_WO",
+    "SUB_WHATSAPP_PERFORMANCE_PICKUP":       rf"D:\Rahiel Hafizh\Submission\Whatsapp\Performance_Update_Pickup",
+    "SUB_WHATSAPP_PERFORMANCE_RECOVERY_WO":  rf"D:\Rahiel Hafizh\Submission\Whatsapp\Performance_Recovery_WO",
+    "SUB_WHATSAPP_PERFORMANCE_STOPSELL":     rf"D:\Rahiel Hafizh\Submission\Whatsapp\Performance_Kunjungan_StopSell",
+    "SUB_WHATSAPP_PROGRESS_FLOWRATE":        rf"D:\Rahiel Hafizh\Submission\Whatsapp\Progress_Update_Flowrate",
 
     # WORKSOURCE FILE
-    "WORKSOURCE_MOBCOLL_LOR_MAIL": rf"D:\Rahiel Hafizh\Source\Summary_Perfomance_Kunjungan_Mobcoll_LoR.xlsx",
-    "WORKSOURCE_MOBCOLL_REGULER": rf"D:\Rahiel Hafizh\Source\Summary_Perfomance_Kunjungan_Mobcoll.xlsx",
-    "WORKSOURCE_PENERIMAAN_ANGURAN": rf"D:\Rahiel Hafizh\Source\Summary_Penerimaan_Angsuran.xlsx",
-    "WORKSOURCE_PENERIMAAN_DENDA_AKTIF": rf"D:\Rahiel Hafizh\Source\Summary_Penerimaan_Denda_Aktif.xlsx",
-    "WORKSOURCE_PENERIMAAN_DENDA_ALDA": rf"D:\Rahiel Hafizh\Source\Summary_Penerimaan_Denda_Alda.xlsx",
-    "WORKSOURCE_PERFORMANCE_AR_ASSET": rf"D:\Rahiel Hafizh\Source\Summary_Performance_AR_Remedial_Asset.xlsx",
-    "WORKSOURCE_PERFORMANCE_AR_TOD": rf"D:\Rahiel Hafizh\Source\Summary_Performance_AR_TOD.xlsx",
-    "WORKSOURCE_PERFORMANCE_CWO_WO": rf"D:\Rahiel Hafizh\Source\Summary_Performance_CWO_WO_Estimasi_WO.xlsx",
-    "WORKSOURCE_PERFORMANCE_PICKUP": rf"D:\Rahiel Hafizh\Source\Summary_Performance_Update_Pickup.xlsx",
-    "WORKSOURCE_PERFORMANCE_STOPSELL": rf"D:\Rahiel Hafizh\Source\Summary_Perfomance_Kunjungan_StopSell.xlsx",
-    "WORKSOURCE_PROGRESS_FLOWRATE": rf"D:\Rahiel Hafizh\Source\Summary_Progress_Update_Flowrate.xlsx",
-    "WORKSOURCE_PROGRESS_REDUCE_WO": rf"D:\Rahiel Hafizh\Source\Summary_Progress_Reduce_WO.xlsx",
+    "WORKSOURCE_MOBCOLL_REGULER":            rf"D:\Rahiel Hafizh\Submission\Outlook\Performance_Kunjungan_Mobcoll\Summary_Performance_Kunjungan_Mobcoll_Reguler.xlsx",
+    "WORKSOURCE_MOBCOLL_LOR":                rf"D:\Rahiel Hafizh\Source\Summary_Performance_Kunjungan_Mobcoll_LoR.xlsx",
+    "WORKSOURCE_MOBCOLL_MONITORING":         rf"D:\Rahiel Hafizh\Source\Summary_Performance_Monitoring_Mobcoll.xlsx",
+    "WORKSOURCE_PENERIMAAN_ANGSURAN":        rf"D:\Rahiel Hafizh\Source\Summary_Penerimaan_Angsuran.xlsx",
+    "WORKSOURCE_PENERIMAAN_CASH_IN":         rf"D:\Rahiel Hafizh\Source\Summary_Penerimaan_CashIn.xlsx",
+    "WORKSOURCE_PENERIMAAN_DENDA_AKTIF":     rf"D:\Rahiel Hafizh\Source\Summary_Penerimaan_Denda_Aktif.xlsx",
+    "WORKSOURCE_PENERIMAAN_DENDA_ALDA":      rf"D:\Rahiel Hafizh\Source\Summary_Penerimaan_Denda_Alda.xlsx",
+    "WORKSOURCE_PERFORMANCE_AR_ASSET":       rf"D:\Rahiel Hafizh\Source\Summary_Performance_AR_Remedial_Asset.xlsx",
+    "WORKSOURCE_PERFORMANCE_AR_TOD":         rf"D:\Rahiel Hafizh\Source\Summary_Performance_AR_TOD.xlsx",
+    "WORKSOURCE_PERFORMANCE_BUCKET_CURRENT": rf"D:\Rahiel Hafizh\Source\Summary_Performance_Bucket_Current.xlsx",
+    "WORKSOURCE_PERFORMANCE_BUCKET_OVERDUE": rf"D:\Rahiel Hafizh\Source\Summary_Performance_Bucket_Overdue.xlsx",
+    "WORKSOURCE_PERFORMANCE_CWO_WO":         rf"D:\Rahiel Hafizh\Source\Summary_Performance_CWO_WO_Estimasi_WO.xlsx",
+    "WORKSOURCE_PERFORMANCE_PICKUP":         rf"D:\Rahiel Hafizh\Source\Summary_Performance_Update_Pickup.xlsx",
+    "WORKSOURCE_PERFORMANCE_RECOVERY_WO":    rf"D:\Rahiel Hafizh\Source\Summary_Performance_Recovery_WO.xlsx",
+    "WORKSOURCE_PERFORMANCE_STOPSELL":       rf"D:\Rahiel Hafizh\Source\Summary_Performance_Kunjungan_StopSell.xlsx",
+    "WORKSOURCE_PROGRESS_FLOWRATE":          rf"D:\Rahiel Hafizh\Source\Summary_Progress_Update_Flowrate_Ori.xlsx",
+    "WORKSOURCE_PROGRESS_REDUCE_WO":         rf"D:\Rahiel Hafizh\Source\Summary_Progress_Reduce_WO.xlsx",
 }
 
 CONTACT_INFO = {

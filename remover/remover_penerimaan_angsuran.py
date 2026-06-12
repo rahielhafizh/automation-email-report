@@ -4,7 +4,7 @@ from remover.base_remover import clear_submission_folder
 
 def run_remover(dry_run: bool = False):
     config = load_config()
-    target = str(config.get("SUB_PENERIMAAN_ANGURAN", ""))
+    target = str(config.get("SUB_PENERIMAAN_ANGSURAN", ""))
     return clear_submission_folder(
         target_folder=target, filename_pattern="*", dry_run=dry_run
     )

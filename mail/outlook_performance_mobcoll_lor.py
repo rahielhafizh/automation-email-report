@@ -10,6 +10,6 @@ def send_outlook_email(
         subject_email,
         core_email,
         footer_template,
-        attachment_key="SUB_MOBCOLL_LOR_MAIL",
+        attachment_key="SUB_MOBCOLL_MAIL",
         report_label="REPORT KUNJUNGAN MOBCOLL LOR",
     )

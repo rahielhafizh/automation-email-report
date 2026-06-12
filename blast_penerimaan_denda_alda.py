@@ -6,7 +6,7 @@ from general_task import *
 from mail.outlook_penerimaan_denda_alda import send_outlook_email
 from services.capslock_checker import capslock_checking
 from services.config import load_config, wait_timer, logger, get_month_id
-from services.duration_counter import start_counter, stop_counter, get_duration_result
+from services.duration_counter import start_counter, stop_counter, start_counter_result
 from remover.remover_penerimaan_denda_alda import clear_submission_folder
 from screen_keeper import (
     find_screen_keeper_process,
@@ -72,7 +72,7 @@ def excel_config():
     fine_day = today.strftime("%d")
     month_eng = today.strftime("%B")
     month_idn_title = get_month_id(month_eng, case="title")
-    fine_filename = f"Summary Report Performance Denda Alda {fine_day} {month_idn_title} ({today.strftime('%H.%M')})"
+    fine_filename = f"Summary Report Penerimaan Denda Alda {fine_day} {month_idn_title} ({today.strftime('%H.%M')})"
     pyautogui.write(fine_filename, interval=0.05)
     confirm()
     wait_timer(CONFIG["WAIT_TIME"]["THREE_SECOND"])
@@ -97,14 +97,14 @@ def send_email():
     month_eng = today.strftime("%B")
     fine_year = today.strftime("%Y")
     month_idn_title = get_month_id(month_eng, case="title")
-    subject_email = f"Summary Update Denda Alda | {datetime.now().strftime('%d')} {month_idn_title} ({today.strftime('%H:%M')})"
+    subject_email = f"Summary Report Penerimaan Denda Alda | {datetime.now().strftime('%d')} {month_idn_title} ({today.strftime('%H:%M')})"
 
     # ──────── SET EMAIL BODY
     core_email = f"""Dear All,
 
 Dengan hormat,
 
-Berikut terlampir Summary Report Performance Denda Alda As Of {month_idn_title} {fine_year} Pukul {today.strftime('%H:%M')} WIB.
+Berikut terlampir Summary Report Penerimaan Denda Alda As Of {month_idn_title} {fine_year} Pukul {today.strftime('%H:%M')} WIB.
 
 Catatan
 - Laporan ini dihasilkan secara otomatis dan disusun oleh sistem.
@@ -156,7 +156,7 @@ if __name__ == "__main__":
 
     # ──────── FINALISE AND RESTORE THE ENVIRONMENT
     stop_counter()
-    execution_time = get_duration_result()
+    execution_time = start_counter_result()
     logger.info(f"[SYSTEM] TOTAL EXECUTION TIME : {execution_time}")
     wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
     logger.warning("[SYSTEM] RESTARTING SCREEN KEEPER")
