@@ -25,7 +25,7 @@ def excel_config():
     logger.info("[SYSTEM] CWO/WO REPORT EXCEL WORKFLOW")
 
     # ──────── OPEN THE SOURCE WORKBOOK
-    os.startfile(CONFIG["WORKSOURCE_CWO"])
+    os.startfile(CONFIG["WORKSOURCE_PERFORMANCE_CWO_WO"])
     wait_timer(CONFIG["WAIT_TIME"]["TWENTY_SECOND"])
     maximize_app_window()
 
@@ -58,7 +58,7 @@ def excel_config():
 
     # ──────── SAVE THE NEW WORKBOOK
     save_new_book()
-    pyautogui.write(CONFIG["SUBMISSION_CWO"])
+    pyautogui.write(CONFIG["SUB_PERFORMANCE_CWO_WO"])
     confirm()
     wait_timer(CONFIG["WAIT_TIME"]["FIVE_SECOND"])
 
@@ -144,7 +144,7 @@ if __name__ == "__main__":
     wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
 
     # ──────── CLEAR THE SUBMISSIONS DIRECTORY
-    clear_submission_folder(target_folder=CONFIG["SUBMISSION_CWO"])
+    clear_submission_folder(target_folder=CONFIG["SUB_PERFORMANCE_CWO_WO"])
     wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
 
     # ──────── EXECUTE THE AUTOMATION WORKFLOW

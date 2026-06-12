@@ -25,7 +25,7 @@ def excel_config():
     logger.info("[SYSTEM] INSTALLMENT PAYMENT REPORT EXCEL WORKFLOW")
 
     # ──────── OPEN THE SOURCE WORKBOOK
-    os.startfile(CONFIG["WORKSOURCE_PAYMENT"])
+    os.startfile(CONFIG["WORKSOURCE_PENERIMAAN_ANGURAN"])
     wait_timer(CONFIG["WAIT_TIME"]["THIRTY_SECOND"])
     maximize_app_window()
     switch_to_right_sheet()
@@ -35,10 +35,10 @@ def excel_config():
 
     # ──────── REFRESH ALL DATA CONNECTIONS
     refresh_excel_data()
-    wait_timer(CONFIG["WAIT_TIME"]["TWOHALF_MINUTE"])
+    wait_timer(CONFIG["WAIT_TIME"]["TWO_MINUTE"])
     move_cursor_figure_eight()
     scroller_page()
-    wait_timer(CONFIG["WAIT_TIME"]["ONEHALF_MINUTE"])
+    wait_timer(CONFIG["WAIT_TIME"]["ONE_MINUTE"])
     entering_operation()
     switch_to_first_cells()
 
@@ -67,7 +67,7 @@ def excel_config():
 
     # ──────── SAVE THE NEW WORKBOOK
     save_new_book()
-    pyautogui.write(CONFIG["SUBMISSION_PAYMENT"])
+    pyautogui.write(CONFIG["SUB_PENERIMAAN_ANGURAN"])
     confirm()
     wait_timer(CONFIG["WAIT_TIME"]["FIVE_SECOND"])
 
@@ -160,7 +160,7 @@ if __name__ == "__main__":
     wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
 
     # ──────── CLEAR THE SUBMISSIONS DIRECTORY
-    clear_submission_folder(target_folder=CONFIG["SUBMISSION_PAYMENT"])
+    clear_submission_folder(target_folder=CONFIG["SUB_PENERIMAAN_ANGURAN"])
     wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
 
     # ──────── EXECUTE THE AUTOMATION WORKFLOW

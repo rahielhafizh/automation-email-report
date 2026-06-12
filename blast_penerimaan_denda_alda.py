@@ -25,7 +25,7 @@ def excel_config():
     logger.info("[SYSTEM] ALDA FINE REPORT EXCEL WORKFLOW")
 
     # ──────── OPEN THE SOURCE WORKBOOK
-    os.startfile(CONFIG["WORKSOURCE_ALDA"])
+    os.startfile(CONFIG["WORKSOURCE_PENERIMAAN_DENDA_ALDA"])
     wait_timer(CONFIG["WAIT_TIME"]["TWENTY_SECOND"])
     maximize_app_window()
 
@@ -47,7 +47,7 @@ def excel_config():
     select_sheet_down()
     move_or_copy_menu()
     move_or_copy_as_newbook()
-    wait_timer(CONFIG["WAIT_TIME"]["FIFTEEN_SECOND"])
+    wait_timer(CONFIG["WAIT_TIME"]["TEN_SECOND"])
 
     # ──────── SEVER ALL EXTERNAL LINKS
     switch_to_first_sheet()
@@ -62,7 +62,7 @@ def excel_config():
 
     # ──────── SAVE THE NEW WORKBOOK
     save_new_book()
-    pyautogui.write(CONFIG["SUBMISSION_ALDA"])
+    pyautogui.write(CONFIG["SUB_PENERIMAAN_DENDA_ALDA"])
     confirm()
     wait_timer(CONFIG["WAIT_TIME"]["THREE_SECOND"])
 
@@ -144,7 +144,7 @@ if __name__ == "__main__":
     wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
 
     # ──────── CLEAR THE SUBMISSIONS DIRECTORY
-    clear_submission_folder(target_folder=CONFIG["SUBMISSION_ALDA"])
+    clear_submission_folder(target_folder=CONFIG["SUB_PENERIMAAN_DENDA_ALDA"])
     wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
 
     # ──────── EXECUTE THE AUTOMATION WORKFLOW

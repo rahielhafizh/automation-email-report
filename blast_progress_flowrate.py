@@ -25,14 +25,9 @@ keyboard = Controller()
 def excel_config():
     logger.info("[SYSTEM] FLOWRATE REPORT EXCEL WORKFLOW")
 
-    # ──────── VERIFY THE SOURCE FILE IS ACCESSIBLE
-    if not os.path.exists(CONFIG["WORKSOURCE_FLOWRATE"]):
-        logger.error(f"[ERROR] SOURCE FILE NOT FOUND : {CONFIG['WORKSOURCE_FLOWRATE']}")
-        return None
-
     # ──────── OPEN THE SOURCE WORKBOOK
-    os.startfile(CONFIG["WORKSOURCE_FLOWRATE"])
-    wait_timer(CONFIG["WAIT_TIME"]["TWENTYFIVE_SECOND"])
+    os.startfile(CONFIG["WORKSOURCE_PROGRESS_FLOWRATE"])
+    wait_timer(CONFIG["WAIT_TIME"]["TWENTY_SECOND"])
     maximize_app_window()
     switch_to_first_sheet()
     switch_to_first_cells()
@@ -42,11 +37,12 @@ def excel_config():
     wait_timer(CONFIG["WAIT_TIME"]["TWOHALF_MINUTE"])
     move_cursor_figure_eight()
     scroller_page()
-    wait_timer(CONFIG["WAIT_TIME"]["TWO_MINUTE"])
+    wait_timer(CONFIG["WAIT_TIME"]["ONEHALF_MINUTE"])
     entering_operation()
     switch_to_first_cells()
 
     # ──────── NAVIGATE TO THE TARGET SHEET
+    switch_to_first_sheet()
     for _ in range(2):
         switch_to_right_sheet()
     switch_to_first_cells()
@@ -57,11 +53,11 @@ def excel_config():
     move_or_copy_as_newbook()
     wait_timer(CONFIG["WAIT_TIME"]["ONEHALF_MINUTE"])
     move_cursor_figure_eight()
-    wait_timer(CONFIG["WAIT_TIME"]["FIFTEEN_SECOND"])
 
     # ──────── SEVER ALL EXTERNAL LINKS
     switch_to_table_cells()
     break_excel_link()
+    wait_timer(CONFIG["WAIT_TIME"]["THREE_SECOND"])
 
     # ──────── CAPTURE THE TABLE AS AN IMAGE
     switch_to_first_cells()
@@ -71,9 +67,9 @@ def excel_config():
 
     # ──────── SAVE THE NEW WORKBOOK
     save_new_book()
-    pyautogui.write(CONFIG["SUBMISSION_FLOWRATE"])
+    pyautogui.write(CONFIG["SUB_PROGRESS_FLOWRATE"])
     confirm()
-    wait_timer(CONFIG["WAIT_TIME"]["FIVE_SECOND"])
+    wait_timer(CONFIG["WAIT_TIME"]["THREE_SECOND"])
 
     # ──────── ASSIGN THE STANDARDISED FILENAME
     set_new_book_name()
@@ -89,22 +85,21 @@ def excel_config():
     switch_to_right_sheet()
     switch_to_first_sheet()
     closing_tab()
-    wait_timer(CONFIG["WAIT_TIME"]["TEN_SECOND"])
+    wait_timer(CONFIG["WAIT_TIME"]["THREE_SECOND"])
 
     # ──────── SAVE AND CLOSE THE SOURCE FILE
     switch_to_first_sheet()
     switch_to_first_cells()
     switch_to_right_sheet()
     switch_to_first_cells()
-    wait_timer(CONFIG["WAIT_TIME"]["FIVE_SECOND"])
     save_file()
     wait_timer(CONFIG["WAIT_TIME"]["FIFTEEN_SECOND"])
     closing_tab()
-    wait_timer(CONFIG["WAIT_TIME"]["FIVE_SECOND"])
+    wait_timer(CONFIG["WAIT_TIME"]["THREE_SECOND"])
 
     # ──────── RETURN THE EXPORT PATH FOR DOWNSTREAM VALIDATION
     created_file_path = os.path.join(
-        CONFIG["SUBMISSION_FLOWRATE"], f"{flowrate_filename}.xlsx"
+        CONFIG["SUB_PROGRESS_FLOWRATE"], f"{flowrate_filename}.xlsx"
     )
     return created_file_path
 
@@ -190,7 +185,7 @@ def main():
         wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
 
         # ──────── CLEAR THE SUBMISSIONS DIRECTORY
-        clear_submission_folder(target_folder=CONFIG["SUBMISSION_FLOWRATE"])
+        clear_submission_folder(target_folder=CONFIG["SUB_PROGRESS_FLOWRATE"])
         wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
 
         find_screen_keeper_process()

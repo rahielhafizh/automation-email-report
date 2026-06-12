@@ -24,7 +24,7 @@ def excel_config():
     logger.info("[SYSTEM] REPPO/PICKUP REPORT EXCEL WORKFLOW")
 
     # ──────── OPEN THE SOURCE WORKBOOK
-    os.startfile(CONFIG["WORKSOURCE_PICKUP"])
+    os.startfile(CONFIG["WORKSOURCE_PERFORMANCE_PICKUP"])
     wait_timer(CONFIG["WAIT_TIME"]["TEN_SECOND"])
     maximize_app_window()
 
@@ -54,7 +54,7 @@ def excel_config():
 
     # ──────── SAVE THE NEW WORKBOOK
     save_as_in()
-    pyautogui.write(CONFIG["SUBMISSION_PICKUP"])
+    pyautogui.write(CONFIG["SUB_PERFORMANCE_PICKUP"])
     wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
     confirm()
     wait_timer(CONFIG["WAIT_TIME"]["THREE_SECOND"])
@@ -131,7 +131,7 @@ if __name__ == "__main__":
     wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
 
     # ──────── CLEAR THE SUBMISSIONS DIRECTORY
-    clear_submission_folder(target_folder=CONFIG["SUBMISSION_PICKUP"])
+    clear_submission_folder(target_folder=CONFIG["SUB_PERFORMANCE_PICKUP"])
     wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
 
     find_screen_keeper_process()

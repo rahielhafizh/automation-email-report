@@ -24,7 +24,7 @@ def excel_config():
     logger.info("[SYSTEM] MOBCOLL LOR REPORT EXCEL WORKFLOW")
 
     # ──────── OPEN THE SOURCE WORKBOOK
-    os.startfile(CONFIG["WORKSOURCE_LOR"])
+    os.startfile(CONFIG["WORKSOURCE_MOBCOLL_LOR_MAIL"])
     wait_timer(CONFIG["WAIT_TIME"]["TWENTY_SECOND"])
     maximize_app_window()
     switch_to_first_sheet()
@@ -56,7 +56,7 @@ def excel_config():
 
     # ──────── SAVE THE NEW WORKBOOK
     save_new_book()
-    pyautogui.write(CONFIG["SUBMISSION_LOR"])
+    pyautogui.write(CONFIG["SUB_MOBCOLL_LOR_MAIL"])
     confirm()
 
     # ──────── ASSIGN THE STANDARDISED FILENAME
@@ -132,7 +132,7 @@ if __name__ == "__main__":
     start_counter()
     capslock_checking()
     wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
-    clear_submission_folder(target_folder=CONFIG["SUBMISSION_LOR"])
+    clear_submission_folder(target_folder=CONFIG["SUB_MOBCOLL_LOR_MAIL"])
     wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
     find_screen_keeper_process()
     wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])

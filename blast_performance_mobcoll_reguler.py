@@ -188,7 +188,7 @@ class PicDateTimeValidatorMail:
 # ───────── VALIDATION HELPERS
 def _validate_pic_data(file_path: Optional[str] = None) -> bool:
     try:
-        target_file = file_path or CONFIG["WORKSOURCE_PIC"]
+        target_file = file_path or CONFIG["WORKSOURCE_MOBCOLL_REGULER"]
         logger.info(f"[SYSTEM] VALIDATING MOBCOLL REGULER : {target_file}")
 
         if not os.path.exists(target_file):
@@ -215,7 +215,7 @@ def _validate_pic_data(file_path: Optional[str] = None) -> bool:
 
 
 def _get_pic_validation_details(file_path: Optional[str] = None) -> Dict:
-    target_file = file_path or CONFIG["WORKSOURCE_PIC"]
+    target_file = file_path or CONFIG["WORKSOURCE_MOBCOLL_REGULER"]
     try:
         validator = PicDateTimeValidatorMail(CONFIG)
         results = validator.validate_pic_datetime(target_file)
@@ -250,7 +250,7 @@ def _get_pic_validation_details(file_path: Optional[str] = None) -> Dict:
 def excel_config():
     logger.info("[SYSTEM] MOBCOLL REGULER EXCEL WORKFLOW")
 
-    os.startfile(CONFIG["WORKSOURCE_PIC"])
+    os.startfile(CONFIG["WORKSOURCE_MOBCOLL_REGULER"])
     wait_timer(CONFIG["WAIT_TIME"]["TEN_SECOND"])
     maximize_app_window()
     switch_to_first_sheet()

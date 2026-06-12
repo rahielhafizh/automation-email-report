@@ -33,7 +33,7 @@ def excel_config():
     filename_text = f"{yesterday.day} {month_idn_title} {year}"
 
     # ──────── OPEN THE SOURCE WORKBOOK
-    os.startfile(CONFIG["WORKSOURCE_STOPSELL"])
+    os.startfile(CONFIG["WORKSOURCE_PERFORMANCE_STOPSELL"])
     wait_timer(CONFIG["WAIT_TIME"]["FIFTEEN_SECOND"])
     maximize_app_window()
     switch_to_first_sheet()
@@ -66,7 +66,7 @@ def excel_config():
 
     # ──────── SAVE THE NEW WORKBOOK
     save_new_book()
-    pyautogui.write(CONFIG["SUBMISSION_STOPSELL"])
+    pyautogui.write(CONFIG["SUB_PERFORMANCE_STOPSELL"])
     confirm()
     wait_timer(CONFIG["WAIT_TIME"]["FIVE_SECOND"])
 
@@ -148,7 +148,7 @@ def main():
     wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
 
     # ──────── CLEAR THE SUBMISSIONS DIRECTORY
-    clear_submission_folder(target_folder=CONFIG["SUBMISSION_STOPSELL"])
+    clear_submission_folder(target_folder=CONFIG["SUB_PERFORMANCE_STOPSELL"])
     wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
 
     find_screen_keeper_process()

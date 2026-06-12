@@ -25,7 +25,7 @@ def excel_config():
     logger.info("[SYSTEM] REPORT TOD PERFORMANCE EXCEL WORKFLOW")
 
     # ──────── OPEN THE SOURCE WORKBOOK
-    os.startfile(CONFIG["WORKSOURCE_TOD"])
+    os.startfile(CONFIG["WORKSOURCE_PERFORMANCE_AR_TOD"])
     wait_timer(CONFIG["WAIT_TIME"]["TWENTYFIVE_SECOND"])
     maximize_app_window()
 
@@ -37,7 +37,6 @@ def excel_config():
     # ──────── REFRESH ALL DATA CONNECTIONS
     refresh_excel_data()
     wait_timer(CONFIG["WAIT_TIME"]["TWO_MINUTE"])
-
     move_cell_horizontal()
     wait_timer(CONFIG["WAIT_TIME"]["ONE_MINUTE"])
     entering_operation()
@@ -65,7 +64,7 @@ def excel_config():
 
     # ──────── SAVE THE NEW WORKBOOK
     save_new_book()
-    pyautogui.write(CONFIG["SUBMISSION_TOD"])
+    pyautogui.write(CONFIG["SUB_PERFORMANCE_AR_TOD"])
     confirm()
     wait_timer(CONFIG["WAIT_TIME"]["FIVE_SECOND"])
 
@@ -157,7 +156,7 @@ if __name__ == "__main__":
     wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
 
     # ──────── CLEAR THE SUBMISSIONS DIRECTORY
-    clear_submission_folder(target_folder=CONFIG["SUBMISSION_TOD"])
+    clear_submission_folder(target_folder=CONFIG["SUB_PERFORMANCE_AR_TOD"])
     wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
 
     # ──────── EXECUTE THE AUTOMATION WORKFLOW

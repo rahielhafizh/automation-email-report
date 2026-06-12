@@ -3,10 +3,10 @@ import pyautogui
 from datetime import datetime
 from pynput.keyboard import Controller
 from general_task import *
-from mail.outlook_penerimaan_denda_aktif import send_outlook_email
 from services.capslock_checker import capslock_checking
 from services.config import load_config, wait_timer, logger, get_month_id
 from services.duration_counter import start_counter, stop_counter, get_duration_result
+from mail.outlook_penerimaan_denda_aktif import send_outlook_email
 from remover.remover_penerimaan_denda_aktif import clear_submission_folder
 from screen_keeper import (
     find_screen_keeper_process,
@@ -25,8 +25,8 @@ def excel_config():
     logger.info("[SYSTEM] ACTIVE FINE REPORT EXCEL WORKFLOW")
 
     # ──────── OPEN THE SOURCE WORKBOOK
-    os.startfile(CONFIG["WORKSOURCE_DENDA"])
-    wait_timer(CONFIG["WAIT_TIME"]["TWENTYFIVE_SECOND"])
+    os.startfile(CONFIG["WORKSOURCE_PENERIMAAN_DENDA_AKTIF"])
+    wait_timer(CONFIG["WAIT_TIME"]["TWENTY_SECOND"])
     maximize_app_window()
 
     # ──────── NAVIGATE TO THE STARTING POSITION
@@ -35,7 +35,7 @@ def excel_config():
 
     # ──────── REFRESH ALL DATA CONNECTIONS
     refresh_excel_data()
-    wait_timer(CONFIG["WAIT_TIME"]["TWOHALF_MINUTE"])
+    wait_timer(CONFIG["WAIT_TIME"]["TWO_MINUTE"])
     entering_operation()
 
     # ──────── NAVIGATE TO THE TARGET SHEET
@@ -47,7 +47,7 @@ def excel_config():
     select_sheet_down()
     move_or_copy_menu()
     move_or_copy_as_newbook()
-    wait_timer(CONFIG["WAIT_TIME"]["THIRTY_SECOND"])
+    wait_timer(CONFIG["WAIT_TIME"]["TEN_SECOND"])
 
     # ──────── SEVER ALL EXTERNAL LINKS
     switch_to_first_sheet()
@@ -61,9 +61,9 @@ def excel_config():
 
     # ──────── SAVE THE NEW WORKBOOK
     save_new_book()
-    pyautogui.write(CONFIG["SUBMISSION_DENDA"])
+    pyautogui.write(CONFIG["SUB_PENERIMAAN_DENDA_AKTIF"])
     confirm()
-    wait_timer(CONFIG["WAIT_TIME"]["FIVE_SECOND"])
+    wait_timer(CONFIG["WAIT_TIME"]["THREE_SECOND"])
 
     # ──────── ASSIGN THE STANDARDISED FILENAME
     set_new_book_name()
@@ -85,9 +85,9 @@ def excel_config():
     switch_to_right_sheet()
     switch_to_first_cells()
     save_file()
-    wait_timer(CONFIG["WAIT_TIME"]["FIFTEEN_SECOND"])
+    wait_timer(CONFIG["WAIT_TIME"]["TEN_SECOND"])
     closing_tab()
-    wait_timer(CONFIG["WAIT_TIME"]["FIVE_SECOND"])
+    wait_timer(CONFIG["WAIT_TIME"]["THREE_SECOND"])
 
 
 def send_email():
@@ -145,7 +145,7 @@ if __name__ == "__main__":
     wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
 
     # ──────── CLEAR THE SUBMISSIONS DIRECTORY
-    clear_submission_folder(target_folder=CONFIG["SUBMISSION_DENDA"])
+    clear_submission_folder(target_folder=CONFIG["SUB_PENERIMAAN_DENDA_AKTIF"])
     wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
 
     # ──────── EXECUTE THE AUTOMATION WORKFLOW

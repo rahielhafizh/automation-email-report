@@ -1,17 +1,26 @@
 import os
 import pyautogui
 from datetime import datetime
-from general_task import *
 from pynput.keyboard import Controller
-from remover.remover_progress_reduce_wo import clear_submission_folder
-from services.config import load_config, wait_timer, logger, get_month_id
+from general_task import *
 from mail.outlook_progress_reduce_wo import send_outlook_email
-from services.capslock_checker import capslock_checking
-from services.duration_counter import start_counter, stop_counter, get_duration_result
+from remover.remover_progress_reduce_wo import clear_submission_folder
 from screen_keeper import (
     find_screen_keeper_process,
-    stop_screen_keeper,
     run_screen_keeper,
+    stop_screen_keeper,
+)
+from services.capslock_checker import capslock_checking
+from services.config import (
+    get_month_id,
+    load_config,
+    logger,
+    wait_timer,
+)
+from services.duration_counter import (
+    get_duration_result,
+    start_counter,
+    stop_counter,
 )
 
 # ───────── RUNTIME INITIALISATION
@@ -25,7 +34,7 @@ def excel_config():
     logger.info("[SYSTEM] REDUCE WO REPORT EXCEL WORKFLOW")
 
     # ──────── OPEN THE SOURCE WORKBOOK
-    os.startfile(CONFIG["WORKSOURCE_REDUCE_WO"])
+    os.startfile(CONFIG["WORKSOURCE_PROGRESS_REDUCE_WO"])
     wait_timer(CONFIG["WAIT_TIME"]["TWENTY_SECOND"])
     maximize_app_window()
 
@@ -34,7 +43,7 @@ def excel_config():
 
     # ──────── REFRESH ALL DATA CONNECTIONS
     refresh_excel_data()
-    wait_timer(CONFIG["WAIT_TIME"]["TWO_MINUTE"])
+    wait_timer(CONFIG["WAIT_TIME"]["THREE_MINUTE"])
     entering_operation()
 
     # ──────── NAVIGATE TO THE TARGET SHEET
@@ -47,12 +56,12 @@ def excel_config():
     select_sheet_down()
     move_or_copy_menu()
     move_or_copy_as_newbook()
-    wait_timer(CONFIG["WAIT_TIME"]["TWENTY_SECOND"])
+    wait_timer(CONFIG["WAIT_TIME"]["TEN_SECOND"])
 
     # ──────── SEVER ALL EXTERNAL LINKS
     switch_to_right_sheet()
     break_excel_link()
-    wait_timer(CONFIG["WAIT_TIME"]["FIFTEEN_SECOND"])
+    wait_timer(CONFIG["WAIT_TIME"]["THREE_SECOND"])
 
     # ──────── CAPTURE THE TABLE AS AN IMAGE
     switch_to_first_sheet()
@@ -63,9 +72,9 @@ def excel_config():
 
     # ──────── SAVE THE NEW WORKBOOK
     save_new_book()
-    pyautogui.write(CONFIG["SUBMISSION_REDUCE_WO"])
+    pyautogui.write(CONFIG["SUB_PROGRESS_REDUCE_WO"])
     confirm()
-    wait_timer(CONFIG["WAIT_TIME"]["FIVE_SECOND"])
+    wait_timer(CONFIG["WAIT_TIME"]["THREE_SECOND"])
 
     # ──────── ASSIGN THE STANDARDISED FILENAME
     set_new_book_name()
@@ -76,11 +85,11 @@ def excel_config():
     reduce_wo_filename = f"Summary Report Progress Reduce WO & RR WO {reduce_wo_day} {month_idn_title} ({today.strftime('%H.%M')})"
     pyautogui.write(reduce_wo_filename, interval=0.05)
     confirm()
-    wait_timer(CONFIG["WAIT_TIME"]["FIVE_SECOND"])
+    wait_timer(CONFIG["WAIT_TIME"]["THREE_SECOND"])
 
     # ──────── CLOSE THE EXPORTED WORKBOOK
     closing_tab()
-    wait_timer(CONFIG["WAIT_TIME"]["FIVE_SECOND"])
+    wait_timer(CONFIG["WAIT_TIME"]["THREE_SECOND"])
 
     # ──────── SAVE AND CLOSE THE SOURCE FILE
     switch_to_first_cells()
@@ -89,7 +98,7 @@ def excel_config():
     save_file()
     wait_timer(CONFIG["WAIT_TIME"]["TEN_SECOND"])
     closing_tab()
-    wait_timer(CONFIG["WAIT_TIME"]["FIVE_SECOND"])
+    wait_timer(CONFIG["WAIT_TIME"]["THREE_SECOND"])
 
 
 def send_email():
@@ -154,7 +163,7 @@ if __name__ == "__main__":
     wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
 
     # ──────── CLEAR THE SUBMISSIONS DIRECTORY
-    clear_submission_folder(target_folder=CONFIG["SUBMISSION_REDUCE_WO"])
+    clear_submission_folder(target_folder=CONFIG["SUB_PROGRESS_REDUCE_WO"])
     wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
 
     # ──────── EXECUTE THE AUTOMATION WORKFLOW
