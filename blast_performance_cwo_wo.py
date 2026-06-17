@@ -6,7 +6,11 @@ from general_task import *
 from mail.outlook_performance_cwo_wo import send_outlook_email
 from services.capslock_checker import capslock_checking
 from services.config import load_config, wait_timer, logger, get_month_id
-from services.duration_counter import start_counter, stop_counter, get_execution_duration
+from services.duration_counter import (
+    start_counter,
+    stop_counter,
+    get_execution_duration,
+)
 from remover.remover_performance_cwo_wo import clear_submission_folder
 from screen_keeper import (
     find_screen_keeper_process,
@@ -84,7 +88,7 @@ def excel_config():
     wait_timer(CONFIG["WAIT_TIME"]["TEN_SECOND"])
     closing_tab()
     wait_timer(CONFIG["WAIT_TIME"]["THREE_SECOND"])
- 
+
 
 def send_email():
     # ──────── DEFINE RECIPIENTS AND SUBJECT LINE
@@ -95,9 +99,7 @@ def send_email():
     cwo_year = today.strftime("%Y")
     month_eng = today.strftime("%B")
     month_idn_title = get_month_id(month_eng, case="title")
-    subject_email = (
-        f"Summary Performance Dashboard CWO - WO | {cwo_day} {month_idn_title} {cwo_year}"
-    )
+    subject_email = f"Summary Performance Dashboard CWO - WO | {cwo_day} {month_idn_title} {cwo_year}"
 
     # ──────── SET EMAIL BODY
     core_email = f"""Dear All,

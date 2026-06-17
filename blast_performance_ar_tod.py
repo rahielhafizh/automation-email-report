@@ -8,7 +8,11 @@ from mail.outlook_performance_ar_tod import send_outlook_email
 from services.chrome_checker import open_outlook
 from services.config import load_config, wait_timer, logger, get_month_id
 from services.capslock_checker import capslock_checking
-from services.duration_counter import start_counter, stop_counter, get_execution_duration
+from services.duration_counter import (
+    start_counter,
+    stop_counter,
+    get_execution_duration,
+)
 from screen_keeper import (
     find_screen_keeper_process,
     stop_screen_keeper,
@@ -162,12 +166,12 @@ if __name__ == "__main__":
     clear_submission_folder(target_folder=CONFIG["SUB_PERFORMANCE_AR_TOD"])
     wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
 
-# ── PRE-FLIGHT OUTLOOK ────────────────────────────────────────────────────
+    # ── PRE-FLIGHT OUTLOOK ────────────────────────────────────────────────────
     open_outlook()
     wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
     closing_tab()
     wait_timer(CONFIG["WAIT_TIME"]["THREE_SECOND"])
-    
+
     # ──────── EXECUTE THE AUTOMATION WORKFLOW
     excel_config()
     wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])

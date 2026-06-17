@@ -7,13 +7,18 @@ from services.capslock_checker import capslock_checking
 from services.chrome_checker import open_outlook
 from remover.remover_performance_ar_asset import clear_submission_folder
 from services.config import get_month_id, load_config, logger, wait_timer
-from services.duration_counter import get_execution_duration, start_counter, stop_counter
+from services.duration_counter import (
+    get_execution_duration,
+    start_counter,
+    stop_counter,
+)
 from mail.outlook_penerimaan_denda_aktif import send_outlook_email
 from screen_keeper import (
     find_screen_keeper_process,
     stop_screen_keeper,
     run_screen_keeper,
 )
+
 pyautogui.FAILSAFE = False
 CONFIG = load_config()
 keyboard = Controller()
@@ -45,7 +50,7 @@ def excel_config():
     logger.info("[EXCEL] MOVE AND COPY WORKBOOK")
     for _ in range(3):
         select_sheet_down()
-        
+
     move_or_copy_menu()
     move_or_copy_as_newbook()
     wait_timer(CONFIG["WAIT_TIME"]["FOUR_MINUTE"])

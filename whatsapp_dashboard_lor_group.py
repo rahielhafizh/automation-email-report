@@ -1,8 +1,12 @@
 # Execution time : 12 Minutes
-from services.capslock_checker import capslock_checking
 from services.config import load_config, logger, wait_timer
-from services.duration_counter import start_counter, start_counter, stop_counter
+from services.capslock_checker import capslock_checking
 from services.report.lor.excel_processor import refresh_workbook
+from services.duration_counter import (
+    start_counter,
+    get_execution_duration,
+    stop_counter,
+)
 from services.report.lor.dispatcher import (
     dispatch_area_report,
     dispatch_as_of_report,
@@ -38,22 +42,18 @@ if __name__ == "__main__":
     logger.info("[SYSTEM] START LOR REPORT GROUP DELIVERY")
     start_counter()
     wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
-
     capslock_checking()
     wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
     find_screen_keeper_process()
     wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
     stop_screen_keeper()
     wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
-
     refresh_workbook()
     wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
-
     dispatch_sequence_lor()
     logger.info("[SYSTEM] LOR REPORT GROUP DELIVERY COMPLETE")
-
     stop_counter()
-    execution_time = start_counter()
+    execution_time = get_execution_duration()
     logger.info(f"[SYSTEM] TOTAL EXECUTION TIME: {execution_time}")
     wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
     logger.warning("[SYSTEM] RESTARTING SCREEN KEEPER")

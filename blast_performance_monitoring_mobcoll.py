@@ -12,7 +12,11 @@ from services.capslock_checker import capslock_checking
 from services.chrome_checker import open_outlook
 from remover.remover_performance_monitoring_mobcoll import clear_submission_folder
 from services.config import get_month_id, load_config, logger, wait_timer
-from services.duration_counter import get_execution_duration, start_counter, stop_counter
+from services.duration_counter import (
+    get_execution_duration,
+    start_counter,
+    stop_counter,
+)
 from mail.outlook_performance_monitoring_mobcoll import send_outlook_email
 
 pyautogui.FAILSAFE = False

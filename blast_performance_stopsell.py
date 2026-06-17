@@ -7,7 +7,11 @@ from services.config import load_config, wait_timer, logger, get_month_id
 from mail.outlook_performance_stopsell import send_outlook_email
 from services.capslock_checker import capslock_checking
 from remover.remover_performance_stopsell import clear_submission_folder
-from services.duration_counter import start_counter, stop_counter, get_execution_duration
+from services.duration_counter import (
+    start_counter,
+    stop_counter,
+    get_execution_duration,
+)
 from screen_keeper import (
     find_screen_keeper_process,
     stop_screen_keeper,

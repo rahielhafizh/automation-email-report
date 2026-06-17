@@ -1,20 +1,19 @@
 import pyperclip
 from datetime import date, datetime
-from screen_keeper import (
-    find_screen_keeper_process,
-    run_screen_keeper,
-    stop_screen_keeper,
-)
+from typing import Optional
 from services.rrd_checker import check_flowrate_status
 from services.config import load_config, logger, wait_timer
 from services.whatsapp_sender import send_to_group
-from services.duration_counter import start_counter, stop_counter, get_execution_duration
+from services.duration_counter import (
+    start_counter,
+    stop_counter,
+    get_execution_duration,
+)
 from screen_keeper import (
     find_screen_keeper_process,
     stop_screen_keeper,
     run_screen_keeper,
 )
-from typing import Optional
 
 CONFIG = load_config()
 VALID_INDICATOR = "✅"
@@ -92,7 +91,7 @@ if __name__ == "__main__":
     sent_checking_result()
     logger.info("[SYSTEM] DASHBOARD CONTROL VALIDATION SENT")
     stop_counter()
-    execution_time = start_counter()
+    execution_time = get_execution_duration()
     logger.info(f"[SYSTEM] TOTAL EXECUTION TIME : {execution_time}")
     wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
     logger.warning("[SYSTEM] RESTARTING SCREEN KEEPER")

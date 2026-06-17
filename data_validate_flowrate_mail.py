@@ -2,7 +2,7 @@ import os
 from pathlib import Path
 from datetime import datetime, timedelta
 from typing import Optional, Dict, List, Union
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 import pandas as pd
 from dateutil import parser as date_parser
 from services.config import load_config, logger
@@ -13,13 +13,9 @@ DEFAULT_CONFIG = load_config()
 @dataclass
 class ValidationConfig:
     sheet_name: str = "FR-4W-OD2-Collectible"
-    date_cells: Dict[str, str] = None
+    date_cells: Dict[str, str] = field(default_factory=lambda: {"H3": "H-1"})
     submission_folder: str = ""
     worksource_flowrate: str = ""
-
-    def __post_init__(self):
-        if self.date_cells is None:
-            self.date_cells = {"H3": "H-1"}
 
 
 @dataclass
@@ -103,7 +99,7 @@ class FlowrateDateValidator:
             try:
                 return value.to_pydatetime()
             except Exception:
-                return
+                return None
 
         if isinstance(value, str):
             try:
@@ -235,7 +231,11 @@ class FlowrateDateValidator:
         )
 
 
-def validate_flowrate_file(file_path, config=None, reference_date=None) -> bool:
+def validate_flowrate_file(
+    file_path: Union[str, Path],
+    config: Optional[ValidationConfig] = None,
+    reference_date: Optional[datetime] = None,
+) -> bool:
     try:
         validator = FlowrateDateValidator(config)
         results = validator.validate_file(file_path, reference_date)
@@ -246,7 +246,9 @@ def validate_flowrate_file(file_path, config=None, reference_date=None) -> bool:
         return False
 
 
-def validate_default_flowrate_source(config=None, reference_date=None) -> bool:
+def validate_default_flowrate_source(
+    config: Optional[ValidationConfig] = None, reference_date: Optional[datetime] = None
+) -> bool:
     worksource_path = DEFAULT_CONFIG.get("WORKSOURCE_FLOWRATE")
     return (
         validate_flowrate_file(worksource_path, config, reference_date)
@@ -256,7 +258,9 @@ def validate_default_flowrate_source(config=None, reference_date=None) -> bool:
 
 
 def validate_latest_flowrate_report(
-    file_path=None, config=None, reference_date=None
+    file_path: Optional[Union[str, Path]] = None,
+    config: Optional[ValidationConfig] = None,
+    reference_date: Optional[datetime] = None,
 ) -> bool:
     if file_path:
         return validate_flowrate_file(file_path, config, reference_date)
@@ -271,7 +275,11 @@ def validate_latest_flowrate_report(
         )
 
 
-def validate_flowrate_by_timestamp(timestamp, config=None, reference_date=None) -> bool:
+def validate_flowrate_by_timestamp(
+    timestamp: str,
+    config: Optional[ValidationConfig] = None,
+    reference_date: Optional[datetime] = None,
+) -> bool:
     try:
         validator = FlowrateDateValidator(config)
         return validate_flowrate_file(
