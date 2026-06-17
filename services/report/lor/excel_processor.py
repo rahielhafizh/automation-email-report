@@ -32,13 +32,11 @@ def refresh_workbook() -> None:
     maximize_app_window()
     logger.info("[EXCEL] REFRESH EXCEL PROCESS")
     refresh_excel_data()
-    wait_timer(CONFIG["WAIT_TIME"]["TWO_MINUTE"])
-    handle_refresh_process()
-    wait_timer(CONFIG["WAIT_TIME"]["ONE_MINUTE"])
+    wait_timer(CONFIG["WAIT_TIME"]["THREE_MINUTE"])
     save_file()
-    wait_timer(CONFIG["WAIT_TIME"]["TWENTY_SECOND"])
-    closing_tab()
     wait_timer(CONFIG["WAIT_TIME"]["TEN_SECOND"])
+    closing_tab()
+    wait_timer(CONFIG["WAIT_TIME"]["THREE_SECOND"])
 
 
 def open_workbook() -> None:

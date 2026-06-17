@@ -77,59 +77,59 @@ APPLICATION_PATHS = {
     "CHROME_PATH": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
     "OUTLOOK_PATH": "C:\\ProgramData\\Microsoft\\Windows\\Start Menu\\Programs\\Microsoft Office 2013\\Outlook 2013.lnk",
 }
+
 FOLDER_PATHS = {
     # SUBMISSION OUTLOOK
-    "SUB_OUTLOOK_MOBCOLL_LOR":               rf"D:\Rahiel Hafizh\Submission\Outlook\Performance_Kunjungan_Mobcoll_LoR",
-    "SUB_OUTLOOK_MOBCOLL_REGULER":           rf"D:\Rahiel Hafizh\Submission\Outlook\Performance_Kunjungan_Mobcoll",
-    "SUB_OUTLOOK_PENERIMAAN_ANGSURAN":       rf"D:\Rahiel Hafizh\Submission\Outlook\Penerimaan_Angsuran",
-    "SUB_OUTLOOK_PENERIMAAN_CASH_IN":        rf"D:\Rahiel Hafizh\Submission\Outlook\Penerimaan_CashIn",
-    "SUB_OUTLOOK_PENERIMAAN_DENDA_AKTIF":    rf"D:\Rahiel Hafizh\Submission\Outlook\Penerimaan_Denda_Aktif",
-    "SUB_OUTLOOK_PENERIMAAN_DENDA_ALDA":     rf"D:\Rahiel Hafizh\Submission\Outlook\Penerimaan_Denda_Alda",
-    "SUB_OUTLOOK_PERFORMANCE_AR_ASSET":      rf"D:\Rahiel Hafizh\Submission\Outlook\Performance_AR_Remedial_Asset",
-    "SUB_OUTLOOK_PERFORMANCE_AR_TOD":        rf"D:\Rahiel Hafizh\Submission\Outlook\Performance_AR_TOD",
-    "SUB_OUTLOOK_PERFORMANCE_BUCKET_CURRENT": rf"D:\Rahiel Hafizh\Submission\Outlook\Performance_Bucket_Current",
-    "SUB_OUTLOOK_PERFORMANCE_BUCKET_OVERDUE": rf"D:\Rahiel Hafizh\Submission\Outlook\Performance_Bucket_Overdue",
-    "SUB_OUTLOOK_PERFORMANCE_CWO_WO":        rf"D:\Rahiel Hafizh\Submission\Outlook\Performance_CWO_WO_Estimasi_WO",
-    "SUB_OUTLOOK_PERFORMANCE_PICKUP":        rf"D:\Rahiel Hafizh\Submission\Outlook\Performance_Update_Pickup",
-    "SUB_OUTLOOK_PERFORMANCE_RECOVERY_WO":   rf"D:\Rahiel Hafizh\Submission\Outlook\Performance_Recovery_WO",
-    "SUB_OUTLOOK_PERFORMANCE_STOPSELL":      rf"D:\Rahiel Hafizh\Submission\Outlook\Performance_Kunjungan_StopSell",
-    "SUB_OUTLOOK_PROGRESS_FLOWRATE":         rf"D:\Rahiel Hafizh\Submission\Outlook\Progress_Update_Flowrate",
-    "SUB_OUTLOOK_PROGRESS_REDUCE_WO":        rf"D:\Rahiel Hafizh\Submission\Outlook\Progress_Reduce_WO",
-
+    "SUB_MOBCOLL_LOR": rf"D:\Rahiel Hafizh\Submission\Outlook\Performance_Kunjungan_Mobcoll_LoR",
+    "SUB_MOBCOLL_REGULER": rf"D:\Rahiel Hafizh\Submission\Outlook\Performance_Kunjungan_Mobcoll",
+    "SUB_MOBCOLL_MONITORING": rf"D:\Rahiel Hafizh\Submission\Outlook\Performance_Monitoring_Mobcoll",
+    "SUB_PENERIMAAN_ANGSURAN": rf"D:\Rahiel Hafizh\Submission\Outlook\Penerimaan_Angsuran",
+    "SUB_PENERIMAAN_CASH_IN": rf"D:\Rahiel Hafizh\Submission\Outlook\Penerimaan_CashIn",
+    "SUB_PENERIMAAN_DENDA_AKTIF": rf"D:\Rahiel Hafizh\Submission\Outlook\Penerimaan_Denda_Aktif",
+    "SUB_PENERIMAAN_DENDA_ALDA": rf"D:\Rahiel Hafizh\Submission\Outlook\Penerimaan_Denda_Alda",
+    "SUB_PERFORMANCE_AR_ASSET": rf"D:\Rahiel Hafizh\Submission\Outlook\Performance_AR_Remedial_Asset",
+    "SUB_PERFORMANCE_AR_TOD": rf"D:\Rahiel Hafizh\Submission\Outlook\Performance_AR_TOD",
+    "SUB_PERFORMANCE_BUCKET_CURRENT": rf"D:\Rahiel Hafizh\Submission\Outlook\Performance_Bucket_Current",
+    "SUB_PERFORMANCE_BUCKET_OVERDUE": rf"D:\Rahiel Hafizh\Submission\Outlook\Performance_Bucket_Overdue",
+    "SUB_PERFORMANCE_CWO_WO": rf"D:\Rahiel Hafizh\Submission\Outlook\Performance_CWO_WO_Estimasi_WO",
+    "SUB_PERFORMANCE_PICKUP": rf"D:\Rahiel Hafizh\Submission\Outlook\Performance_Update_Pickup",
+    "SUB_PERFORMANCE_RECOVERY_WO": rf"D:\Rahiel Hafizh\Submission\Outlook\Performance_Recovery_WO",
+    "SUB_PERFORMANCE_STOPSELL": rf"D:\Rahiel Hafizh\Submission\Outlook\Performance_Kunjungan_StopSell",
+    "SUB_PROGRESS_FLOWRATE": rf"D:\Rahiel Hafizh\Submission\Outlook\Progress_Update_Flowrate",
+    "SUB_PROGRESS_REDUCE_WO": rf"D:\Rahiel Hafizh\Submission\Outlook\Progress_Reduce_WO",
     # SUBMISSION WHATSAPP
-    "SUB_WHATSAPP_MOBCOLL_LOR":              rf"D:\Rahiel Hafizh\Submission\Whatsapp\Performance_Kunjungan_Mobcoll_LoR",
-    "SUB_WHATSAPP_MOBCOLL_REGULER":          rf"D:\Rahiel Hafizh\Submission\Whatsapp\Performance_Kunjungan_Mobcoll",
-    "SUB_WHATSAPP_PENERIMAAN_CASH_IN":       rf"D:\Rahiel Hafizh\Submission\Whatsapp\Penerimaan_CashIn",
-    "SUB_WHATSAPP_PENERIMAAN_DENDA_AKTIF":   rf"D:\Rahiel Hafizh\Submission\Whatsapp\Penerimaan_Denda_Aktif",
-    "SUB_WHATSAPP_PENERIMAAN_DENDA_ALDA":    rf"D:\Rahiel Hafizh\Submission\Whatsapp\Penerimaan_Denda_Alda",
-    "SUB_WHATSAPP_PERFORMANCE_AR_ASSET":     rf"D:\Rahiel Hafizh\Submission\Whatsapp\Performance_AR_Remedial_Asset",
-    "SUB_WHATSAPP_PERFORMANCE_AR_TOD":       rf"D:\Rahiel Hafizh\Submission\Whatsapp\Performance_AR_TOD",
+    "SUB_WHATSAPP_MOBCOLL_LOR": rf"D:\Rahiel Hafizh\Submission\Whatsapp\Performance_Kunjungan_Mobcoll_LoR",
+    "SUB_WHATSAPP_MOBCOLL_REGULER": rf"D:\Rahiel Hafizh\Submission\Whatsapp\Performance_Kunjungan_Mobcoll",
+    "SUB_WHATSAPP_PENERIMAAN_CASH_IN": rf"D:\Rahiel Hafizh\Submission\Whatsapp\Penerimaan_CashIn",
+    "SUB_WHATSAPP_PENERIMAAN_DENDA_AKTIF": rf"D:\Rahiel Hafizh\Submission\Whatsapp\Penerimaan_Denda_Aktif",
+    "SUB_WHATSAPP_PENERIMAAN_DENDA_ALDA": rf"D:\Rahiel Hafizh\Submission\Whatsapp\Penerimaan_Denda_Alda",
+    "SUB_WHATSAPP_PERFORMANCE_AR_ASSET": rf"D:\Rahiel Hafizh\Submission\Whatsapp\Performance_AR_Remedial_Asset",
+    "SUB_WHATSAPP_PERFORMANCE_AR_TOD": rf"D:\Rahiel Hafizh\Submission\Whatsapp\Performance_AR_TOD",
     "SUB_WHATSAPP_PERFORMANCE_BUCKET_CURRENT": rf"D:\Rahiel Hafizh\Submission\Whatsapp\Performance_Bucket_Current",
     "SUB_WHATSAPP_PERFORMANCE_BUCKET_OVERDUE": rf"D:\Rahiel Hafizh\Submission\Whatsapp\Performance_Bucket_Overdue",
-    "SUB_WHATSAPP_PERFORMANCE_CWO_WO":       rf"D:\Rahiel Hafizh\Submission\Whatsapp\Performance_CWO_WO_Estimasi_WO",
-    "SUB_WHATSAPP_PERFORMANCE_PICKUP":       rf"D:\Rahiel Hafizh\Submission\Whatsapp\Performance_Update_Pickup",
-    "SUB_WHATSAPP_PERFORMANCE_RECOVERY_WO":  rf"D:\Rahiel Hafizh\Submission\Whatsapp\Performance_Recovery_WO",
-    "SUB_WHATSAPP_PERFORMANCE_STOPSELL":     rf"D:\Rahiel Hafizh\Submission\Whatsapp\Performance_Kunjungan_StopSell",
-    "SUB_WHATSAPP_PROGRESS_FLOWRATE":        rf"D:\Rahiel Hafizh\Submission\Whatsapp\Progress_Update_Flowrate",
-
+    "SUB_WHATSAPP_PERFORMANCE_CWO_WO": rf"D:\Rahiel Hafizh\Submission\Whatsapp\Performance_CWO_WO_Estimasi_WO",
+    "SUB_WHATSAPP_PERFORMANCE_PICKUP": rf"D:\Rahiel Hafizh\Submission\Whatsapp\Performance_Update_Pickup",
+    "SUB_WHATSAPP_PERFORMANCE_RECOVERY_WO": rf"D:\Rahiel Hafizh\Submission\Whatsapp\Performance_Recovery_WO",
+    "SUB_WHATSAPP_PERFORMANCE_STOPSELL": rf"D:\Rahiel Hafizh\Submission\Whatsapp\Performance_Kunjungan_StopSell",
+    "SUB_WHATSAPP_PROGRESS_FLOWRATE": rf"D:\Rahiel Hafizh\Submission\Whatsapp\Progress_Update_Flowrate",
     # WORKSOURCE FILE
-    "WORKSOURCE_MOBCOLL_REGULER":            rf"D:\Rahiel Hafizh\Submission\Outlook\Performance_Kunjungan_Mobcoll\Summary_Performance_Kunjungan_Mobcoll_Reguler.xlsx",
-    "WORKSOURCE_MOBCOLL_LOR":                rf"D:\Rahiel Hafizh\Source\Summary_Performance_Kunjungan_Mobcoll_LoR.xlsx",
-    "WORKSOURCE_MOBCOLL_MONITORING":         rf"D:\Rahiel Hafizh\Source\Summary_Performance_Monitoring_Mobcoll.xlsx",
-    "WORKSOURCE_PENERIMAAN_ANGSURAN":        rf"D:\Rahiel Hafizh\Source\Summary_Penerimaan_Angsuran.xlsx",
-    "WORKSOURCE_PENERIMAAN_CASH_IN":         rf"D:\Rahiel Hafizh\Source\Summary_Penerimaan_CashIn.xlsx",
-    "WORKSOURCE_PENERIMAAN_DENDA_AKTIF":     rf"D:\Rahiel Hafizh\Source\Summary_Penerimaan_Denda_Aktif.xlsx",
-    "WORKSOURCE_PENERIMAAN_DENDA_ALDA":      rf"D:\Rahiel Hafizh\Source\Summary_Penerimaan_Denda_Alda.xlsx",
-    "WORKSOURCE_PERFORMANCE_AR_ASSET":       rf"D:\Rahiel Hafizh\Source\Summary_Performance_AR_Remedial_Asset.xlsx",
-    "WORKSOURCE_PERFORMANCE_AR_TOD":         rf"D:\Rahiel Hafizh\Source\Summary_Performance_AR_TOD.xlsx",
+    "WORKSOURCE_MOBCOLL_REGULER": rf"D:\Rahiel Hafizh\Submission\Outlook\Performance_Kunjungan_Mobcoll\Summary_Performance_Kunjungan_Mobcoll_Reguler.xlsx",
+    "WORKSOURCE_MOBCOLL_LOR": rf"D:\Rahiel Hafizh\Source\Summary_Performance_Kunjungan_Mobcoll_LoR.xlsx",
+    "WORKSOURCE_MOBCOLL_MONITORING": rf"D:\Rahiel Hafizh\Source\Summary_Performance_Monitoring_Mobcoll.xlsx",
+    "WORKSOURCE_PENERIMAAN_ANGSURAN": rf"D:\Rahiel Hafizh\Source\Summary_Penerimaan_Angsuran.xlsx",
+    "WORKSOURCE_PENERIMAAN_CASH_IN": rf"D:\Rahiel Hafizh\Source\Summary_Penerimaan_CashIn.xlsx",
+    "WORKSOURCE_PENERIMAAN_DENDA_AKTIF": rf"D:\Rahiel Hafizh\Source\Summary_Penerimaan_Denda_Aktif.xlsx",
+    "WORKSOURCE_PENERIMAAN_DENDA_ALDA": rf"D:\Rahiel Hafizh\Source\Summary_Penerimaan_Denda_Alda.xlsx",
+    "WORKSOURCE_PERFORMANCE_AR_ASSET": rf"D:\Rahiel Hafizh\Source\Summary_Performance_AR_Remedial_Asset.xlsx",
+    "WORKSOURCE_PERFORMANCE_AR_TOD": rf"D:\Rahiel Hafizh\Source\Summary_Performance_AR_TOD.xlsx",
     "WORKSOURCE_PERFORMANCE_BUCKET_CURRENT": rf"D:\Rahiel Hafizh\Source\Summary_Performance_Bucket_Current.xlsx",
     "WORKSOURCE_PERFORMANCE_BUCKET_OVERDUE": rf"D:\Rahiel Hafizh\Source\Summary_Performance_Bucket_Overdue.xlsx",
-    "WORKSOURCE_PERFORMANCE_CWO_WO":         rf"D:\Rahiel Hafizh\Source\Summary_Performance_CWO_WO_Estimasi_WO.xlsx",
-    "WORKSOURCE_PERFORMANCE_PICKUP":         rf"D:\Rahiel Hafizh\Source\Summary_Performance_Update_Pickup.xlsx",
-    "WORKSOURCE_PERFORMANCE_RECOVERY_WO":    rf"D:\Rahiel Hafizh\Source\Summary_Performance_Recovery_WO.xlsx",
-    "WORKSOURCE_PERFORMANCE_STOPSELL":       rf"D:\Rahiel Hafizh\Source\Summary_Performance_Kunjungan_StopSell.xlsx",
-    "WORKSOURCE_PROGRESS_FLOWRATE":          rf"D:\Rahiel Hafizh\Source\Summary_Progress_Update_Flowrate_Ori.xlsx",
-    "WORKSOURCE_PROGRESS_REDUCE_WO":         rf"D:\Rahiel Hafizh\Source\Summary_Progress_Reduce_WO.xlsx",
+    "WORKSOURCE_PERFORMANCE_CWO_WO": rf"D:\Rahiel Hafizh\Source\Summary_Performance_CWO_WO_Estimasi_WO.xlsx",
+    "WORKSOURCE_PERFORMANCE_PICKUP": rf"D:\Rahiel Hafizh\Source\Summary_Performance_Update_Pickup.xlsx",
+    "WORKSOURCE_PERFORMANCE_RECOVERY_WO": rf"D:\Rahiel Hafizh\Source\Summary_Performance_Recovery_WO.xlsx",
+    "WORKSOURCE_PERFORMANCE_STOPSELL": rf"D:\Rahiel Hafizh\Source\Summary_Performance_Kunjungan_StopSell.xlsx",
+    "WORKSOURCE_PROGRESS_FLOWRATE": rf"D:\Rahiel Hafizh\Source\Summary_Progress_Update_Flowrate_Ori.xlsx",
+    "WORKSOURCE_PROGRESS_REDUCE_WO": rf"D:\Rahiel Hafizh\Source\Summary_Progress_Reduce_WO.xlsx",
 }
 
 CONTACT_INFO = {
@@ -237,28 +237,6 @@ PYAUTOGUI_SETTINGS = {
     "DEFAULT_INTERVAL": 0.05,
 }
 
-JITTER_SETTINGS = {
-    "STANDARD": {
-        "MIN": 0.1,
-        "MAX": 0.3,
-        "FACTOR": 0.2,
-    },
-    "AGGRESSIVE": {
-        "MIN": 0.2,
-        "MAX": 0.5,
-        "FACTOR": 0.35,
-    },
-    "CONSERVATIVE": {
-        "MIN": 0.05,
-        "MAX": 0.15,
-        "FACTOR": 0.1,
-    },
-    "NONE": {
-        "MIN": 0.0,
-        "MAX": 0.0,
-        "FACTOR": 0.0,
-    },
-}
 
 MONTHS_ID = {
     "January": "Januari",
@@ -417,13 +395,18 @@ CERTIFICATION_FILTER_CONFIG = {
     "CUSTOM_CONFIG": None,
 }
 
+WHATSAPP_SETTINGS = {
+    "INPUT_X": 1085,
+    "INPUT_Y": 695,
+}
+
 DEFAULT_CONFIG = {
     **APPLICATION_PATHS,
     **FOLDER_PATHS,
     **CONTACT_INFO,
     "WAIT_TIME": WAIT_TIMES,
     "PYAUTOGUI": PYAUTOGUI_SETTINGS,
-    "JITTER": JITTER_SETTINGS,
+    "WHATSAPP": WHATSAPP_SETTINGS,  # tambahan
     "MONTHS_ID": MONTHS_ID,
     "AREA_BRANCH_MAPPING": AREA_BRANCH_MAPPING,
     "BRANCH_ORDER": BRANCH_ORDER,
@@ -458,29 +441,6 @@ def wait_timer(base_time: float) -> None:
     time.sleep(base_time)
 
 
-def wait_with_jitter(base_time: float, jitter_type: str = "STANDARD") -> None:
-    jitter_config = JITTER_SETTINGS.get(jitter_type, JITTER_SETTINGS["STANDARD"])
-    if jitter_config["FACTOR"] > 0:
-        jitter = random.uniform(jitter_config["MIN"], jitter_config["MAX"])
-        total_time = base_time + (base_time * jitter)
-    else:
-        total_time = base_time
-
-    wait_timer(total_time)
-
-
-def adaptive_wait(operation_type: str = "NORMAL") -> None:
-    wait_mapping = {
-        "FAST": WAIT_TIMES["HALF_SECOND"],
-        "NORMAL": WAIT_TIMES["ONE_SECOND"],
-        "SLOW": WAIT_TIMES["TWO_SECOND"],
-        "VERY_SLOW": WAIT_TIMES["FIVE_SECOND"],
-    }
-
-    wait_time = wait_mapping.get(operation_type, WAIT_TIMES["ONE_SECOND"])
-    wait_timer(wait_time)
-
-
 def get_config_value(key: str, default: Any = None) -> Any:
     config = DEFAULT_CONFIG
     keys = key.split(".")
@@ -500,11 +460,6 @@ def get_wait_time(time_key: str, default: float = 1.0) -> float:
 
 def get_pyautogui_setting(setting_name: str, default: Any = None) -> Any:
     return PYAUTOGUI_SETTINGS.get(setting_name, default)
-
-
-def get_jitter_setting(jitter_type: str, default: float = 0.5) -> float:
-    jitter_config = JITTER_SETTINGS.get(jitter_type, JITTER_SETTINGS["STANDARD"])
-    return jitter_config.get("FACTOR", default)
 
 
 def get_month_id(english_month: str, case: str = "as-is") -> str:
@@ -533,16 +488,14 @@ def get_certification_filter_config(preset: Optional[str] = None) -> Dict[str, A
         preset = CERTIFICATION_FILTER_CONFIG["ACTIVE_PRESET"]
 
     if CERTIFICATION_FILTER_CONFIG["CUSTOM_CONFIG"] is not None:
-        logger.info("[CONFIG] USING CUSTOM CERTIFICATION FILTER CONFIGURATION")
+        logger.info("[CONFIG] USING CUSTOM FILTER CONFIGURATION")
         return CERTIFICATION_FILTER_CONFIG["CUSTOM_CONFIG"]
 
     if preset in CERTIFICATION_FILTER_PRESETS:
-        logger.info(f"[CONFIG] USING CERTIFICATION FILTER PRESET : {preset}")
+        logger.info(f"[CONFIG] USING FILTER PRESET : {preset}")
         return CERTIFICATION_FILTER_PRESETS[preset].copy()
     else:
-        logger.warning(
-            f"[CONFIG] UNKNOWN PRESET '{preset}', DEFAULTING TO 'NEXT_MONTH'"
-        )
+        logger.warning(f"[CONFIG] UNKNOWN PRESET '{preset}'")
         return CERTIFICATION_FILTER_PRESETS["NEXT_MONTH"].copy()
 
 
@@ -550,7 +503,7 @@ def set_certification_filter_preset(preset: str) -> bool:
     if preset in CERTIFICATION_FILTER_PRESETS:
         CERTIFICATION_FILTER_CONFIG["ACTIVE_PRESET"] = preset
         CERTIFICATION_FILTER_CONFIG["CUSTOM_CONFIG"] = None
-        logger.info(f"[CONFIG] CERTIFICATION FILTER PRESET SET TO : {preset}")
+        logger.info(f"[CONFIG] FILTER PRESET SET TO : {preset}")
         return True
     else:
         logger.error(f"[CONFIG] INVALID PRESET NAME : {preset}")
@@ -569,5 +522,5 @@ def set_custom_certification_filter(custom_config: Dict[str, Any]) -> bool:
         return False
 
     CERTIFICATION_FILTER_CONFIG["CUSTOM_CONFIG"] = custom_config
-    logger.info("[CONFIG] CUSTOM CERTIFICATION FILTER CONFIGURATION APPLIED")
+    logger.info("[CONFIG] CUSTOM FILTER CONFIGURATION APPLIED")
     return True

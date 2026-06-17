@@ -1,10 +1,7 @@
 import math
 import time
-
-import keyboard
 import pyautogui
 from pynput.keyboard import Controller, Key
-
 from services.config import load_config, logger, wait_timer
 
 CONFIG = load_config()
@@ -376,9 +373,10 @@ def maximize_app_window() -> None:
 def minimize_outlook() -> None:
     wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
     logger.info("[SYSTEM] SEND EMAIL AND MINIMIZE OUTLOOK")
-    wait_timer(CONFIG["WAIT_TIME"]["TEN_SECOND"])
+    pyautogui.hotkey("alt", "s")
+    wait_timer(CONFIG["WAIT_TIME"]["THREE_SECOND"])
     pyautogui.hotkey("win", "m")
-    wait_timer(CONFIG["WAIT_TIME"]["FIVE_SECOND"])
+    wait_timer(CONFIG["WAIT_TIME"]["THREE_SECOND"])
 
 
 def minimize_text() -> None:

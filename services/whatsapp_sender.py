@@ -1,14 +1,14 @@
 import pyautogui
 import pywhatkit as kit
 import webbrowser
+from typing import Optional
 from services.config import load_config, wait_timer, logger
 from services.chrome_checker import open_chrome
-
 
 CONFIG = load_config()
 
 
-def number_formatter(phone_no: str) -> str | None:
+def number_formatter(phone_no: str) -> Optional[str]:
     if not phone_no or phone_no == "0":
         return None
 
@@ -25,7 +25,7 @@ def number_formatter(phone_no: str) -> str | None:
     return phone_no
 
 
-def validate_group_link(group_link: str) -> str | None:
+def validate_group_link(group_link: str) -> Optional[str]:
     if not group_link:
         return None
 
@@ -43,28 +43,27 @@ def validate_group_link(group_link: str) -> str | None:
     return group_link
 
 
-def open_whatsapp_chat(phone_no: str) -> None:
-    kit.sendwhatmsg_instantly(  # type: ignore[attr-defined]
-        phone_no=phone_no,
-        message="",
-        wait_time=CONFIG["WAIT_TIME"]["TWENTY_SECOND"],
-        tab_close=False,
-    )
+def click_whatsapp() -> None:
+    input_x = CONFIG["WHATSAPP"]["INPUT_X"]
+    input_y = CONFIG["WHATSAPP"]["INPUT_Y"]
+    logger.info(f"[SYSTEM] CLICKING WHATSAPP INPUT AT X: {input_x}, Y: {input_y}")
+    pyautogui.click(input_x, input_y)
+    wait_timer(CONFIG["WAIT_TIME"]["HALF_SECOND"])
 
 
-def cleanup_input_field() -> None:
+def cleanup_report_preparation() -> None:
     pyautogui.hotkey("ctrl", "a")
-    wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
+    wait_timer(CONFIG["WAIT_TIME"]["HALF_SECOND"])
     pyautogui.press("backspace")
-    wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
+    wait_timer(CONFIG["WAIT_TIME"]["HALF_SECOND"])
 
 
-def close_whatsapp_tab() -> None:
-    wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
+def closing_whatsapp_tab() -> None:
+    wait_timer(CONFIG["WAIT_TIME"]["HALF_SECOND"])
     pyautogui.hotkey("ctrl", "w")
-    wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
+    wait_timer(CONFIG["WAIT_TIME"]["HALF_SECOND"])
     pyautogui.press("enter")
-    wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
+    wait_timer(CONFIG["WAIT_TIME"]["TWO_SECOND"])
 
 
 def send_to_group(group_link: str, message: str = "") -> bool:
@@ -75,17 +74,22 @@ def send_to_group(group_link: str, message: str = "") -> bool:
             raise ValueError("INVALID LINK FORMAT")
 
         webbrowser.open(validated_link)
-        wait_timer(CONFIG["WAIT_TIME"]["THIRTY_SECOND"])
+        wait_timer(CONFIG["WAIT_TIME"]["FIFTEEN_SECOND"])
 
-        cleanup_input_field()
+        click_whatsapp()
+        cleanup_report_preparation()
+
+        if message:
+            pyautogui.typewrite(message)
+            wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
 
         pyautogui.hotkey("ctrl", "v")
-        wait_timer(CONFIG["WAIT_TIME"]["THREE_SECOND"])
+        wait_timer(CONFIG["WAIT_TIME"]["TWO_SECOND"])
 
         pyautogui.press("enter")
-        wait_timer(CONFIG["WAIT_TIME"]["FIVE_SECOND"])
+        wait_timer(CONFIG["WAIT_TIME"]["TWO_SECOND"])
 
-        close_whatsapp_tab()
+        closing_whatsapp_tab()
         logger.info("[SYSTEM] MESSAGE SUCCESSFULLY SENT TO GROUP")
         return True
 
@@ -97,14 +101,21 @@ def send_to_group(group_link: str, message: str = "") -> bool:
 def send_whatsapp_report(phone_no: str, message: str) -> bool:
     try:
         open_chrome()
-        formatted_number = number_formatter(phone_no)
-        if not formatted_number:
+        formatted_no = number_formatter(phone_no)
+        if not formatted_no:
             raise ValueError(f"INVALID PHONE NUMBER: {phone_no}")
 
-        logger.info(f"[SYSTEM] INITIATING MESSAGE TO {formatted_number}")
+        logger.info(f"[SYSTEM] INITIATING MESSAGE TO {formatted_no}")
 
-        open_whatsapp_chat(formatted_number)
-        cleanup_input_field()
+        kit.sendwhatmsg_instantly(
+            phone_no=formatted_no,
+            message="",
+            wait_time=CONFIG["WAIT_TIME"]["FIFTEEN_SECOND"],
+            tab_close=False,
+        )
+
+        click_whatsapp()
+        cleanup_report_preparation()
 
         if message:
             pyautogui.typewrite(message)
@@ -116,8 +127,8 @@ def send_whatsapp_report(phone_no: str, message: str) -> bool:
         pyautogui.press("enter")
         wait_timer(CONFIG["WAIT_TIME"]["TWO_SECOND"])
 
-        close_whatsapp_tab()
-        logger.info(f"[SYSTEM] MESSAGE SUCCESSFULLY SENT TO {formatted_number}")
+        closing_whatsapp_tab()
+        logger.info(f"[SYSTEM] MESSAGE SUCCESSFULLY SENT TO {formatted_no}")
         return True
 
     except Exception as e:
@@ -128,14 +139,21 @@ def send_whatsapp_report(phone_no: str, message: str) -> bool:
 def send_summary_report(phone_no: str, message: str) -> bool:
     try:
         open_chrome()
-        formatted_number = number_formatter(phone_no)
-        if not formatted_number:
+        formatted_no = number_formatter(phone_no)
+        if not formatted_no:
             raise ValueError(f"INVALID PHONE NUMBER: {phone_no}")
 
-        logger.info(f"[SYSTEM] INITIATING SUMMARY MESSAGE TO {formatted_number}")
+        logger.info(f"[SYSTEM] INITIATING SUMMARY MESSAGE TO {formatted_no}")
 
-        open_whatsapp_chat(formatted_number)
-        cleanup_input_field()
+        kit.sendwhatmsg_instantly(
+            phone_no=formatted_no,
+            message="",
+            wait_time=CONFIG["WAIT_TIME"]["TWENTY_SECOND"],
+            tab_close=False,
+        )
+
+        click_whatsapp()
+        cleanup_report_preparation()
 
         if message:
             pyautogui.typewrite(message)
@@ -144,8 +162,8 @@ def send_summary_report(phone_no: str, message: str) -> bool:
         pyautogui.press("enter")
         wait_timer(CONFIG["WAIT_TIME"]["TWO_SECOND"])
 
-        close_whatsapp_tab()
-        logger.info(f"[SYSTEM] SUMMARY MESSAGE SUCCESSFULLY SENT TO {formatted_number}")
+        closing_whatsapp_tab()
+        logger.info(f"[SYSTEM] SUMMARY MESSAGE SUCCESSFULLY SENT TO {formatted_no}")
         return True
 
     except Exception as e:
@@ -156,24 +174,31 @@ def send_summary_report(phone_no: str, message: str) -> bool:
 def send_paste_report(phone_no: str, message: str) -> bool:
     try:
         open_chrome()
-        formatted_number = number_formatter(phone_no)
-        if not formatted_number:
+        formatted_no = number_formatter(phone_no)
+        if not formatted_no:
             raise ValueError(f"INVALID PHONE NUMBER: {phone_no}")
 
-        logger.info(f"[SYSTEM] INITIATING PASTE MESSAGE TO {formatted_number}")
+        logger.info(f"[SYSTEM] INITIATING PASTE MESSAGE TO {formatted_no}")
 
-        open_whatsapp_chat(formatted_number)
-        cleanup_input_field()
+        kit.sendwhatmsg_instantly(
+            phone_no=formatted_no,
+            message="",
+            wait_time=CONFIG["WAIT_TIME"]["TWENTY_SECOND"],
+            tab_close=False,
+        )
 
-        wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
+        click_whatsapp()
+        cleanup_report_preparation()
+        wait_timer(CONFIG["WAIT_TIME"]["HALF_SECOND"])
+
         pyautogui.hotkey("ctrl", "v")
-        wait_timer(CONFIG["WAIT_TIME"]["TWO_SECOND"])
+        wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
 
         pyautogui.press("enter")
         wait_timer(CONFIG["WAIT_TIME"]["TWO_SECOND"])
 
-        close_whatsapp_tab()
-        logger.info(f"[SYSTEM] PASTE MESSAGE SUCCESSFULLY SENT TO {formatted_number}")
+        closing_whatsapp_tab()
+        logger.info(f"[SYSTEM] PASTE MESSAGE SUCCESSFULLY SENT TO {formatted_no}")
         return True
 
     except Exception as e:

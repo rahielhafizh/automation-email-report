@@ -7,7 +7,7 @@ from mail.outlook_progress_flowrate import send_outlook_email
 from data_validate_flowrate_mail import validate_flowrate_file
 from services.capslock_checker import capslock_checking
 from services.config import load_config, wait_timer, logger, get_month_id
-from services.duration_counter import start_counter, stop_counter, start_counter_result
+from services.duration_counter import start_counter, stop_counter, get_execution_duration
 from remover.remover_progress_flowrate import clear_submission_folder
 from screen_keeper import (
     find_screen_keeper_process,
@@ -220,7 +220,7 @@ def main():
     finally:
         # ──────── FINALISE AND RESTORE THE ENVIRONMENT
         stop_counter()
-        execution_time = start_counter_result()
+        execution_time = get_execution_duration()
         logger.info(f"[TIMER] TOTAL : {execution_time}")
         wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
         run_screen_keeper()

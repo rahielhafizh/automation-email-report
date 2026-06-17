@@ -18,7 +18,7 @@ from services.config import (
     wait_timer,
 )
 from services.duration_counter import (
-    start_counter_result,
+    get_execution_duration,
     start_counter,
     stop_counter,
 )
@@ -175,7 +175,7 @@ if __name__ == "__main__":
 
     # ──────── FINALISE AND RESTORE THE ENVIRONMENT
     stop_counter()
-    execution_time = start_counter_result()
+    execution_time = get_execution_duration()
     logger.info(f"[SYSTEM] TOTAL EXECUTION TIME : {execution_time}")
 
     wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])

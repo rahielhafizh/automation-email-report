@@ -9,10 +9,9 @@ from screen_keeper import (
     stop_screen_keeper,
 )
 from services.capslock_checker import capslock_checking
-from services.chrome_checker import open_outlook
 from remover.remover_performance_bucket_od import clear_submission_folder
 from services.config import get_month_id, load_config, logger, wait_timer
-from services.duration_counter import start_counter_result, start_counter, stop_counter
+from services.duration_counter import get_execution_duration, start_counter, stop_counter
 from mail.outlook_performance_bucket_od import send_outlook_email
 
 pyautogui.FAILSAFE = False
@@ -24,7 +23,7 @@ def excel_config():
     logger.info("[SYSTEM] SUMMARY PERFORMANCE BUCKET OD WORKFLOW")
 
     # ── OPEN & NAVIGATE ───────────────────────────────────────────────────────
-    os.startfile(CONFIG["WORKSOURCE_BUCKET_OD"])
+    os.startfile(CONFIG["WORKSOURCE_PERFORMANCE_BUCKET_OVERDUE"])
     wait_timer(CONFIG["WAIT_TIME"]["THIRTY_SECOND"])
     maximize_app_window()
     logger.info("[EXCEL] NAVIGATE TO TARGET SHEET")
@@ -58,11 +57,9 @@ def excel_config():
     break_excel_link()
     wait_timer(CONFIG["WAIT_TIME"]["THIRTY_SECOND"])
     handle_breaklink_process()
-    move_cursor_figure_eight()
     escaping()
 
     # ── CAPTURE TABLE AS PICTURE ──────────────────────────────────────────────
-    move_cursor_figure_eight()
     switch_to_first_sheet()
     switch_to_first_cells()
     switch_to_table_cells()
@@ -72,7 +69,7 @@ def excel_config():
     # ── SAVE NEW WORKBOOK ─────────────────────────────────────────────────────
     logger.info("[EXCEL] SAVE NEW WORKBOOK")
     save_new_book()
-    pyautogui.write(CONFIG["SUBMISSION_BUCKET_OD"])
+    pyautogui.write(CONFIG["SUB_PERFORMANCE_BUCKET_OVERDUE"])
     confirm()
     wait_timer(CONFIG["WAIT_TIME"]["FIVE_SECOND"])
 
@@ -84,12 +81,11 @@ def excel_config():
     bucket_filename = f"Summary Performance Bucket OD {bucket_day} {month_idn_title}"
     pyautogui.write(bucket_filename, interval=0.05)
     confirm()
-    wait_timer(CONFIG["WAIT_TIME"]["THIRTY_SECOND"])
+    wait_timer(CONFIG["WAIT_TIME"]["TEN_SECOND"])
 
     # ── CLOSE WORKBOOKS ───────────────────────────────────────────────────────
-    move_cursor_figure_eight()
     closing_tab()
-    wait_timer(CONFIG["WAIT_TIME"]["ONE_MINUTE"])
+    wait_timer(CONFIG["WAIT_TIME"]["TEN_SECOND"])
 
     logger.info("[EXCEL] CLOSE WORKSOURCE FILE")
     switch_to_first_sheet()
@@ -151,14 +147,8 @@ if __name__ == "__main__":
     wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
     stop_screen_keeper()
     wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
-    clear_submission_folder(target_folder=CONFIG["SUBMISSION_BUCKET_OD"])
+    clear_submission_folder(target_folder=CONFIG["SUB_PERFORMANCE_BUCKET_OVERDUE"])
     wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
-
-    # ── PRE-FLIGHT OUTLOOK ────────────────────────────────────────────────────
-    open_outlook()
-    wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
-    closing_tab()
-    wait_timer(CONFIG["WAIT_TIME"]["THREE_SECOND"])
 
     # ── EXCEL PROCESSING ──────────────────────────────────────────────────────
     excel_config()
@@ -171,7 +161,7 @@ if __name__ == "__main__":
 
     # ── FINALISE ──────────────────────────────────────────────────────────────
     stop_counter()
-    execution_time = start_counter_result()
+    execution_time = get_execution_duration()
     logger.info(f"[SYSTEM] TOTAL EXECUTION TIME : {execution_time}")
     wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
     logger.warning("[SYSTEM] RESTARTING SCREEN KEEPER")

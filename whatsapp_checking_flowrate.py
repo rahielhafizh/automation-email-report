@@ -8,7 +8,7 @@ from screen_keeper import (
 from services.rrd_checker import check_flowrate_status
 from services.config import load_config, logger, wait_timer
 from services.whatsapp_sender import send_to_group
-from services.duration_counter import start_counter, stop_counter, start_counter_result
+from services.duration_counter import start_counter, stop_counter, get_execution_duration
 from screen_keeper import (
     find_screen_keeper_process,
     stop_screen_keeper,

@@ -6,7 +6,7 @@ from general_task import *
 from mail.outlook_penerimaan_denda_alda import send_outlook_email
 from services.capslock_checker import capslock_checking
 from services.config import load_config, wait_timer, logger, get_month_id
-from services.duration_counter import start_counter, stop_counter, start_counter_result
+from services.duration_counter import start_counter, stop_counter, get_execution_duration
 from remover.remover_penerimaan_denda_alda import clear_submission_folder
 from screen_keeper import (
     find_screen_keeper_process,
@@ -40,6 +40,7 @@ def excel_config():
     switch_to_first_cells()
 
     # ──────── NAVIGATE TO THE TARGET SHEET
+    switch_to_right_sheet()
     switch_to_right_sheet()
 
     # ──────── EXTRACT THE TARGET SHEET INTO A STANDALONE WORKBOOK
@@ -156,7 +157,7 @@ if __name__ == "__main__":
 
     # ──────── FINALISE AND RESTORE THE ENVIRONMENT
     stop_counter()
-    execution_time = start_counter_result()
+    execution_time = get_execution_duration()
     logger.info(f"[SYSTEM] TOTAL EXECUTION TIME : {execution_time}")
     wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
     logger.warning("[SYSTEM] RESTARTING SCREEN KEEPER")

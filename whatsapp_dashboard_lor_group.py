@@ -1,4 +1,4 @@
-from screen_keeper import find_screen_keeper_process, run_screen_keeper, stop_screen_keeper
+# Execution time : 12 Minutes
 from services.capslock_checker import capslock_checking
 from services.config import load_config, logger, wait_timer
 from services.duration_counter import start_counter, start_counter, stop_counter
@@ -8,7 +8,11 @@ from services.report.lor.dispatcher import (
     dispatch_as_of_report,
     dispatch_today_report,
 )
-
+from screen_keeper import (
+    find_screen_keeper_process,
+    run_screen_keeper,
+    stop_screen_keeper,
+)
 
 CONFIG = load_config()
 

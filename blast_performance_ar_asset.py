@@ -7,7 +7,7 @@ from services.capslock_checker import capslock_checking
 from services.chrome_checker import open_outlook
 from remover.remover_performance_ar_asset import clear_submission_folder
 from services.config import get_month_id, load_config, logger, wait_timer
-from services.duration_counter import start_counter_result, start_counter, stop_counter
+from services.duration_counter import get_execution_duration, start_counter, stop_counter
 from mail.outlook_penerimaan_denda_aktif import send_outlook_email
 from screen_keeper import (
     find_screen_keeper_process,
@@ -191,7 +191,7 @@ if __name__ == "__main__":
 
     # ── FINALISE ──────────────────────────────────────────────────────────────
     stop_counter()
-    execution_time = start_counter_result()
+    execution_time = get_execution_duration()
     logger.info(f"[SYSTEM] TOTAL EXECUTION TIME : {execution_time}")
     wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
     logger.warning("[SYSTEM] RESTARTING SCREEN KEEPER")

@@ -4,10 +4,11 @@ from datetime import datetime, timedelta
 from general_task import *
 from pynput.keyboard import Controller
 from remover.remover_performance_ar_tod import clear_submission_folder
-from services.config import load_config, wait_timer, logger, get_month_id
 from mail.outlook_performance_ar_tod import send_outlook_email
+from services.chrome_checker import open_outlook
+from services.config import load_config, wait_timer, logger, get_month_id
 from services.capslock_checker import capslock_checking
-from services.duration_counter import start_counter, stop_counter, start_counter_result
+from services.duration_counter import start_counter, stop_counter, get_execution_duration
 from screen_keeper import (
     find_screen_keeper_process,
     stop_screen_keeper,
@@ -43,14 +44,16 @@ def excel_config():
 
     # ──────── NAVIGATE TO THE TARGET SHEET
     switch_to_first_cells()
-    switch_to_right_sheet()
+    for _ in range(4):
+        switch_to_right_sheet()
     switch_to_first_cells()
 
     # ──────── EXTRACT THE TARGET SHEET INTO A STANDALONE WORKBOOK
     select_sheet_down()
+    select_sheet_down()
     move_or_copy_menu()
     move_or_copy_as_newbook()
-    wait_timer(CONFIG["WAIT_TIME"]["FORTYFIVE_SECOND"])
+    wait_timer(CONFIG["WAIT_TIME"]["THREE_SECOND"])
 
     # ──────── SEVER ALL EXTERNAL LINKS
     switch_to_first_sheet()
@@ -159,6 +162,12 @@ if __name__ == "__main__":
     clear_submission_folder(target_folder=CONFIG["SUB_PERFORMANCE_AR_TOD"])
     wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
 
+# ── PRE-FLIGHT OUTLOOK ────────────────────────────────────────────────────
+    open_outlook()
+    wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
+    closing_tab()
+    wait_timer(CONFIG["WAIT_TIME"]["THREE_SECOND"])
+    
     # ──────── EXECUTE THE AUTOMATION WORKFLOW
     excel_config()
     wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
@@ -168,7 +177,7 @@ if __name__ == "__main__":
 
     # ──────── FINALISE AND RESTORE THE ENVIRONMENT
     stop_counter()
-    execution_time = start_counter_result()
+    execution_time = get_execution_duration()
     logger.info(f"[SYSTEM] TOTAL EXECUTION TIME : {execution_time}")
 
     wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])

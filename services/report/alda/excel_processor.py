@@ -24,7 +24,7 @@ def process_alda_workbook() -> None:
     switch_to_first_sheet()
 
     refresh_excel_data()
-    wait_timer(CONFIG["WAIT_TIME"]["TWO_MINUTE"])
+    wait_timer(CONFIG["WAIT_TIME"]["ONE_MINUTE"])
 
     switch_to_first_cells()
     switch_to_right_sheet()
@@ -34,6 +34,6 @@ def process_alda_workbook() -> None:
     switch_to_first_cells()
     switch_to_first_sheet()
     save_file()
-    wait_timer(CONFIG["WAIT_TIME"]["TWENTY_SECOND"])
+    wait_timer(CONFIG["WAIT_TIME"]["TEN_SECOND"])
     closing_tab()
     logger.info("[ALDA] EXCEL PROCESSING COMPLETE")

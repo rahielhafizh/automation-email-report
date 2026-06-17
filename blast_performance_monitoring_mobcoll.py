@@ -3,13 +3,17 @@ import pyautogui
 from datetime import datetime, timedelta
 from general_task import *
 from pynput.keyboard import Controller
-from screen_keeper import find_screen_keeper_process, run_screen_keeper, stop_screen_keeper
+from screen_keeper import (
+    find_screen_keeper_process,
+    run_screen_keeper,
+    stop_screen_keeper,
+)
 from services.capslock_checker import capslock_checking
 from services.chrome_checker import open_outlook
-from services.cleaner.clean_summary_monitoring_mobcoll import clear_submission_folder
+from remover.remover_performance_monitoring_mobcoll import clear_submission_folder
 from services.config import get_month_id, load_config, logger, wait_timer
-from services.duration_counter import start_counter_result, start_counter, stop_counter
-from services.mailer.outlook_summary_monitoring import send_outlook_email
+from services.duration_counter import get_execution_duration, start_counter, stop_counter
+from mail.outlook_performance_monitoring_mobcoll import send_outlook_email
 
 pyautogui.FAILSAFE = False
 CONFIG = load_config()
@@ -20,7 +24,7 @@ def excel_config():
     logger.info("[SYSTEM] SUMMARY MONITORING MOBCOLL WORKFLOW")
 
     # ── OPEN & NAVIGATE ───────────────────────────────────────────────────────
-    os.startfile(CONFIG["WORKSOURCE_MOBCOLL"])
+    os.startfile(CONFIG["WORKSOURCE_MOBCOLL_MONITORING"])
     wait_timer(CONFIG["WAIT_TIME"]["THIRTY_SECOND"])
     maximize_app_window()
     logger.info("[EXCEL] NAVIGATE TO TARGET SHEET")
@@ -32,9 +36,9 @@ def excel_config():
     # ── REFRESH DATA ──────────────────────────────────────────────────────────
     logger.info("[EXCEL] REFRESH EXCEL PROCESS")
     refresh_excel_data()
-    wait_timer(CONFIG["WAIT_TIME"]["THREE_MINUTE"])
+    wait_timer(CONFIG["WAIT_TIME"]["TWOHALF_MINUTE"])
     handle_refresh_process()
-    wait_timer(CONFIG["WAIT_TIME"]["THREE_MINUTE"])
+    wait_timer(CONFIG["WAIT_TIME"]["TWOHALF_MINUTE"])
     entering_operation()
     switch_to_first_cells()
 
@@ -59,11 +63,8 @@ def excel_config():
     # ── BREAK EXTERNAL LINKS ──────────────────────────────────────────────────
     logger.info("[EXCEL] BREAK EXTERNAL LINKS")
     break_excel_link()
-    wait_timer(CONFIG["WAIT_TIME"]["ONEHALF_MINUTE"])
+    wait_timer(CONFIG["WAIT_TIME"]["THIRTY_SECOND"])
     handle_breaklink_process()
-    wait_timer(CONFIG["WAIT_TIME"]["ONEHALF_MINUTE"])
-    handle_breaklink_process()
-    move_cursor_figure_eight()
     escaping()
 
     # ── CAPTURE TABLE AS PICTURE ──────────────────────────────────────────────
@@ -78,7 +79,7 @@ def excel_config():
     # ── SAVE NEW WORKBOOK ─────────────────────────────────────────────────────
     logger.info("[EXCEL] SAVE NEW WORKBOOK")
     save_new_book()
-    pyautogui.write(CONFIG["SUBMISSION_MOBCOLL"])
+    pyautogui.write(CONFIG["SUB_MOBCOLL_MONITORING"])
     confirm()
     wait_timer(CONFIG["WAIT_TIME"]["FIVE_SECOND"])
 
@@ -92,7 +93,7 @@ def excel_config():
     )
     pyautogui.write(monitoring_filename, interval=0.05)
     confirm()
-    wait_timer(CONFIG["WAIT_TIME"]["THIRTY_SECOND"])
+    wait_timer(CONFIG["WAIT_TIME"]["TEN_SECOND"])
 
     # ── CLOSE WORKBOOKS ───────────────────────────────────────────────────────
     move_cursor_figure_eight()
@@ -157,14 +158,8 @@ if __name__ == "__main__":
     wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
     stop_screen_keeper()
     wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
-    clear_submission_folder(target_folder=CONFIG["SUBMISSION_MOBCOLL"])
+    clear_submission_folder(target_folder=CONFIG["SUB_MOBCOLL_MONITORING"])
     wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
-
-    # ── PRE-FLIGHT OUTLOOK ────────────────────────────────────────────────────
-    open_outlook()
-    wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
-    closing_tab()
-    wait_timer(CONFIG["WAIT_TIME"]["THREE_SECOND"])
 
     # ── EXCEL PROCESSING ──────────────────────────────────────────────────────
     excel_config()
@@ -177,7 +172,7 @@ if __name__ == "__main__":
 
     # ── FINALISE ──────────────────────────────────────────────────────────────
     stop_counter()
-    execution_time = start_counter_result()
+    execution_time = get_execution_duration()
     logger.info(f"[SYSTEM] TOTAL EXECUTION TIME : {execution_time}")
     wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
     logger.warning("[SYSTEM] RESTARTING SCREEN KEEPER")

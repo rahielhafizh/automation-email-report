@@ -10,6 +10,6 @@ def send_outlook_email(
         subject_email,
         core_email,
         footer_template,
-        attachment_key="SUB_PERFORMANCE_BUCKET_OD",
+        attachment_key="SUB_PERFORMANCE_BUCKET_OVERDUE",
         report_label="REPORT PERFORMANCE BUCKET OD",
     )
