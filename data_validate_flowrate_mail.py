@@ -15,7 +15,7 @@ class ValidationConfig:
     sheet_name: str = "FR-4W-OD2-Collectible"
     date_cells: Dict[str, str] = field(default_factory=lambda: {"H3": "H-1"})
     submission_folder: str = ""
-    worksource_flowrate: str = ""
+    WORKSOURCE_PROGRESS_FLOWRATE: str = ""
 
 
 @dataclass
@@ -38,8 +38,8 @@ class FlowrateDateValidator:
 
     def __init__(self, config: Optional[ValidationConfig] = None):
         self.config = config or ValidationConfig(
-            submission_folder=DEFAULT_CONFIG.get("SUBMISSION_FLOWRATE", ""),
-            worksource_flowrate=DEFAULT_CONFIG.get("WORKSOURCE_FLOWRATE", ""),
+            submission_folder=DEFAULT_CONFIG.get("SUB_PROGRESS_FLOWRATE", ""),
+            WORKSOURCE_PROGRESS_FLOWRATE=DEFAULT_CONFIG.get("WORKSOURCE_PROGRESS_FLOWRATE", ""),
         )
 
     def get_expected_dates(
@@ -249,7 +249,7 @@ def validate_flowrate_file(
 def validate_default_flowrate_source(
     config: Optional[ValidationConfig] = None, reference_date: Optional[datetime] = None
 ) -> bool:
-    worksource_path = DEFAULT_CONFIG.get("WORKSOURCE_FLOWRATE")
+    worksource_path = DEFAULT_CONFIG.get("WORKSOURCE_PROGRESS_FLOWRATE")
     return (
         validate_flowrate_file(worksource_path, config, reference_date)
         if worksource_path

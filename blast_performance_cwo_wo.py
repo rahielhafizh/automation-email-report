@@ -144,8 +144,6 @@ if __name__ == "__main__":
     wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
     stop_screen_keeper()
     wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
-
-    # ──────── CLEAR THE SUBMISSIONS DIRECTORY
     clear_submission_folder(target_folder=CONFIG["SUB_PERFORMANCE_CWO_WO"])
     wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
 

@@ -560,7 +560,7 @@ def save_new_book() -> None:
     wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
     pyautogui.hotkey("enter")
     wait_timer(CONFIG["WAIT_TIME"]["FIVE_SECOND"])
-    pyautogui.press("tab", presses=10)
+    pyautogui.press("tab", presses=11)
     wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
     pyautogui.press("space")
     wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])

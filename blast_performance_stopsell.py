@@ -151,7 +151,6 @@ def main():
     capslock_checking()
     wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
 
-    # ──────── CLEAR THE SUBMISSIONS DIRECTORY
     clear_submission_folder(target_folder=CONFIG["SUB_PERFORMANCE_STOPSELL"])
     wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
 

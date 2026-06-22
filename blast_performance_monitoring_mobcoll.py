@@ -42,7 +42,7 @@ def excel_config():
     refresh_excel_data()
     wait_timer(CONFIG["WAIT_TIME"]["TWOHALF_MINUTE"])
     handle_refresh_process()
-    wait_timer(CONFIG["WAIT_TIME"]["TWOHALF_MINUTE"])
+    wait_timer(CONFIG["WAIT_TIME"]["TWO_MINUTE"])
     entering_operation()
     switch_to_first_cells()
 

@@ -1,25 +1,48 @@
+import io
 import logging
 import sys
 import time
-import random
-from typing import Dict, Any, List, Optional
-from colorlog import ColoredFormatter
+from io import TextIOWrapper
+from typing import Any, Optional
 
 import pyautogui
+from colorlog import ColoredFormatter
 
 _pyautogui_configured = False
-pyautogui.FAILSAFE = False
-pyautogui.PAUSE = 0.1
 
 
+# ─── LOGGER FORMATTER ─────────────────────────────────────────────────────────
+class SafeColoredFormatter(ColoredFormatter):
+    DATE_FORMAT = "%d-%m-%Y %H:%M:%S"
+
+    def formatTime(
+        self, record: logging.LogRecord, datefmt: Optional[str] = None
+    ) -> str:
+        ct = self.converter(record.created)
+        return time.strftime(self.DATE_FORMAT, ct)
+
+    def format(self, record: logging.LogRecord) -> str:
+        try:
+            return super().format(record)
+        except UnicodeEncodeError:
+            record.msg = record.msg.encode("ascii", errors="replace").decode("ascii")
+            record.args = ()
+            try:
+                return super().format(record)
+            except Exception:
+                return f"[LOG] {record.levelname}: {record.getMessage()}"
+
+
+# ─── LOGGER SETUP ─────────────────────────────────────────────────────────────
 def setup_logger() -> logging.Logger:
     logger = logging.getLogger()
     logger.setLevel(logging.DEBUG)
+
     if not logger.handlers:
-        formatter = ColoredFormatter(
+        formatter = SafeColoredFormatter(
             fmt=(
                 "\n"
-                "%(log_color)s[%(asctime)s] \n"
+                "%(log_color)s[%(asctime)s]\n"
                 "• CONDITION  : %(levelname)s\n"
                 "• SOURCE     : %(filename)s:%(lineno)d\n"
                 "• FUNCTION   : %(funcName)s()\n"
@@ -27,7 +50,7 @@ def setup_logger() -> logging.Logger:
                 "\n"
                 "▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"
             ),
-            datefmt=" 📆 %d-%m-%Y 🕒 %H:%M:%S ",
+            datefmt=None,
             log_colors={
                 "DEBUG": "blue",
                 "INFO": "green",
@@ -40,23 +63,43 @@ def setup_logger() -> logging.Logger:
         stream_handler = logging.StreamHandler(sys.stdout)
         stream_handler.setLevel(logging.DEBUG)
         stream_handler.setFormatter(formatter)
+
+        stream = stream_handler.stream
+        if isinstance(stream, TextIOWrapper):
+            try:
+                stream.reconfigure(errors="replace")
+            except Exception:
+                pass
+        elif hasattr(stream, "buffer"):
+            try:
+                stream_handler.stream = io.TextIOWrapper(
+                    stream.buffer,
+                    encoding="utf-8",
+                    errors="replace",
+                    line_buffering=True,
+                )
+            except Exception:
+                pass
+
         logger.addHandler(stream_handler)
 
     logging.getLogger("urllib3.connectionpool").setLevel(logging.WARNING)
     logging.getLogger("urllib3.util.retry").setLevel(logging.WARNING)
-    logging.getLogger("requests.packages.urllib3.util.retry").setLevel(logging.WARNING)
-    logging.getLogger("requests").setLevel(logging.WARNING)
-    logging.getLogger("urllib3").setLevel(logging.WARNING)
     logging.getLogger("requests.packages.urllib3.connectionpool").setLevel(
         logging.WARNING
     )
+    logging.getLogger("requests.packages.urllib3.util.retry").setLevel(logging.WARNING)
+    logging.getLogger("requests").setLevel(logging.WARNING)
+    logging.getLogger("urllib3").setLevel(logging.WARNING)
 
     return logger
 
 
 logger = setup_logger()
 
-DEFAULT_CC_SPPI = [
+
+# ─── EMAIL DISTRIBUTION LISTS ─────────────────────────────────────────────────
+DEFAULT_CC_SPPI: list[str] = [
     "agnes.tri@sfi.co.id",
     "ardi.supriyono@sfi.co.id",
     "swacita.apriyanti@sfi.co.id",
@@ -65,73 +108,78 @@ DEFAULT_CC_SPPI = [
     "ugi.lugina@sfi.co.id",
 ]
 
-
-DEFAULT_CC_MOKAS = [
+DEFAULT_CC_MOKAS: list[str] = [
     "angelita.roma@sfi.co.id",
     "alfian.tejo@sfi.co.id",
     "aris.sumartono@sfi.co.id",
     "brian.yektibudi@sfi.co.id",
 ]
 
+
+# ─── APPLICATION PATHS ────────────────────────────────────────────────────────
 APPLICATION_PATHS = {
     "CHROME_PATH": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
     "OUTLOOK_PATH": "C:\\ProgramData\\Microsoft\\Windows\\Start Menu\\Programs\\Microsoft Office 2013\\Outlook 2013.lnk",
 }
 
+
+# ─── FOLDER PATHS ─────────────────────────────────────────────────────────────
 FOLDER_PATHS = {
     # SUBMISSION OUTLOOK
-    "SUB_MOBCOLL_LOR": rf"D:\Rahiel Hafizh\Submission\Outlook\Performance_Kunjungan_Mobcoll_LoR",
-    "SUB_MOBCOLL_REGULER": rf"D:\Rahiel Hafizh\Submission\Outlook\Performance_Kunjungan_Mobcoll",
-    "SUB_MOBCOLL_MONITORING": rf"D:\Rahiel Hafizh\Submission\Outlook\Performance_Monitoring_Mobcoll",
-    "SUB_PENERIMAAN_ANGSURAN": rf"D:\Rahiel Hafizh\Submission\Outlook\Penerimaan_Angsuran",
-    "SUB_PENERIMAAN_CASH_IN": rf"D:\Rahiel Hafizh\Submission\Outlook\Penerimaan_CashIn",
-    "SUB_PENERIMAAN_DENDA_AKTIF": rf"D:\Rahiel Hafizh\Submission\Outlook\Penerimaan_Denda_Aktif",
-    "SUB_PENERIMAAN_DENDA_ALDA": rf"D:\Rahiel Hafizh\Submission\Outlook\Penerimaan_Denda_Alda",
-    "SUB_PERFORMANCE_AR_ASSET": rf"D:\Rahiel Hafizh\Submission\Outlook\Performance_AR_Remedial_Asset",
-    "SUB_PERFORMANCE_AR_TOD": rf"D:\Rahiel Hafizh\Submission\Outlook\Performance_AR_TOD",
-    "SUB_PERFORMANCE_BUCKET_CURRENT": rf"D:\Rahiel Hafizh\Submission\Outlook\Performance_Bucket_Current",
-    "SUB_PERFORMANCE_BUCKET_OVERDUE": rf"D:\Rahiel Hafizh\Submission\Outlook\Performance_Bucket_Overdue",
-    "SUB_PERFORMANCE_CWO_WO": rf"D:\Rahiel Hafizh\Submission\Outlook\Performance_CWO_WO_Estimasi_WO",
-    "SUB_PERFORMANCE_PICKUP": rf"D:\Rahiel Hafizh\Submission\Outlook\Performance_Update_Pickup",
-    "SUB_PERFORMANCE_RECOVERY_WO": rf"D:\Rahiel Hafizh\Submission\Outlook\Performance_Recovery_WO",
-    "SUB_PERFORMANCE_STOPSELL": rf"D:\Rahiel Hafizh\Submission\Outlook\Performance_Kunjungan_StopSell",
-    "SUB_PROGRESS_FLOWRATE": rf"D:\Rahiel Hafizh\Submission\Outlook\Progress_Update_Flowrate",
-    "SUB_PROGRESS_REDUCE_WO": rf"D:\Rahiel Hafizh\Submission\Outlook\Progress_Reduce_WO",
+    "SUB_MOBCOLL_LOR": rf"D:\EL\Submission\Outlook\Performance_Kunjungan_Mobcoll_LoR",
+    "SUB_MOBCOLL_REGULER": rf"D:\EL\Submission\Outlook\Performance_Kunjungan_Mobcoll",
+    "SUB_MOBCOLL_MONITORING": rf"D:\EL\Submission\Outlook\Performance_Monitoring_Mobcoll",
+    "SUB_PENERIMAAN_ANGSURAN": rf"D:\EL\Submission\Outlook\Penerimaan_Angsuran",
+    "SUB_PENERIMAAN_CASH_IN": rf"D:\EL\Submission\Outlook\Penerimaan_CashIn",
+    "SUB_PENERIMAAN_DENDA_AKTIF": rf"D:\EL\Submission\Outlook\Penerimaan_Denda_Aktif",
+    "SUB_PENERIMAAN_DENDA_ALDA": rf"D:\EL\Submission\Outlook\Penerimaan_Denda_Alda",
+    "SUB_PERFORMANCE_AR_ASSET": rf"D:\EL\Submission\Outlook\Performance_AR_Remedial_Asset",
+    "SUB_PERFORMANCE_AR_TOD": rf"D:\EL\Submission\Outlook\Performance_AR_TOD",
+    "SUB_PERFORMANCE_BUCKET_CURRENT": rf"D:\EL\Submission\Outlook\Performance_Bucket_Current",
+    "SUB_PERFORMANCE_BUCKET_OVERDUE": rf"D:\EL\Submission\Outlook\Performance_Bucket_Overdue",
+    "SUB_PERFORMANCE_CWO_WO": rf"D:\EL\Submission\Outlook\Performance_CWO_WO_Estimasi_WO",
+    "SUB_PERFORMANCE_PICKUP": rf"D:\EL\Submission\Outlook\Performance_Update_Pickup",
+    "SUB_PERFORMANCE_RECOVERY_WO": rf"D:\EL\Submission\Outlook\Performance_Recovery_WO",
+    "SUB_PERFORMANCE_STOPSELL": rf"D:\EL\Submission\Outlook\Performance_Kunjungan_StopSell",
+    "SUB_PROGRESS_FLOWRATE": rf"D:\EL\Submission\Outlook\Progress_Update_Flowrate",
+    "SUB_PROGRESS_REDUCE_WO": rf"D:\EL\Submission\Outlook\Progress_Reduce_WO",
     # SUBMISSION WHATSAPP
-    "SUB_WHATSAPP_MOBCOLL_LOR": rf"D:\Rahiel Hafizh\Submission\Whatsapp\Performance_Kunjungan_Mobcoll_LoR",
-    "SUB_WHATSAPP_MOBCOLL_REGULER": rf"D:\Rahiel Hafizh\Submission\Whatsapp\Performance_Kunjungan_Mobcoll",
-    "SUB_WHATSAPP_PENERIMAAN_CASH_IN": rf"D:\Rahiel Hafizh\Submission\Whatsapp\Penerimaan_CashIn",
-    "SUB_WHATSAPP_PENERIMAAN_DENDA_AKTIF": rf"D:\Rahiel Hafizh\Submission\Whatsapp\Penerimaan_Denda_Aktif",
-    "SUB_WHATSAPP_PENERIMAAN_DENDA_ALDA": rf"D:\Rahiel Hafizh\Submission\Whatsapp\Penerimaan_Denda_Alda",
-    "SUB_WHATSAPP_PERFORMANCE_AR_ASSET": rf"D:\Rahiel Hafizh\Submission\Whatsapp\Performance_AR_Remedial_Asset",
-    "SUB_WHATSAPP_PERFORMANCE_AR_TOD": rf"D:\Rahiel Hafizh\Submission\Whatsapp\Performance_AR_TOD",
-    "SUB_WHATSAPP_PERFORMANCE_BUCKET_CURRENT": rf"D:\Rahiel Hafizh\Submission\Whatsapp\Performance_Bucket_Current",
-    "SUB_WHATSAPP_PERFORMANCE_BUCKET_OVERDUE": rf"D:\Rahiel Hafizh\Submission\Whatsapp\Performance_Bucket_Overdue",
-    "SUB_WHATSAPP_PERFORMANCE_CWO_WO": rf"D:\Rahiel Hafizh\Submission\Whatsapp\Performance_CWO_WO_Estimasi_WO",
-    "SUB_WHATSAPP_PERFORMANCE_PICKUP": rf"D:\Rahiel Hafizh\Submission\Whatsapp\Performance_Update_Pickup",
-    "SUB_WHATSAPP_PERFORMANCE_RECOVERY_WO": rf"D:\Rahiel Hafizh\Submission\Whatsapp\Performance_Recovery_WO",
-    "SUB_WHATSAPP_PERFORMANCE_STOPSELL": rf"D:\Rahiel Hafizh\Submission\Whatsapp\Performance_Kunjungan_StopSell",
-    "SUB_WHATSAPP_PROGRESS_FLOWRATE": rf"D:\Rahiel Hafizh\Submission\Whatsapp\Progress_Update_Flowrate",
+    "SUB_WHATSAPP_MOBCOLL_LOR": rf"D:\EL\Submission\Whatsapp\Performance_Kunjungan_Mobcoll_LoR",
+    "SUB_WHATSAPP_MOBCOLL_REGULER": rf"D:\EL\Submission\Whatsapp\Performance_Kunjungan_Mobcoll",
+    "SUB_WHATSAPP_PENERIMAAN_CASH_IN": rf"D:\EL\Submission\Whatsapp\Penerimaan_CashIn",
+    "SUB_WHATSAPP_PENERIMAAN_DENDA_AKTIF": rf"D:\EL\Submission\Whatsapp\Penerimaan_Denda_Aktif",
+    "SUB_WHATSAPP_PENERIMAAN_DENDA_ALDA": rf"D:\EL\Submission\Whatsapp\Penerimaan_Denda_Alda",
+    "SUB_WHATSAPP_PERFORMANCE_AR_ASSET": rf"D:\EL\Submission\Whatsapp\Performance_AR_Remedial_Asset",
+    "SUB_WHATSAPP_PERFORMANCE_AR_TOD": rf"D:\EL\Submission\Whatsapp\Performance_AR_TOD",
+    "SUB_WHATSAPP_PERFORMANCE_BUCKET_CURRENT": rf"D:\EL\Submission\Whatsapp\Performance_Bucket_Current",
+    "SUB_WHATSAPP_PERFORMANCE_BUCKET_OVERDUE": rf"D:\EL\Submission\Whatsapp\Performance_Bucket_Overdue",
+    "SUB_WHATSAPP_PERFORMANCE_CWO_WO": rf"D:\EL\Submission\Whatsapp\Performance_CWO_WO_Estimasi_WO",
+    "SUB_WHATSAPP_PERFORMANCE_PICKUP": rf"D:\EL\Submission\Whatsapp\Performance_Update_Pickup",
+    "SUB_WHATSAPP_PERFORMANCE_RECOVERY_WO": rf"D:\EL\Submission\Whatsapp\Performance_Recovery_WO",
+    "SUB_WHATSAPP_PERFORMANCE_STOPSELL": rf"D:\EL\Submission\Whatsapp\Performance_Kunjungan_StopSell",
+    "SUB_WHATSAPP_PROGRESS_FLOWRATE": rf"D:\EL\Submission\Whatsapp\Progress_Update_Flowrate",
     # WORKSOURCE FILE
-    "WORKSOURCE_MOBCOLL_REGULER": rf"D:\Rahiel Hafizh\Submission\Outlook\Performance_Kunjungan_Mobcoll\Summary_Performance_Kunjungan_Mobcoll_Reguler.xlsx",
-    "WORKSOURCE_MOBCOLL_LOR": rf"D:\Rahiel Hafizh\Source\Summary_Performance_Kunjungan_Mobcoll_LoR.xlsx",
-    "WORKSOURCE_MOBCOLL_MONITORING": rf"D:\Rahiel Hafizh\Source\Summary_Performance_Monitoring_Mobcoll.xlsx",
-    "WORKSOURCE_PENERIMAAN_ANGSURAN": rf"D:\Rahiel Hafizh\Source\Summary_Penerimaan_Angsuran.xlsx",
-    "WORKSOURCE_PENERIMAAN_CASH_IN": rf"D:\Rahiel Hafizh\Source\Summary_Penerimaan_CashIn.xlsx",
-    "WORKSOURCE_PENERIMAAN_DENDA_AKTIF": rf"D:\Rahiel Hafizh\Source\Summary_Penerimaan_Denda_Aktif.xlsx",
-    "WORKSOURCE_PENERIMAAN_DENDA_ALDA": rf"D:\Rahiel Hafizh\Source\Summary_Penerimaan_Denda_Alda.xlsx",
-    "WORKSOURCE_PERFORMANCE_AR_ASSET": rf"D:\Rahiel Hafizh\Source\Summary_Performance_AR_Remedial_Asset.xlsx",
-    "WORKSOURCE_PERFORMANCE_AR_TOD": rf"D:\Rahiel Hafizh\Source\Summary_Performance_AR_TOD.xlsx",
-    "WORKSOURCE_PERFORMANCE_BUCKET_CURRENT": rf"D:\Rahiel Hafizh\Source\Summary_Performance_Bucket_Current.xlsx",
-    "WORKSOURCE_PERFORMANCE_BUCKET_OVERDUE": rf"D:\Rahiel Hafizh\Source\Summary_Performance_Bucket_Overdue.xlsx",
-    "WORKSOURCE_PERFORMANCE_CWO_WO": rf"D:\Rahiel Hafizh\Source\Summary_Performance_CWO_WO_Estimasi_WO.xlsx",
-    "WORKSOURCE_PERFORMANCE_PICKUP": rf"D:\Rahiel Hafizh\Source\Summary_Performance_Update_Pickup.xlsx",
-    "WORKSOURCE_PERFORMANCE_RECOVERY_WO": rf"D:\Rahiel Hafizh\Source\Summary_Performance_Recovery_WO.xlsx",
-    "WORKSOURCE_PERFORMANCE_STOPSELL": rf"D:\Rahiel Hafizh\Source\Summary_Performance_Kunjungan_StopSell.xlsx",
-    "WORKSOURCE_PROGRESS_FLOWRATE": rf"D:\Rahiel Hafizh\Source\Summary_Progress_Update_Flowrate_Ori.xlsx",
-    "WORKSOURCE_PROGRESS_REDUCE_WO": rf"D:\Rahiel Hafizh\Source\Summary_Progress_Reduce_WO.xlsx",
+    "WORKSOURCE_MOBCOLL_REGULER": rf"D:\EL\Submission\Outlook\Performance_Kunjungan_Mobcoll\Summary_Performance_Kunjungan_Mobcoll_Reguler.xlsx",
+    "WORKSOURCE_MOBCOLL_LOR": rf"D:\EL\Source\Summary_Performance_Kunjungan_Mobcoll_LoR.xlsx",
+    "WORKSOURCE_MOBCOLL_MONITORING": rf"D:\EL\Source\Summary_Performance_Monitoring_Mobcoll.xlsx",
+    "WORKSOURCE_PENERIMAAN_ANGSURAN": rf"D:\EL\Source\Summary_Penerimaan_Angsuran.xlsx",
+    "WORKSOURCE_PENERIMAAN_CASH_IN": rf"D:\EL\Source\Summary_Penerimaan_CashIn.xlsx",
+    "WORKSOURCE_PENERIMAAN_DENDA_AKTIF": rf"D:\EL\Source\Summary_Penerimaan_Denda_Aktif.xlsx",
+    "WORKSOURCE_PENERIMAAN_DENDA_ALDA": rf"D:\EL\Source\Summary_Penerimaan_Denda_Alda.xlsx",
+    "WORKSOURCE_PERFORMANCE_AR_ASSET": rf"D:\EL\Source\Summary_Performance_AR_Remedial_Asset.xlsx",
+    "WORKSOURCE_PERFORMANCE_AR_TOD": rf"D:\EL\Source\Summary_Performance_AR_TOD.xlsx",
+    "WORKSOURCE_PERFORMANCE_BUCKET_CURRENT": rf"D:\EL\Source\Summary_Performance_Bucket_Current.xlsx",
+    "WORKSOURCE_PERFORMANCE_BUCKET_OVERDUE": rf"D:\EL\Source\Summary_Performance_Bucket_Overdue.xlsx",
+    "WORKSOURCE_PERFORMANCE_CWO_WO": rf"D:\EL\Source\Summary_Performance_CWO_WO_Estimasi_WO.xlsx",
+    "WORKSOURCE_PERFORMANCE_PICKUP": rf"D:\EL\Source\Summary_Performance_Update_Pickup.xlsx",
+    "WORKSOURCE_PERFORMANCE_RECOVERY_WO": rf"D:\EL\Source\Summary_Performance_Recovery_WO.xlsx",
+    "WORKSOURCE_PERFORMANCE_STOPSELL": rf"D:\EL\Source\Summary_Performance_Kunjungan_StopSell.xlsx",
+    "WORKSOURCE_PROGRESS_FLOWRATE": rf"D:\EL\Source\Summary_Progress_Update_Flowrate_Ori.xlsx",
+    "WORKSOURCE_PROGRESS_REDUCE_WO": rf"D:\EL\Source\Summary_Progress_Reduce_WO.xlsx",
 }
 
+
+# ─── CONTACT INFORMATION ──────────────────────────────────────────────────────
 CONTACT_INFO = {
     "ASSET_GROUP": "https://web.whatsapp.com/accept?code=KblwmcubP6g04LzqwooTYV",
     "ADMIN_PRIMARY": "+6281382427588",
@@ -143,6 +191,8 @@ CONTACT_INFO = {
     "PERSONAL_FIVE": "+628988171583",
 }
 
+
+# ─── TIMING CONFIGURATION ─────────────────────────────────────────────────────
 WAIT_TIMES = {
     # MICROSECOND
     "HUNDRED_MICROSECOND": 0.0001,
@@ -188,12 +238,13 @@ WAIT_TIMES = {
     "FORTYFIVE_SECOND": 45,
     "FIFTY_SECOND": 50,
     "FIFTYFIVE_SECOND": 55,
-    # MINUTE-BASED TIMERS
+    # MINUTE-BASED
     "ONE_MINUTE": 60,
     "ONEHALF_MINUTE": 90,
     "TWO_MINUTE": 120,
     "TWOHALF_MINUTE": 150,
     "THREE_MINUTE": 180,
+    "THREEHALF_MINUTE": 210,
     "FOUR_MINUTE": 240,
     "FIVE_MINUTE": 300,
     "SIX_MINUTE": 360,
@@ -212,14 +263,10 @@ WAIT_TIMES = {
     "FIFTY_MINUTE": 3000,
     "FIFTYFIVE_MINUTE": 3300,
     "SIXTY_MINUTE": 3600,
-    # EXTENDED TIMERS
-    "NORMAL": 1,
-    "EXTENDED": 2,
-    "LONG": 5,
-    "VERY_LONG": 10,
-    "ULTRA_LONG": 30,
 }
 
+
+# ─── PYAUTOGUI SETTINGS ───────────────────────────────────────────────────────
 PYAUTOGUI_SETTINGS = {
     "FAILSAFE": False,
     "TRUE_CONDITION": True,
@@ -238,6 +285,7 @@ PYAUTOGUI_SETTINGS = {
 }
 
 
+# ─── LOCALIZATION MAPPING ─────────────────────────────────────────────────────
 MONTHS_ID = {
     "January": "Januari",
     "February": "Februari",
@@ -253,7 +301,9 @@ MONTHS_ID = {
     "December": "Desember",
 }
 
-AREA_BRANCH_MAPPING: Dict[str, List[str]] = {
+
+# ─── AREA / BRANCH REFERENCE DATA ────────────────────────────────────────────
+AREA_BRANCH_MAPPING: dict[str, list[str]] = {
     "IBT": [
         "DENPASAR",
         "MATARAM",
@@ -319,7 +369,7 @@ AREA_BRANCH_MAPPING: Dict[str, List[str]] = {
     ],
 }
 
-BRANCH_ORDER = [
+BRANCH_ORDER: list[str] = [
     "BALIKPAPAN",
     "BANDAR LAMPUNG",
     "BANDUNG",
@@ -365,7 +415,9 @@ BRANCH_ORDER = [
     "YOGYAKARTA",
 ]
 
-CERTIFICATION_FILTER_PRESETS = {
+
+# ─── CERTIFICATION FILTER CONFIGURATION ──────────────────────────────────────
+CERTIFICATION_FILTER_PRESETS: dict[str, Any] = {
     "NEXT_MONTH": {"MODE": "NEXT_MONTH"},
     "TWO_MONTHS": {"MODE": "NEXT_N_MONTHS", "MONTHS_AHEAD": 2},
     "THREE_MONTHS": {"MODE": "NEXT_N_MONTHS", "MONTHS_AHEAD": 3},
@@ -390,23 +442,27 @@ CERTIFICATION_FILTER_PRESETS = {
     },
 }
 
-CERTIFICATION_FILTER_CONFIG = {
+CERTIFICATION_FILTER_CONFIG: dict[str, Any] = {
     "ACTIVE_PRESET": "NEXT_MONTH",
     "CUSTOM_CONFIG": None,
 }
 
+
+# ─── WHATSAPP UI SETTINGS ─────────────────────────────────────────────────────
 WHATSAPP_SETTINGS = {
-    "INPUT_X": 1085,
-    "INPUT_Y": 695,
+    "INPUT_X": 800,
+    "INPUT_Y": 820,
 }
 
+
+# ─── DEFAULT CONFIGURATION REGISTRY ──────────────────────────────────────────
 DEFAULT_CONFIG = {
     **APPLICATION_PATHS,
     **FOLDER_PATHS,
     **CONTACT_INFO,
     "WAIT_TIME": WAIT_TIMES,
     "PYAUTOGUI": PYAUTOGUI_SETTINGS,
-    "WHATSAPP": WHATSAPP_SETTINGS,  # tambahan
+    "WHATSAPP": WHATSAPP_SETTINGS,
     "MONTHS_ID": MONTHS_ID,
     "AREA_BRANCH_MAPPING": AREA_BRANCH_MAPPING,
     "BRANCH_ORDER": BRANCH_ORDER,
@@ -415,42 +471,46 @@ DEFAULT_CONFIG = {
 }
 
 
+# ─── PYAUTOGUI INITIALISATION ─────────────────────────────────────────────────
 def setup_pyautogui_config() -> None:
     global _pyautogui_configured
     if _pyautogui_configured:
         return
 
     try:
-        pyautogui.FAILSAFE = PYAUTOGUI_SETTINGS["FALSE_CONDITION"]
+        pyautogui.FAILSAFE = PYAUTOGUI_SETTINGS["FAILSAFE"]
         pyautogui.PAUSE = PYAUTOGUI_SETTINGS["PAUSE"]
         _pyautogui_configured = True
     except Exception as e:
-        logger.error(f"FAILED TO CONFIGURE PYAUTOGUI : {e}")
+        logger.error(f"[SYSTEM] FAILED TO CONFIGURE PYAUTOGUI: {e}")
         raise
 
 
-def load_config() -> Dict[str, Any]:
+# ─── CONFIGURATION LOADER ─────────────────────────────────────────────────────
+def load_config() -> dict[str, Any]:
     setup_pyautogui_config()
     return DEFAULT_CONFIG
 
 
+# ─── TIMER UTILITIES ──────────────────────────────────────────────────────────
 def wait_timer(base_time: float) -> None:
     if base_time < 0:
-        logger.warning(f"[TIMER] INVALID NEGATIVE VALUE : {base_time}")
+        logger.warning(f"[TIMER] INVALID NEGATIVE VALUE: {base_time}")
         return
     time.sleep(base_time)
 
 
+# ─── CONFIGURATION ACCESSORS ──────────────────────────────────────────────────
 def get_config_value(key: str, default: Any = None) -> Any:
     config = DEFAULT_CONFIG
     keys = key.split(".")
+
     try:
         for k in keys:
             config = config[k]
         return config
-
     except (KeyError, TypeError):
-        logger.warning(f"[CONFIG] KEY NOT FOUND : {key}")
+        logger.warning(f"[CONFIG] KEY NOT FOUND: {key}")
         return default
 
 
@@ -471,54 +531,60 @@ def get_month_id(english_month: str, case: str = "as-is") -> str:
         return indonesian_month.lower()
     elif case == "title":
         return indonesian_month.title()
-    else:
-        return indonesian_month
+    return indonesian_month
 
 
-def area_branch_mapping() -> Dict[str, List[str]]:
+# ─── AREA / BRANCH ACCESSORS ─────────────────────────────────────────────────
+def area_branch_mapping() -> dict[str, list[str]]:
     return AREA_BRANCH_MAPPING.copy()
 
 
-def get_branch_order() -> List[str]:
+def get_branch_order() -> list[str]:
     return BRANCH_ORDER.copy()
 
 
-def get_certification_filter_config(preset: Optional[str] = None) -> Dict[str, Any]:
-    if preset is None:
-        preset = CERTIFICATION_FILTER_CONFIG["ACTIVE_PRESET"]
+# ─── CERTIFICATION FILTER ACCESSORS ──────────────────────────────────────────
+_VALID_FILTER_MODES = {
+    "NEXT_MONTH",
+    "NEXT_N_MONTHS",
+    "DAYS_RANGE",
+    "SPECIFIC_DATE_RANGE",
+}
 
+
+def get_certification_filter_config(preset: Optional[str] = None) -> dict[str, Any]:
     if CERTIFICATION_FILTER_CONFIG["CUSTOM_CONFIG"] is not None:
         logger.info("[CONFIG] USING CUSTOM FILTER CONFIGURATION")
         return CERTIFICATION_FILTER_CONFIG["CUSTOM_CONFIG"]
 
-    if preset in CERTIFICATION_FILTER_PRESETS:
-        logger.info(f"[CONFIG] USING FILTER PRESET : {preset}")
-        return CERTIFICATION_FILTER_PRESETS[preset].copy()
-    else:
-        logger.warning(f"[CONFIG] UNKNOWN PRESET '{preset}'")
-        return CERTIFICATION_FILTER_PRESETS["NEXT_MONTH"].copy()
+    active_preset = preset or CERTIFICATION_FILTER_CONFIG["ACTIVE_PRESET"]
+
+    if active_preset in CERTIFICATION_FILTER_PRESETS:
+        logger.info(f"[CONFIG] USING FILTER PRESET: {active_preset}")
+        return CERTIFICATION_FILTER_PRESETS[active_preset].copy()
+
+    logger.warning(
+        f"[CONFIG] UNKNOWN PRESET '{active_preset}' — FALLING BACK TO NEXT_MONTH"
+    )
+    return CERTIFICATION_FILTER_PRESETS["NEXT_MONTH"].copy()
 
 
 def set_certification_filter_preset(preset: str) -> bool:
-    if preset in CERTIFICATION_FILTER_PRESETS:
-        CERTIFICATION_FILTER_CONFIG["ACTIVE_PRESET"] = preset
-        CERTIFICATION_FILTER_CONFIG["CUSTOM_CONFIG"] = None
-        logger.info(f"[CONFIG] FILTER PRESET SET TO : {preset}")
-        return True
-    else:
-        logger.error(f"[CONFIG] INVALID PRESET NAME : {preset}")
+    if preset not in CERTIFICATION_FILTER_PRESETS:
+        logger.error(f"[CONFIG] INVALID PRESET NAME: {preset}")
         return False
 
+    CERTIFICATION_FILTER_CONFIG["ACTIVE_PRESET"] = preset
+    CERTIFICATION_FILTER_CONFIG["CUSTOM_CONFIG"] = None
+    logger.info(f"[CONFIG] FILTER PRESET SET TO: {preset}")
+    return True
 
-def set_custom_certification_filter(custom_config: Dict[str, Any]) -> bool:
-    required_mode = custom_config.get("MODE")
-    if required_mode not in [
-        "NEXT_MONTH",
-        "NEXT_N_MONTHS",
-        "DAYS_RANGE",
-        "SPECIFIC_DATE_RANGE",
-    ]:
-        logger.error(f"[CONFIG] INVALID MODE IN CUSTOM FILTER : {required_mode}")
+
+def set_custom_certification_filter(custom_config: dict[str, Any]) -> bool:
+    mode = custom_config.get("MODE")
+
+    if mode not in _VALID_FILTER_MODES:
+        logger.error(f"[CONFIG] INVALID MODE IN CUSTOM FILTER: {mode}")
         return False
 
     CERTIFICATION_FILTER_CONFIG["CUSTOM_CONFIG"] = custom_config

@@ -22,10 +22,8 @@ def process_alda_workbook() -> None:
     wait_timer(CONFIG["WAIT_TIME"]["FIFTEEN_SECOND"])
     maximize_app_window()
     switch_to_first_sheet()
-
     refresh_excel_data()
-    wait_timer(CONFIG["WAIT_TIME"]["ONE_MINUTE"])
-
+    wait_timer(CONFIG["WAIT_TIME"]["TWO_MINUTE"])
     switch_to_first_cells()
     switch_to_right_sheet()
     switch_to_first_cells()

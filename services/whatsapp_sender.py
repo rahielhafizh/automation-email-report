@@ -1,4 +1,5 @@
 import pyautogui
+import pyperclip
 import pywhatkit as kit
 import webbrowser
 from typing import Optional
@@ -74,7 +75,7 @@ def send_to_group(group_link: str, message: str = "") -> bool:
             raise ValueError("INVALID LINK FORMAT")
 
         webbrowser.open(validated_link)
-        wait_timer(CONFIG["WAIT_TIME"]["FIFTEEN_SECOND"])
+        wait_timer(CONFIG["WAIT_TIME"]["TWENTY_SECOND"])
 
         click_whatsapp()
         cleanup_report_preparation()
@@ -110,7 +111,7 @@ def send_whatsapp_report(phone_no: str, message: str) -> bool:
         kit.sendwhatmsg_instantly(
             phone_no=formatted_no,
             message="",
-            wait_time=CONFIG["WAIT_TIME"]["FIFTEEN_SECOND"],
+            wait_time=CONFIG["WAIT_TIME"]["TWENTY_SECOND"],
             tab_close=False,
         )
 
@@ -189,6 +190,12 @@ def send_paste_report(phone_no: str, message: str) -> bool:
 
         click_whatsapp()
         cleanup_report_preparation()
+        wait_timer(CONFIG["WAIT_TIME"]["HALF_SECOND"])
+
+        if not message:
+            raise ValueError("EMPTY MESSAGE CANNOT BE PASTED")
+
+        pyperclip.copy(message)
         wait_timer(CONFIG["WAIT_TIME"]["HALF_SECOND"])
 
         pyautogui.hotkey("ctrl", "v")

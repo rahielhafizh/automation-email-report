@@ -133,7 +133,6 @@ if __name__ == "__main__":
     capslock_checking()
     wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
 
-    # ──────── CLEAR THE SUBMISSIONS DIRECTORY
     clear_submission_folder(target_folder=CONFIG["SUB_PERFORMANCE_PICKUP"])
     wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
 

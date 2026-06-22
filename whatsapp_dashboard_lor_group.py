@@ -23,12 +23,12 @@ CONFIG = load_config()
 
 def dispatch_sequence_lor() -> None:
     if not dispatch_area_report():
-        logger.error("[LOR] AREA REPORT FAILED — SEQUENCE ABORTED")
+        logger.error("[LOR] AREA REPORT FAILED")
         return
     logger.info("[LOR] AREA REPORT DISPATCHED")
 
     if not dispatch_as_of_report():
-        logger.error("[LOR] AS-OF REPORT FAILED — SEQUENCE ABORTED")
+        logger.error("[LOR] AS-OF REPORT FAILED")
         return
     logger.info("[LOR] AS-OF REPORT DISPATCHED")
 
@@ -51,7 +51,7 @@ if __name__ == "__main__":
     refresh_workbook()
     wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
     dispatch_sequence_lor()
-    logger.info("[SYSTEM] LOR REPORT GROUP DELIVERY COMPLETE")
+    logger.info("[SYSTEM] LOR REPORT GROUP DISPATCHED")
     stop_counter()
     execution_time = get_execution_duration()
     logger.info(f"[SYSTEM] TOTAL EXECUTION TIME: {execution_time}")

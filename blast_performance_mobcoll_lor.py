@@ -36,7 +36,7 @@ def excel_config():
 
     # ──────── REFRESH ALL DATA CONNECTIONS
     refresh_excel_data()
-    wait_timer(CONFIG["WAIT_TIME"]["TWO_MINUTE"])
+    wait_timer(CONFIG["WAIT_TIME"]["TWOHALF_MINUTE"])
     entering_operation()
     switch_to_first_cells()
 
@@ -46,7 +46,7 @@ def excel_config():
     select_sheet_down()
     move_or_copy_menu()
     move_or_copy_as_newbook()
-    wait_timer(CONFIG["WAIT_TIME"]["FIFTEEN_SECOND"])
+    wait_timer(CONFIG["WAIT_TIME"]["THIRTY_SECOND"])
 
     # ──────── SEVER ALL EXTERNAL LINKS
     break_excel_link()

@@ -148,7 +148,6 @@ if __name__ == "__main__":
     stop_screen_keeper()
     wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
 
-    # ──────── CLEAR THE SUBMISSIONS DIRECTORY
     clear_submission_folder(target_folder=CONFIG["SUB_PENERIMAAN_DENDA_ALDA"])
     wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
 

@@ -11,6 +11,7 @@ from general_task import (
     switch_to_first_sheet,
     switch_to_right_sheet,
     switch_to_table_cells,
+    move_cursor_figure_eight,
 )
 from services.config import load_config, logger, wait_timer
 
@@ -28,18 +29,20 @@ def process_cash_in_workbook() -> None:
 
     refresh_excel_data()
     wait_timer(CONFIG["WAIT_TIME"]["THREE_MINUTE"])
+    move_cursor_figure_eight()
+    scroller_page()
+    wait_timer(CONFIG["WAIT_TIME"]["TWO_MINUTE"])
 
     switch_to_first_cells()
     for _ in range(_CASH_IN_SHEET_INDEX):
         switch_to_right_sheet()
 
-    
     wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
     switch_to_first_cells()
     switch_to_table_cells()
     capture_table_as_bitmap()
     switch_to_first_cells()
     save_file()
-    wait_timer(CONFIG["WAIT_TIME"]["ONE_MINUTE"])
+    wait_timer(CONFIG["WAIT_TIME"]["THIRTY_SECOND"])
     closing_tab()
     logger.info("[CASH IN] EXCEL PROCESSING COMPLETE")
