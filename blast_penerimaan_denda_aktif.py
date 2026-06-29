@@ -39,11 +39,11 @@ def excel_config():
 
     # ──────── REFRESH ALL DATA CONNECTIONS
     refresh_excel_data()
-    wait_timer(CONFIG["WAIT_TIME"]["TWO_MINUTE"])
+    wait_timer(CONFIG["WAIT_TIME"]["ONE_MINUTE"])
     entering_operation()
+    switch_to_first_cells()
 
     # ──────── NAVIGATE TO THE TARGET SHEET
-    switch_to_first_cells()
     switch_to_right_sheet()
 
     # ──────── EXTRACT THE TARGET SHEET INTO A STANDALONE WORKBOOK
@@ -58,6 +58,7 @@ def excel_config():
     break_excel_link()
 
     # ──────── CAPTURE THE TABLE AS AN IMAGE
+    switch_to_first_sheet()
     switch_to_first_cells()
     switch_to_table_cells()
     capture_table_as_picture()
@@ -79,17 +80,16 @@ def excel_config():
     fine_filename = f"Summary Report Update Penerimaan Denda Aktif {fine_day} {month_idn_title} ({today.strftime('%H.%M')})"
     pyautogui.write(fine_filename, interval=0.05)
     confirm()
-    wait_timer(CONFIG["WAIT_TIME"]["TEN_SECOND"])
+    wait_timer(CONFIG["WAIT_TIME"]["THREE_SECOND"])
     closing_tab()
     wait_timer(CONFIG["WAIT_TIME"]["THREE_SECOND"])
 
     # ──────── SAVE AND CLOSE THE SOURCE FILE
+    switch_to_first_cells()
     switch_to_first_sheet()
     switch_to_first_cells()
-    switch_to_right_sheet()
-    switch_to_first_cells()
     save_file()
-    wait_timer(CONFIG["WAIT_TIME"]["TEN_SECOND"])
+    wait_timer(CONFIG["WAIT_TIME"]["FIFTEEN_SECOND"])
     closing_tab()
     wait_timer(CONFIG["WAIT_TIME"]["THREE_SECOND"])
 
@@ -161,7 +161,7 @@ if __name__ == "__main__":
     # ──────── FINALISE AND RESTORE THE ENVIRONMENT
     stop_counter()
     execution_time = get_execution_duration()
-    logger.info(f"[SYSTEM] TOTAL EXECUTION TIME: {execution_time}")
+    logger.info(f"[SYSTEM] TOTAL EXECUTION TIME : {execution_time}")
     wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
     logger.warning("[SYSTEM] RESTARTING SCREEN KEEPER")
     run_screen_keeper()

@@ -30,23 +30,25 @@ def excel_config():
 
     # ──────── OPEN THE SOURCE WORKBOOK
     os.startfile(CONFIG["WORKSOURCE_PENERIMAAN_ANGSURAN"])
-    wait_timer(CONFIG["WAIT_TIME"]["THIRTY_SECOND"])
+    wait_timer(CONFIG["WAIT_TIME"]["TWENTY_SECOND"])
     maximize_app_window()
-    switch_to_first_sheet()
     switch_to_first_cells()
 
     # ──────── REFRESH ALL DATA CONNECTIONS
     refresh_excel_data()
-    wait_timer(CONFIG["WAIT_TIME"]["THREE_MINUTE"])
+    wait_timer(CONFIG["WAIT_TIME"]["FOUR_MINUTE"])
     move_cursor_figure_eight()
     scroller_page()
-    wait_timer(CONFIG["WAIT_TIME"]["TWO_MINUTE"])
+    wait_timer(CONFIG["WAIT_TIME"]["THREE_MINUTE"])
     entering_operation()
     switch_to_first_cells()
 
     # ──────── NAVIGATE TO THE TARGET SHEET
+    switch_to_first_sheet()
+    switch_to_first_cells()
     switch_to_right_sheet()
     switch_to_right_sheet()
+    switch_to_first_cells()
 
     # ──────── EXTRACT THE TARGET SHEET INTO A STANDALONE WORKBOOK
     select_sheet_down()
@@ -59,7 +61,7 @@ def excel_config():
     # ──────── SEVER ALL EXTERNAL LINKS
     switch_to_first_sheet()
     break_excel_link()
-    wait_timer(CONFIG["WAIT_TIME"]["FIVE_SECOND"])
+    wait_timer(CONFIG["WAIT_TIME"]["THREE_SECOND"])
 
     # ──────── CAPTURE THE TABLE AS AN IMAGE
     switch_to_first_cells()
@@ -82,13 +84,13 @@ def excel_config():
     payment_filename = f"Summary Report Update Penerimaan Angsuran - {payment_day} {month_idn_title} ({today.strftime('%H.%M')})"
     pyautogui.write(payment_filename, interval=0.05)
     confirm()
-    wait_timer(CONFIG["WAIT_TIME"]["TWENTY_SECOND"])
+    wait_timer(CONFIG["WAIT_TIME"]["TEN_SECOND"])
 
     # ──────── CLOSE THE EXPORTED WORKBOOK
     switch_to_right_sheet()
     switch_to_first_sheet()
     closing_tab()
-    wait_timer(CONFIG["WAIT_TIME"]["FIVE_SECOND"])
+    wait_timer(CONFIG["WAIT_TIME"]["THREE_SECOND"])
 
     # ──────── SAVE AND CLOSE THE SOURCE FILE
     move_cell_horizontal()

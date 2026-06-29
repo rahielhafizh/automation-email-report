@@ -45,7 +45,6 @@ def excel_config():
 
     # ──────── NAVIGATE TO THE TARGET SHEET
     switch_to_right_sheet()
-    switch_to_right_sheet()
 
     # ──────── EXTRACT THE TARGET SHEET INTO A STANDALONE WORKBOOK
     switch_to_first_cells()
@@ -137,7 +136,7 @@ Collection HO - PT Suzuki Finance Indonesia.
 
 # ───────── ENTRY POINT
 if __name__ == "__main__":
-    logger.info("[SYSTEM] START ACTIVE FINE REPORT")
+    logger.info("[SYSTEM] START ALDA FINE REPORT")
 
     # ──────── INITIALISE THE REPORT RUN
     start_counter()
@@ -156,7 +155,7 @@ if __name__ == "__main__":
     wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
 
     send_email()
-    logger.info("[SYSTEM] ACTIVE FINE REPORT SENT")
+    logger.info("[SYSTEM] ALDA FINE REPORT SENT")
 
     # ──────── FINALISE AND RESTORE THE ENVIRONMENT
     stop_counter()

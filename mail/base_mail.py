@@ -75,7 +75,7 @@ def send_base_outlook(
         pyautogui.write(footer_template)
 
         wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
-        # finish_outlook()
+        finish_outlook()
         logger.info(f"[SYSTEM] {report_label} REPORT MAIL COMPLETED")
 
     except Exception as e:
