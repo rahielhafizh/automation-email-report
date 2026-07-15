@@ -451,8 +451,8 @@ CERTIFICATION_FILTER_CONFIG: dict[str, Any] = {
 
 # ─── WHATSAPP UI SETTINGS ─────────────────────────────────────────────────────
 WHATSAPP_SETTINGS = {
-    "INPUT_X": 800,
-    "INPUT_Y": 820,
+    "INPUT_X": 705,
+    "INPUT_Y": 695,
 }
 
 
