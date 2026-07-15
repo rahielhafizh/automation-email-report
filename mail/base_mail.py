@@ -68,7 +68,6 @@ def send_base_outlook(
         pyautogui.write(CONFIG.get(attachment_key, ""))
         confirm_file_attach()
 
-        # Body & Footer
         pyautogui.write(core_email)
         blank_mail_space()
         input_clipboard_picture()

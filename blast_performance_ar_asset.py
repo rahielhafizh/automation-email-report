@@ -34,11 +34,7 @@ def excel_config():
     logger.info("[EXCEL] NAVIGATE TO TARGET SHEET")
     for _ in range(3):
         switch_to_first_sheet()
-    for _ in range(
-        
-        
-        
-        14):
+    for _ in range(14):
         switch_to_right_sheet()
 
     # ── REFRESH DATA ──────────────────────────────────────────────────────────
@@ -86,16 +82,7 @@ def excel_config():
 
     # ── NAVIGATE TO SUMMARY SHEET ─────────────────────────────────────────────
     switch_to_right_sheet()
-    wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
-    switch_to_first_cells()
-
-    # ── CAPTURE TABLE AS PICTURE ──────────────────────────────────────────────
-    logger.info("[EXCEL] CAPTURE TABLE AS PICTURE")
-    wait_timer(CONFIG["WAIT_TIME"]["FIVE_SECOND"])
-    switch_to_first_cells()
-    switch_to_table_cells()
-    capture_table_as_picture()
-    switch_to_first_cells()
+    capturing_report_picture()
 
     # ── SAVE NEW WORKBOOK ─────────────────────────────────────────────────────
     logger.info("[EXCEL] SAVE NEW WORKBOOK")
@@ -160,13 +147,17 @@ Asset Management Division
 Collection HO - PT Suzuki Finance Indonesia
 """
 
-    send_outlook_email(
-        outlook_recipients,
-        secondary_recipients,
-        subject_email,
-        core_email,
-        footer_template,
-    )
+    try:
+        send_outlook_email(
+            outlook_recipients,
+            secondary_recipients,
+            subject_email,
+            core_email,
+            footer_template,
+        )
+    except Exception as exc:
+        logger.error(f"[ERROR] FAILED TO SEND EMAIL : {exc}")
+        raise
 
 
 if __name__ == "__main__":
@@ -204,5 +195,5 @@ if __name__ == "__main__":
     execution_time = get_execution_duration()
     logger.info(f"[SYSTEM] TOTAL EXECUTION TIME : {execution_time}")
     wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
-    logger.warning("[SYSTEM] RESTARTING SCREEN KEEPER")
+    logger.info("[SYSTEM] RESTARTING SCREEN KEEPER")
     run_screen_keeper()

@@ -222,6 +222,8 @@ def finish_outlook() -> None:
     wait_timer(CONFIG["WAIT_TIME"]["FIVE_SECOND"])
     pyautogui.hotkey("alt", "f4")
     wait_timer(CONFIG["WAIT_TIME"]["FIVE_SECOND"])
+    pyautogui.hotkey("esc")
+    wait_timer(CONFIG["WAIT_TIME"]["HALF_SECOND"])
 
 
 def handle_breaklink_process() -> None:
@@ -449,32 +451,32 @@ def move_or_copy_as_newbook() -> None:
     wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
     logger.info("[DATA] COPY SHEET TO NEW WORKBOOK")
     pyautogui.hotkey("tab")
-    wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
+    wait_timer(CONFIG["WAIT_TIME"]["TENTH_SECOND"])
     pyautogui.hotkey("space")
-    wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
+    wait_timer(CONFIG["WAIT_TIME"]["TENTH_SECOND"])
     pyautogui.press("tab", presses=3)
-    wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
+    wait_timer(CONFIG["WAIT_TIME"]["TENTH_SECOND"])
     pyautogui.hotkey("space")
-    wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
+    wait_timer(CONFIG["WAIT_TIME"]["TENTH_SECOND"])
     pyautogui.press("up", presses=5)
-    wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
+    wait_timer(CONFIG["WAIT_TIME"]["TENTH_SECOND"])
     pyautogui.hotkey("enter")
-    wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
+    wait_timer(CONFIG["WAIT_TIME"]["TENTH_SECOND"])
     pyautogui.press("tab", presses=3)
-    wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
+    wait_timer(CONFIG["WAIT_TIME"]["TENTH_SECOND"])
     pyautogui.hotkey("enter")
-    wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
+    wait_timer(CONFIG["WAIT_TIME"]["TENTH_SECOND"])
 
 
 def move_or_copy_menu() -> None:
     wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
     logger.info("[SYSTEM] OPEN MOVE OR COPY DIALOG")
     pyautogui.hotkey("alt")
-    wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
+    wait_timer(CONFIG["WAIT_TIME"]["TENTH_SECOND"])
     pyautogui.hotkey("e")
-    wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
+    wait_timer(CONFIG["WAIT_TIME"]["TENTH_SECOND"])
     pyautogui.hotkey("m")
-    wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
+    wait_timer(CONFIG["WAIT_TIME"]["TENTH_SECOND"])
 
 
 def moving_process(
@@ -559,13 +561,13 @@ def save_new_book() -> None:
     pyautogui.press("tab", presses=2)
     wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
     pyautogui.hotkey("enter")
-    wait_timer(CONFIG["WAIT_TIME"]["FIVE_SECOND"])
+    wait_timer(CONFIG["WAIT_TIME"]["THREE_SECOND"])
     pyautogui.press("tab", presses=10)
     wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
     pyautogui.press("space")
-    wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
+    wait_timer(CONFIG["WAIT_TIME"]["TENTH_SECOND"])
     pyautogui.press("backspace")
-    wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
+    wait_timer(CONFIG["WAIT_TIME"]["TENTH_SECOND"])
 
 
 def save_new_copy() -> None:
@@ -588,10 +590,8 @@ def scroller_page(scroll_amount: int = 500) -> None:
     wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
     pyautogui.PAUSE = 0
     pyautogui.scroll(scroll_amount)
-
     wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
     pyautogui.scroll(-scroll_amount)
-
     wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
 
 
@@ -624,7 +624,7 @@ def select_hyperlink() -> None:
 
 
 def select_sheet_down() -> None:
-    wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
+    wait_timer(CONFIG["WAIT_TIME"]["HALF_SECOND"])
     logger.info("[SYSTEM] EXTEND SELECTION DOWNWARD")
     for _ in range(15):
         pynputKeyboard.press(Key.ctrl)
@@ -639,7 +639,7 @@ def select_sheet_down() -> None:
 
 
 def select_sheet_half_down() -> None:
-    wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
+    wait_timer(CONFIG["WAIT_TIME"]["HALF_SECOND"])
     logger.info("[SYSTEM] EXTEND SELECTION DOWNWARD PARTIAL")
     for _ in range(5):
         pynputKeyboard.press(Key.ctrl)
@@ -650,7 +650,7 @@ def select_sheet_half_down() -> None:
         pynputKeyboard.release(Key.shift)
         pynputKeyboard.release(Key.ctrl)
         wait_timer(CONFIG["WAIT_TIME"]["HALF_SECOND"])
-    wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
+    wait_timer(CONFIG["WAIT_TIME"]["HALF_SECOND"])
 
 
 def select_sheet_half_up() -> None:
@@ -770,36 +770,36 @@ def set_text_right() -> None:
 
 
 def switch_to_first_cells() -> None:
-    wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
+    wait_timer(CONFIG["WAIT_TIME"]["TENTH_SECOND"])
     logger.info("[SYSTEM] NAVIGATE TO FIRST CELLS")
-    for _ in range(5):
+    for _ in range(10):
         pyautogui.hotkey("ctrl", "up")
-    for _ in range(5):
+    for _ in range(10):
         pyautogui.hotkey("ctrl", "left")
-    wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
+    wait_timer(CONFIG["WAIT_TIME"]["TENTH_SECOND"])
 
 
 def switch_to_first_sheet() -> None:
-    wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
+    wait_timer(CONFIG["WAIT_TIME"]["TENTH_SECOND"])
     logger.info("[SYSTEM] SWITCH TO FIRST SHEET")
     for _ in range(15):
         pyautogui.hotkey("ctrl", "pgup")
-    wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
+    wait_timer(CONFIG["WAIT_TIME"]["TENTH_SECOND"])
 
 
 def switch_to_last_sheet() -> None:
-    wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
+    wait_timer(CONFIG["WAIT_TIME"]["TENTH_SECOND"])
     logger.info("[SYSTEM] SWITCH TO LAST SHEET")
     for _ in range(15):
         pyautogui.hotkey("ctrl", "pagedown")
-    wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
+    wait_timer(CONFIG["WAIT_TIME"]["TENTH_SECOND"])
 
 
 def switch_to_left_sheet() -> None:
-    wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
+    wait_timer(CONFIG["WAIT_TIME"]["TENTH_SECOND"])
     logger.info("[SYSTEM] SWITCH TO PREVIOUS SHEET")
     pyautogui.hotkey("ctrl", "pgup")
-    wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
+    wait_timer(CONFIG["WAIT_TIME"]["TENTH_SECOND"])
 
 
 def switch_to_right_sheet() -> None:
@@ -816,3 +816,12 @@ def switch_to_table_cells() -> None:
     wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
     pyautogui.press("right", presses=3)
     wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
+
+def capturing_report_picture() -> None:
+    switch_to_first_cells()
+    wait_timer(CONFIG["WAIT_TIME"]["TENTH_SECOND"])
+    switch_to_table_cells()
+    wait_timer(CONFIG["WAIT_TIME"]["TENTH_SECOND"])
+    capture_table_as_picture()
+    wait_timer(CONFIG["WAIT_TIME"]["TENTH_SECOND"])
+    switch_to_first_cells()

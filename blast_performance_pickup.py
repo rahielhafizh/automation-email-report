@@ -50,10 +50,8 @@ def excel_config():
 
     # ──────── CAPTURE THE TABLE AS AN IMAGE
     switch_to_first_sheet()
-    switch_to_first_cells()
-    switch_to_table_cells()
-    capture_table_as_picture()
-    switch_to_first_cells()
+    capturing_report_picture()
+
 
     # ──────── SAVE THE NEW WORKBOOK
     save_as_in()

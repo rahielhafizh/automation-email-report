@@ -1,58 +1,73 @@
+import os
 import re
 import pandas as pd
 from pathlib import Path
 from openpyxl import load_workbook
 from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
 from openpyxl.utils import get_column_letter
-from typing import Optional
+from typing import Callable
+from services.config import logger
 
 ASSET_DIR = Path(__file__).parent / "asset"
 INPUT_FILE = ASSET_DIR / "Mapping-PIC.xlsx"
 OUTPUT_FILE = ASSET_DIR / "Mapping-Result.xlsx"
+RE_NON_DIGIT = re.compile(r"[^0-9]")
+RE_MULTI_SPACE = re.compile(r"\s{2,}")
+RE_AREA_PREFIX = re.compile(r"^[\d\W_]+\s*")
+RE_WHITESPACE = re.compile(r"\s+")
+BARE_M_PREFIX = re.compile(r"^M$", re.IGNORECASE)
 
 DEGREE_MAP: dict[str, str] = {
-    "ST": "S.T",
-    "SP": "S.P",
-    "SAB": "S.A.B",
-    "SKOM": "S.Kom",
-    "S KOM": "S.Kom",
-    "SKom": "S.Kom",
-    "SPD": "S.Pd",
-    "S PD": "S.Pd",
-    "SE": "S.E",
-    "SH": "S.H",
-    "SI": "S.I",
-    "SIP": "S.IP",
-    "SSOS": "S.Sos",
-    "SAK": "S.Ak",
-    "MM": "M.M",
-    "MT": "M.T",
-    "MBA": "M.B.A",
-    "MSI": "M.Si",
-    "MSC": "M.Sc",
-    "AMD": "A.Md",
+    "AMD": "A.Md.",
+    "AMDKOM": "A.Md.Kom.",
+    "AMDAK": "A.Md.Ak.",
+    "AMDM": "A.Md.M.",
+    "AMDAB": "A.Md.A.B.",
+    "AMDPJK": "A.Md.Pjk.",
+    "AMDPAR": "A.Md.Par.",
+    "STR": "S.Tr.",
+    "STRKOM": "S.Tr.Kom.",
+    "STRAK": "S.Tr.Ak.",
+    "STRAB": "S.Tr.A.B.",
+    "STRM": "S.Tr.M.",
+    "SE": "S.E.",
+    "SAK": "S.Ak.",
+    "SM": "S.M.",
+    "SAB": "S.A.B.",
+    "SAP": "S.A.P.",
+    "SKOM": "S.Kom.",
+    "SI": "S.I.",
+    "SH": "S.H.",
+    "SIKOM": "S.I.Kom.",
+    "ST": "S.T.",
+    "SSOS": "S.Sos.",
+    "SPSI": "S.Psi.",
+    "SMAT": "S.Mat.",
+    "STAT": "S.Stat.",
+    "SSI": "S.Si.",
+    "SPD": "S.Pd.",
+    "SP": "S.P.",
+    "SS": "S.S.",
+    "SHUM": "S.Hum.",
+    "SDES": "S.Ds.",
+    "SDS": "S.Ds.",
 }
 
-DEGREE_KEYS_UPPER: frozenset[str] = frozenset(
-    k.upper().replace(" ", "") for k in DEGREE_MAP
-)
+DEGREE_KEYS_UPPER: frozenset[str] = frozenset(DEGREE_MAP.keys())
 
-DEGREE_TOKENS_SORTED = sorted(DEGREE_MAP.keys(), key=len, reverse=True)
-DEGREE_PATTERN = re.compile(
-    r"[,\s]+(" + "|".join(re.escape(d) for d in DEGREE_TOKENS_SORTED) + r")\s*$",
-    re.IGNORECASE,
-)
-
-INLINE_DEGREE_PATTERN = re.compile(
-    r"\s+([A-Z]{2,5})\s*$",
-)
-
-
-def format_abbreviation(token: str) -> str:
-    upper = token.upper()
-    canonical = DEGREE_MAP.get(upper) or DEGREE_MAP.get(token)
-    return canonical if canonical else ".".join(upper)
-
+FRONT_TITLES_MAP: dict[str, str] = {
+    "DRS": "Drs.",
+    "DRA": "Dra.",
+    "IR": "Ir.",
+    "DR": "Dr.",
+    "PROF": "Prof.",
+    "DRG": "drg.",
+    "DRH": "drh.",
+    "NS": "Ns.",
+    "BD": "Bd.",
+    "APT": "apt.",
+    "H": "H.",
+}
 
 PREFIX_ABBREV: dict[str, str] = {
     "MUHAMMAD": "M.",
@@ -64,43 +79,107 @@ PREFIX_ABBREV: dict[str, str] = {
     "MOH": "M.",
 }
 
-BARE_M_PREFIX = re.compile(r"^M$", re.IGNORECASE)
-
-CITY_SUFFIXES: frozenset[str] = frozenset(
+BRANCH_COMPOUNDS: frozenset[str] = frozenset(
     {
-        "BKL",
-        "SMD",
-        "SMG",
-        "TBN",
-        "NR",
-        "KB",
-        "MDN",
-        "JKT",
-        "SBY",
-        "BGR",
-        "CKR",
-        "TSM",
-        "CRB",
-        "TGR",
-        "DPK",
-        "BDG",
-        "SLO",
-        "YGY",
-        "MLG",
-        "SDA",
-        "PTK",
+        "BANDAR LAMPUNG",
+        "DEWI SARTIKA",
+        "PANGKAL PINANG",
+    }
+)
+
+BRANCH_TOKENS: frozenset[str] = frozenset(
+    {
+        "BALIKPAPAN",
+        "BANDUNG",
+        "BANJARMASIN",
+        "BARABAI",
+        "BATAM",
+        "BEKASI",
+        "BOGOR",
+        "CIREBON",
+        "DENPASAR",
+        "DEPOK",
+        "GORONTALO",
+        "GRESIK",
+        "JAMBI",
+        "KARAWANG",
+        "KEDIRI",
+        "KEDOYA",
+        "KENDARI",
+        "KUDUS",
+        "KUPANG",
+        "MAKASSAR",
+        "MALANG",
+        "MANADO",
+        "MATARAM",
+        "MEDAN",
+        "PADANG",
+        "PALANGKARAYA",
+        "PALEMBANG",
+        "PALU",
+        "PEKANBARU",
+        "PONTIANAK",
+        "PURWOKERTO",
+        "SAMARINDA",
+        "SAMPIT",
+        "SEMARANG",
+        "SERANG",
+        "SOLO",
+        "SUNTER",
+        "SURABAYA",
+        "TANGERANG",
+        "TEGAL",
+        "TERNATE",
+        "YOGYAKARTA",
         "BPN",
-        "MKS",
-        "MDO",
-        "AMQ",
+        "BDL",
+        "BDG",
+        "BJM",
+        "BRB",
         "BTM",
-        "PLG",
-        "LPG",
-        "PBR",
+        "BKS",
+        "BGR",
+        "CRB",
+        "DPS",
+        "DPK",
+        "GTO",
+        "GRK",
+        "JMB",
+        "KRW",
+        "KDR",
+        "KDY",
+        "KDI",
+        "KDS",
+        "KPG",
+        "MKS",
+        "MLG",
+        "MND",
+        "MTR",
+        "MDN",
         "PDG",
-        "MES",
-        "ACH",
-        "ABG",
+        "PLK",
+        "PLG",
+        "PLW",
+        "PKP",
+        "PBR",
+        "PTK",
+        "PWT",
+        "SMD",
+        "SMP",
+        "SMG",
+        "SRG",
+        "SLO",
+        "STR",
+        "SBY",
+        "TGR",
+        "TGL",
+        "TTE",
+        "YGY",
+        "CABANG",
+        "AREA",
+        "REGION",
+        "KOTA",
+        "KABUPATEN",
     }
 )
 
@@ -123,66 +202,44 @@ BALINESE_COMPOUND: frozenset[str] = frozenset(
         "NI PUTU",
         "IDA BAGUS",
         "IDA AYU",
+        "I NYOMAN",
+        "NI NYOMAN",
+        "I GUSTI",
+        "I GUSTI AYU",
+        "ANAK AGUNG",
+        "COKORDA",
+        "TJOKORDA",
+        "GUSTI AYU",
+        "GUSTI NGURAH",
+        "DEWA AYU",
+        "DEWA GEDE",
+        "ANAK AGUNG ISTRI",
+        "ANAK AGUNG GEDE",
     }
 )
 
-BALINESE_SINGLE: frozenset[str] = frozenset({"I", "NI", "IDA", "ANAK", "DEWA", "DESAK"})
+BALINESE_SINGLE: frozenset[str] = frozenset(
+    {"I", "NI", "IDA", "ANAK", "DEWA", "DESAK", "GUSTI"}
+)
+PROTECTED_SINGLES: frozenset[str] = frozenset({"I", "M."})
 
 
-def extract_comma_degree(raw: str) -> tuple[str, Optional[str]]:
-    match = DEGREE_PATTERN.search(raw)
-    if not match:
-        return raw, None
-    token_raw = match.group(1)
-    token_key = token_raw.upper().replace(" ", "")
-    pure_name = raw[: match.start()].strip().rstrip(",").strip()
-    normalised = format_abbreviation(token_key)
-    return pure_name, normalised
-
-
-def extract_inline_degree(
-    tokens_u: list[str], tokens_o: list[str]
-) -> tuple[list[str], list[str], Optional[str]]:
-    if not tokens_u:
-        return tokens_u, tokens_o, None
-    last_u = tokens_u[-1].upper()
-    if (
-        re.fullmatch(r"[A-Z]{2,5}", last_u)
-        and last_u in DEGREE_KEYS_UPPER
-        and last_u not in CITY_SUFFIXES
-    ):
-        degree = format_abbreviation(last_u)
-        return tokens_u[:-1], tokens_o[:-1], degree
-    return tokens_u, tokens_o, None
-
-
-def strip_city_suffix(upper: list[str], orig: list[str]) -> tuple[list[str], list[str]]:
-    if upper and upper[-1] in CITY_SUFFIXES:
-        return upper[:-1], orig[:-1]
-    return upper, orig
-
-
-def protected_prefix_length(upper_tokens: list[str]) -> int:
-    if len(upper_tokens) >= 2:
-        two = upper_tokens[0] + " " + upper_tokens[1]
-        if two in BALINESE_COMPOUND:
-            return 2
-    if upper_tokens and (upper_tokens[0] in BALINESE_SINGLE or upper_tokens[0] == "M."):
+def get_balinese_prefix_len(upper_tokens: list[str]) -> int:
+    if len(upper_tokens) >= 3 and " ".join(upper_tokens[:3]) in BALINESE_COMPOUND:
+        return 3
+    if len(upper_tokens) >= 2 and " ".join(upper_tokens[:2]) in BALINESE_COMPOUND:
+        return 2
+    if upper_tokens and upper_tokens[0] in BALINESE_SINGLE:
         return 1
     return 0
 
 
-PROTECTED_SINGLES: frozenset[str] = frozenset({"I", "M."})
-
-
-def format_token(token: str, is_protected: bool = False) -> str:
+def format_token(token: str) -> str:
     if "." in token:
         return token
     upper = token.upper()
     if len(token) == 1 and token.isalpha():
-        if is_protected or upper in PROTECTED_SINGLES:
-            return upper
-        return upper + "."
+        return upper if upper in PROTECTED_SINGLES else upper + "."
     return token.title()
 
 
@@ -191,66 +248,114 @@ def clean_name(value) -> str:
     if not raw:
         return ""
 
-    raw = re.sub(r"\s{2,}", " ", raw).strip().rstrip(".,")
+    raw = RE_MULTI_SPACE.sub(" ", raw).strip().rstrip(".,")
+    parts = [p.strip() for p in raw.split(",")]
+    core_raw, comma_degrees_raw = parts[0], parts[1:]
 
-    pure, degree = extract_comma_degree(raw)
-
-    tokens_u = pure.upper().split()
-    tokens_o = pure.split()
+    tokens_u = core_raw.upper().split()
     if not tokens_u:
         return ""
 
-    tokens_u, tokens_o = strip_city_suffix(tokens_u, tokens_o)
-    if not tokens_u:
-        return ""
+    front_titles = []
+    while tokens_u and tokens_u[0].replace(".", "") in FRONT_TITLES_MAP:
+        front_titles.append(FRONT_TITLES_MAP[tokens_u.pop(0).replace(".", "")])
 
-    if degree is None:
-        tokens_u, tokens_o, degree = extract_inline_degree(tokens_u, tokens_o)
+    while tokens_u:
+        popped = False
+        if len(tokens_u) >= 2:
+            last_two = f"{tokens_u[-2]} {tokens_u[-1]}"
+            if last_two in BRANCH_COMPOUNDS:
+                del tokens_u[-2:]
+                popped = True
+                continue
+        if tokens_u[-1] in BRANCH_TOKENS:
+            tokens_u.pop()
+            popped = True
+            continue
+        break
+
+    inline_degrees = []
+    while tokens_u and tokens_u[-1].replace(".", "") in DEGREE_KEYS_UPPER:
+        inline_degrees.insert(0, DEGREE_MAP[tokens_u.pop().replace(".", "")])
 
     if not tokens_u:
-        return ""
+        return " ".join(front_titles) if front_titles else raw
 
     if tokens_u[0] in PREFIX_ABBREV:
         tokens_u[0] = PREFIX_ABBREV[tokens_u[0]]
-        tokens_o[0] = tokens_u[0]
     elif BARE_M_PREFIX.match(tokens_u[0]) and len(tokens_u) > 1:
         tokens_u[0] = "M."
-        tokens_o[0] = "M."
 
-    prefix_len = protected_prefix_length(tokens_u)
-
-    keep_full = prefix_len + 2
+    keep_full = (
+        get_balinese_prefix_len(tokens_u) + 1
+        if get_balinese_prefix_len(tokens_u) > 0
+        else 2
+    )
 
     if len(tokens_u) <= keep_full:
-        result = " ".join(format_token(t) for t in tokens_u)
+        core_name = " ".join(format_token(t) for t in tokens_u)
     else:
         full_part = " ".join(format_token(t) for t in tokens_u[:keep_full])
         letters = [t[0].upper() for t in tokens_u[keep_full:] if t and t[0].isalpha()]
-        initials = ".".join(letters)
-        result = f"{full_part} {initials}" if initials else full_part
+        initials = ".".join(letters) + "." if letters else ""
+        core_name = f"{full_part} {initials}".strip()
 
-    return f"{result}, {degree}" if degree else result
+    final_name = f"{' '.join(front_titles)} {core_name}".strip()
+
+    all_degrees = inline_degrees.copy()
+    for cd in comma_degrees_raw:
+        clean_cd = cd.upper().replace(".", "").replace(" ", "")
+        if clean_cd in DEGREE_MAP:
+            all_degrees.append(DEGREE_MAP[clean_cd])
+            continue
+        sub_parts = cd.split()
+        if len(sub_parts) > 1:
+            sub_clean = "".join(sub_parts).upper().replace(".", "")
+            if sub_clean in DEGREE_MAP:
+                all_degrees.append(DEGREE_MAP[sub_clean])
+                continue
+        all_degrees.append(cd.title())
+
+    result_str = (
+        f"{final_name}, {', '.join(all_degrees)}" if all_degrees else final_name
+    )
+    return result_str.rstrip(".")
 
 
 def clean_branch_id(value) -> str:
-    raw = str(value) if pd.notna(value) else ""
-    digits = re.sub(r"[^0-9]", "", raw).strip()
+    digits = RE_NON_DIGIT.sub("", str(value) if pd.notna(value) else "")
     return digits.zfill(4) if digits else ""
 
 
 def clean_area(value) -> str:
     raw = str(value).strip() if pd.notna(value) else ""
-    stripped = re.sub(r"^[\d\W_]+\s*", "", raw)
-    collapsed = re.sub(r"\s{2,}", " ", stripped).strip()
-    return collapsed.upper()
+    collapsed = RE_MULTI_SPACE.sub(" ", RE_AREA_PREFIX.sub("", raw)).strip().upper()
+    return "UNKNOWN_AREA" if raw and not collapsed else collapsed
 
 
-HEADER_FILL = PatternFill("solid", start_color="1F4E79", end_color="1F4E79")
+def clean_position(value) -> str:
+    return RE_WHITESPACE.sub("", str(value).strip() if pd.notna(value) else "").upper()
+
+
+def clean_phone_number(value) -> str:
+    raw = str(value).strip() if pd.notna(value) else ""
+    if not raw:
+        return ""
+    digits = RE_NON_DIGIT.sub("", raw)
+    if digits.startswith("62"):
+        return "0" + digits[2:]
+    if digits.startswith("8"):
+        return "0" + digits
+    return digits
+
+
 ALT_ROW_FILL = PatternFill("solid", start_color="D6E4F0", end_color="D6E4F0")
+HEADER_FILL = PatternFill("solid", start_color="1F4E79", end_color="1F4E79")
 HEADER_FONT = Font(name="Arial", bold=True, color="FFFFFF", size=10)
 BODY_FONT = Font(name="Arial", size=10)
-CENTER = Alignment(horizontal="center", vertical="center")
 LEFT = Alignment(horizontal="left", vertical="center")
+CENTER = Alignment(horizontal="center", vertical="center")
+CENTERED_COLUMNS: frozenset[int] = frozenset({1, 2, 3, 6, 10, 14})
 THIN_BORDER = Border(
     left=Side(style="thin"),
     right=Side(style="thin"),
@@ -258,32 +363,32 @@ THIN_BORDER = Border(
     bottom=Side(style="thin"),
 )
 
+COLUMN_CLEANERS: dict[int, Callable[[object], str]] = {
+    2: clean_branch_id,
+    3: clean_area,
+    6: clean_name,
+    7: clean_position,
+    10: clean_name,
+}
 
-def apply_worksheet_style(ws, col_count: int) -> None:
+SORT_PRIORITY_INDICES: tuple[int, ...] = (2, 6, 10)
+
+
+def apply_worksheet_style(ws, col_count: int, col_max_lengths: dict[int, int]) -> None:
     for col in range(1, col_count + 1):
-        cell = ws.cell(row=1, column=col)
-        cell.font = HEADER_FONT
-        cell.fill = HEADER_FILL
-        cell.alignment = CENTER
-        cell.border = THIN_BORDER
+        header_cell = ws.cell(row=1, column=col)
+        header_cell.font, header_cell.fill = HEADER_FONT, HEADER_FILL
+        header_cell.alignment, header_cell.border = CENTER, THIN_BORDER
 
     for row_idx, row in enumerate(ws.iter_rows(min_row=2), start=2):
-        fill = ALT_ROW_FILL if row_idx % 2 == 0 else PatternFill()
-        for cell in row:
-            cell.font = BODY_FONT
-            cell.fill = fill
-            cell.border = THIN_BORDER
-            cell.alignment = LEFT
+        row_fill = ALT_ROW_FILL if row_idx % 2 == 0 else PatternFill()
+        for col_idx, cell in enumerate(row, start=1):
+            cell.font, cell.fill, cell.border = BODY_FONT, row_fill, THIN_BORDER
+            cell.alignment = CENTER if col_idx in CENTERED_COLUMNS else LEFT
 
     for col in range(1, col_count + 1):
         col_letter = get_column_letter(col)
-        max_len = max(
-            (
-                len(str(ws.cell(row=r, column=col).value or ""))
-                for r in range(1, ws.max_row + 1)
-            ),
-            default=10,
-        )
+        max_len = col_max_lengths.get(col - 1, 10)
         ws.column_dimensions[col_letter].width = min(max_len + 4, 45)
 
     ws.freeze_panes = "A2"
@@ -295,40 +400,81 @@ def load_source(file_path: Path) -> pd.DataFrame:
     return pd.read_excel(file_path, dtype=str)
 
 
+def sort_by_priority(df: pd.DataFrame) -> pd.DataFrame:
+    columns = df.columns
+    sort_cols = [columns[i] for i in SORT_PRIORITY_INDICES if len(columns) > i]
+    if not sort_cols:
+        return df
+    return df.sort_values(
+        by=sort_cols,
+        key=lambda col: col.str.upper(),
+        kind="mergesort",
+        ignore_index=True,
+    )
+
+
 def transform(df: pd.DataFrame) -> pd.DataFrame:
     result = df.copy()
-    col_names = list(result.columns)
+    columns = result.columns
 
-    if len(col_names) > 2:
-        result[col_names[2]] = result[col_names[2]].map(clean_branch_id)
+    for index, cleaner in COLUMN_CLEANERS.items():
+        if len(columns) > index:
+            result[columns[index]] = result[columns[index]].map(cleaner)
 
-    if len(col_names) > 3:
-        result[col_names[3]] = result[col_names[3]].map(clean_area)
+    phone_index = next(
+        (
+            i
+            for i, col in enumerate(columns)
+            if "HP" in str(col).upper() or "TELEPON" in str(col).upper()
+        ),
+        None,
+    )
+    if phone_index is not None:
+        result[columns[phone_index]] = result[columns[phone_index]].map(
+            clean_phone_number
+        )
 
-    if len(col_names) > 6:
-        result[col_names[6]] = result[col_names[6]].map(clean_name)
-
-    if len(col_names) > 10:
-        result[col_names[10]] = result[col_names[10]].map(clean_name)
-
-    return result
+    return sort_by_priority(result)
 
 
 def write_output(df: pd.DataFrame, file_path: Path) -> None:
     file_path.parent.mkdir(parents=True, exist_ok=True)
+
+    col_max_lengths = {
+        i: max(
+            df[col].astype(str).map(len).max() if not df.empty else 10, len(str(col))
+        )
+        for i, col in enumerate(df.columns)
+    }
+
     df.to_excel(file_path, index=False, sheet_name="Result")
 
     wb = load_workbook(file_path)
-    ws = wb.active
-    apply_worksheet_style(ws, len(df.columns))
+    apply_worksheet_style(wb.active, len(df.columns), col_max_lengths)
     wb.save(file_path)
 
 
 def run() -> None:
-    df_raw = load_source(INPUT_FILE)
-    df_clean = transform(df_raw)
-    write_output(df_clean, OUTPUT_FILE)
-    print(f"[DONE] {len(df_clean)} rows written → {OUTPUT_FILE}")
+    os.system("cls" if os.name == "nt" else "clear")
+    logger.info("[INFO] MEMULAI PROSES MAPPING DATA PIC")
+
+    try:
+        logger.info("[INFO] MENARIK DATA DARI SUMBER")
+        df_raw = load_source(INPUT_FILE)
+        logger.info(f"[INFO] DATA BERHASIL DITARIK ({len(df_raw)} BARIS).")
+
+        logger.info("[INFO] MEMULAI TRANSFORMASI DATA")
+        df_clean = transform(df_raw)
+        logger.info("[INFO] TRANSFORMASI DATA SELESAI")
+
+        logger.info("[INFO] MENYIMPAN HASIL KE FORMAT EXCEL")
+        write_output(df_clean, OUTPUT_FILE)
+        logger.info(f"[INFO] HASIL TERSIMPAN PADA : {OUTPUT_FILE.resolve()}")
+
+    except FileNotFoundError as e:
+        logger.error(f"[ERROR] FILE TIDAK DITEMUKAN: {e}")
+    except Exception as e:
+        logger.error(f"[ERROR] TERJADI KESALAHAN : {e}")
 
 
 if __name__ == "__main__":

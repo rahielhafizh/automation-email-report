@@ -73,12 +73,9 @@ def excel_config():
 
     # ── CAPTURE TABLE AS PICTURE ──────────────────────────────────────────────
     move_cursor_figure_eight()
-    switch_to_first_cells()
     switch_to_first_sheet()
-    switch_to_first_cells()
-    switch_to_table_cells()
-    capture_table_as_picture()
-    switch_to_first_cells()
+    capturing_report_picture()
+
 
     # ── SAVE NEW WORKBOOK ─────────────────────────────────────────────────────
     logger.info("[EXCEL] SAVE NEW WORKBOOK")

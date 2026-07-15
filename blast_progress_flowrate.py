@@ -64,10 +64,8 @@ def excel_config():
     wait_timer(CONFIG["WAIT_TIME"]["THREE_SECOND"])
 
     # ──────── CAPTURE THE TABLE AS AN IMAGE
-    switch_to_first_cells()
-    switch_to_table_cells()
-    capture_table_as_picture()
-    switch_to_first_cells()
+    capturing_report_picture()
+
 
     # ──────── SAVE THE NEW WORKBOOK
     save_new_book()

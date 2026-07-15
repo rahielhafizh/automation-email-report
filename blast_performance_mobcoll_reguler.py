@@ -179,7 +179,7 @@ class PicDateTimeValidatorMail:
         result = self.validate_cell_datetime(df, cell_address, expected_date)
 
         if result.is_valid:
-            logger.info(f"[DATA] CELL {cell_address} VALIDATED SUCCESSFULLY")
+            logger.info(f"[VALIDATION] CELL {cell_address} VALIDATED SUCCESSFULLY")
         else:
             logger.error(f"[ERROR] {result.error_message}")
 
@@ -204,7 +204,7 @@ def _validate_pic_data(file_path: Optional[str] = None) -> bool:
         is_valid = validator.is_data_valid(results)
 
         if is_valid:
-            logger.info("[DATA] MOBCOLL REGULER VALID")
+            logger.info("[VALIDATION] MOBCOLL REGULER VALID")
             return True
 
         for result in results:
@@ -229,7 +229,7 @@ def _get_pic_validation_details(file_path: Optional[str] = None) -> Dict:
             "validation_time": datetime.now().strftime("%d/%m/%Y %H:%M:%S"),
             "expected_date": datetime.now().date().strftime("%d/%m/%Y"),
             "is_valid": validator.is_data_valid(results),
-            "results": [
+            "r`1.esults": [
                 {
                     "cell": r.cell_address,
                     "expected": r.expected_date.strftime("%d/%m/%Y"),
@@ -265,11 +265,7 @@ def excel_config():
     switch_to_first_cells()
 
     switch_to_right_sheet()
-    switch_to_first_cells()
-    switch_to_table_cells()
-    capture_table_as_picture()
-
-    switch_to_first_cells()
+    capturing_report_picture()
     switch_to_first_sheet()
     switch_to_first_cells()
     wait_timer(CONFIG["WAIT_TIME"]["THREE_SECOND"])
@@ -316,10 +312,8 @@ def send_email():
             footer_template,
         )
     except Exception as exc:
-        logger.error(f"[ERROR] FAILED TO SEND EMAIL: {exc}")
+        logger.error(f"[ERROR] FAILED TO SEND EMAIL : {exc}")
         raise
-
-    logger.info("[DATA] MOBCOLL REGULER REPORT SENT")
 
 
 def validate_and_send_email() -> bool:
@@ -336,7 +330,7 @@ def validate_and_send_email() -> bool:
     if "results" in details:
         for result in details["results"]:
             if not result["valid"]:
-                logger.warning(f"[WARNING] CELL {result['cell']} — {result['error']}")
+                logger.warning(f"[VALIDATION] CELL {result['cell']}")
 
     return False
 
@@ -367,8 +361,8 @@ if __name__ == "__main__":
 
     stop_counter()
     execution_time = get_execution_duration()
-    logger.info(f"[SYSTEM] TOTAL EXECUTION TIME: {execution_time}")
+    logger.info(f"[SYSTEM] TOTAL EXECUTION TIME : {execution_time}")
 
     wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
-    logger.warning("[SYSTEM] RESTARTING SCREEN KEEPER")
+    logger.info("[SYSTEM] RESTARTING SCREEN KEEPER")
     run_screen_keeper()

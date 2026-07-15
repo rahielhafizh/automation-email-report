@@ -56,7 +56,7 @@ def excel_config():
     select_sheet_down()
     move_or_copy_menu()
     move_or_copy_as_newbook()
-    wait_timer(CONFIG["WAIT_TIME"]["TEN_SECOND"])
+    wait_timer(CONFIG["WAIT_TIME"]["TWENTY_SECOND"])
 
     # ──────── SEVER ALL EXTERNAL LINKS
     switch_to_right_sheet()
@@ -65,10 +65,7 @@ def excel_config():
 
     # ──────── CAPTURE THE TABLE AS AN IMAGE
     switch_to_first_sheet()
-    switch_to_first_cells()
-    switch_to_table_cells()
-    capture_table_as_picture()
-    switch_to_first_cells()
+    capturing_report_picture()
 
     # ──────── SAVE THE NEW WORKBOOK
     save_new_book()
@@ -89,14 +86,15 @@ def excel_config():
 
     # ──────── CLOSE THE EXPORTED WORKBOOK
     closing_tab()
-    wait_timer(CONFIG["WAIT_TIME"]["THREE_SECOND"])
+    wait_timer(CONFIG["WAIT_TIME"]["TEN_SECOND"])
+    move_cursor_figure_eight()
 
     # ──────── SAVE AND CLOSE THE SOURCE FILE
     switch_to_first_cells()
     switch_to_first_sheet()
     switch_to_first_cells()
     save_file()
-    wait_timer(CONFIG["WAIT_TIME"]["TEN_SECOND"])
+    wait_timer(CONFIG["WAIT_TIME"]["FIFTEEN_SECOND"])
     closing_tab()
     wait_timer(CONFIG["WAIT_TIME"]["THREE_SECOND"])
 

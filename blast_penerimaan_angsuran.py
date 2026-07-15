@@ -36,7 +36,7 @@ def excel_config():
 
     # ──────── REFRESH ALL DATA CONNECTIONS
     refresh_excel_data()
-    wait_timer(CONFIG["WAIT_TIME"]["FOUR_MINUTE"])
+    wait_timer(CONFIG["WAIT_TIME"]["THREE_MINUTE"])
     move_cursor_figure_eight()
     scroller_page()
     wait_timer(CONFIG["WAIT_TIME"]["THREE_MINUTE"])
@@ -46,28 +46,26 @@ def excel_config():
     # ──────── NAVIGATE TO THE TARGET SHEET
     switch_to_first_sheet()
     switch_to_first_cells()
-    switch_to_right_sheet()
-    switch_to_right_sheet()
+    for _ in range(2):
+        switch_to_right_sheet()
     switch_to_first_cells()
 
     # ──────── EXTRACT THE TARGET SHEET INTO A STANDALONE WORKBOOK
     select_sheet_down()
     move_or_copy_menu()
     move_or_copy_as_newbook()
-    wait_timer(CONFIG["WAIT_TIME"]["TWO_MINUTE"])
+    wait_timer(CONFIG["WAIT_TIME"]["THREE_MINUTE"])
     move_cursor_figure_eight()
     scroller_page()
 
     # ──────── SEVER ALL EXTERNAL LINKS
     switch_to_first_sheet()
     break_excel_link()
-    wait_timer(CONFIG["WAIT_TIME"]["THREE_SECOND"])
-
+    wait_timer(CONFIG["WAIT_TIME"]["FIFTEEN_SECOND"])
+    escaping()
+    
     # ──────── CAPTURE THE TABLE AS AN IMAGE
-    switch_to_first_cells()
-    switch_to_table_cells()
-    capture_table_as_picture()
-    switch_to_first_cells()
+    capturing_report_picture()
 
     # ──────── SAVE THE NEW WORKBOOK
     save_new_book()
@@ -89,9 +87,12 @@ def excel_config():
     # ──────── CLOSE THE EXPORTED WORKBOOK
     switch_to_right_sheet()
     switch_to_first_sheet()
-    closing_tab()
     wait_timer(CONFIG["WAIT_TIME"]["THREE_SECOND"])
-
+    move_cursor_figure_eight()
+    closing_tab()
+    wait_timer(CONFIG["WAIT_TIME"]["FIFTEEN_SECOND"])
+    move_cursor_figure_eight()
+    
     # ──────── SAVE AND CLOSE THE SOURCE FILE
     move_cell_horizontal()
     switch_to_first_sheet()
@@ -99,7 +100,7 @@ def excel_config():
     switch_to_right_sheet()
     switch_to_first_cells()
     save_file()
-    wait_timer(CONFIG["WAIT_TIME"]["TEN_SECOND"])
+    wait_timer(CONFIG["WAIT_TIME"]["TWENTY_SECOND"])
     closing_tab()
     wait_timer(CONFIG["WAIT_TIME"]["THREE_SECOND"])
 
@@ -179,5 +180,5 @@ if __name__ == "__main__":
     logger.info(f"[SYSTEM] TOTAL EXECUTION TIME : {execution_time}")
 
     wait_timer(CONFIG["WAIT_TIME"]["FIVE_SECOND"])
-    logger.warning("[SYSTEM] RESTARTING SCREEN KEEPER")
+    logger.info("[SYSTEM] RESTARTING SCREEN KEEPER")
     run_screen_keeper()

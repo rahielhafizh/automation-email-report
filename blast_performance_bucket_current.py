@@ -68,10 +68,7 @@ def excel_config():
     # ── CAPTURE TABLE AS PICTURE ──────────────────────────────────────────────
     move_cursor_figure_eight()
     switch_to_first_sheet()
-    switch_to_first_cells()
-    switch_to_table_cells()
-    capture_table_as_picture()
-    switch_to_first_cells()
+    capturing_report_picture()
 
     # ── SAVE NEW WORKBOOK ─────────────────────────────────────────────────────
     logger.info("[EXCEL] SAVE NEW WORKBOOK")
@@ -134,13 +131,17 @@ Asset Management Division
 Collection HO - PT Suzuki Finance Indonesia
 """
 
-    send_outlook_email(
-        outlook_recipients,
-        secondary_recipients,
-        subject_email,
-        core_email,
-        footer_template,
-    )
+    try:
+        send_outlook_email(
+            outlook_recipients,
+            secondary_recipients,
+            subject_email,
+            core_email,
+            footer_template,
+        )
+    except Exception as exc:
+        logger.error(f"[ERROR] FAILED TO SEND EMAIL : {exc}")
+        raise
 
 
 if __name__ == "__main__":
@@ -160,7 +161,6 @@ if __name__ == "__main__":
 
     # ── EXCEL PROCESSING ──────────────────────────────────────────────────────
     excel_config()
-
     wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
 
     # ── EMAIL DISPATCH ────────────────────────────────────────────────────────
@@ -173,5 +173,5 @@ if __name__ == "__main__":
     execution_time = get_execution_duration()
     logger.info(f"[SYSTEM] TOTAL EXECUTION TIME : {execution_time}")
     wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
-    logger.warning("[SYSTEM] RESTARTING SCREEN KEEPER")
+    logger.info("[SYSTEM] RESTARTING SCREEN KEEPER")
     run_screen_keeper()

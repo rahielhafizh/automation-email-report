@@ -63,10 +63,8 @@ def excel_config():
     wait_timer(CONFIG["WAIT_TIME"]["FIVE_SECOND"])
 
     # ── CAPTURE TABLE AS PICTURE ──────────────────────────────────────────────
-    switch_to_first_cells()
-    switch_to_table_cells()
-    capture_table_as_picture()
-    switch_to_first_cells()
+    capturing_report_picture()
+
 
     # ── SAVE NEW WORKBOOK ─────────────────────────────────────────────────────
     save_new_book()

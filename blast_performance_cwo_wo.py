@@ -55,10 +55,8 @@ def excel_config():
     break_excel_link()
 
     # ──────── CAPTURE THE TABLE AS AN IMAGE
-    switch_to_first_cells()
-    switch_to_table_cells()
-    capture_table_as_picture()
-    switch_to_first_cells()
+    capturing_report_picture()
+
 
     # ──────── SAVE THE NEW WORKBOOK
     save_new_book()
@@ -123,13 +121,17 @@ Collection HO - PT Suzuki Finance Indonesia
 """
 
     # ──────── DISPATCH THE EMAIL VIA OUTLOOK
-    send_outlook_email(
-        outlook_recipients,
-        secondary_recipients,
-        subject_email,
-        core_email,
-        footer_template,
-    )
+    try:
+        send_outlook_email(
+            outlook_recipients,
+            secondary_recipients,
+            subject_email,
+            core_email,
+            footer_template,
+        )
+    except Exception as exc:
+        logger.error(f"[ERROR] FAILED TO SEND EMAIL : {exc}")
+        raise
 
 
 # ───────── ENTRY POINT
@@ -157,7 +159,7 @@ if __name__ == "__main__":
     # ──────── FINALISE AND RESTORE THE ENVIRONMENT
     stop_counter()
     execution_time = get_execution_duration()
-    logger.info(f"[SYSTEM] TOTAL EXECUTION TIME: {execution_time}")
+    logger.info(f"[SYSTEM] TOTAL EXECUTION TIME : {execution_time}")
     wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
-    logger.warning("[SYSTEM] RESTARTING SCREEN KEEPER")
+    logger.info("[SYSTEM] RESTARTING SCREEN KEEPER")
     run_screen_keeper()

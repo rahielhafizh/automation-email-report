@@ -64,10 +64,7 @@ def excel_config():
     break_excel_link()
 
     # ──────── CAPTURE THE TABLE AS AN IMAGE
-    switch_to_first_cells()
-    switch_to_table_cells()
-    capture_table_as_picture()
-    switch_to_first_cells()
+    capturing_report_picture()
 
     # ──────── SAVE THE NEW WORKBOOK
     save_new_book()
@@ -184,5 +181,5 @@ if __name__ == "__main__":
     logger.info(f"[SYSTEM] TOTAL EXECUTION TIME : {execution_time}")
 
     wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
-    logger.warning("[SYSTEM] RESTARTING SCREEN KEEPER")
+    logger.info("[SYSTEM] RESTARTING SCREEN KEEPER")
     run_screen_keeper()

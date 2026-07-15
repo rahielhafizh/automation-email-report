@@ -1,9 +1,9 @@
 import os
 import pyautogui
-from datetime import datetime, timedelta
-from pynput.keyboard import Key, Controller
+from datetime import datetime
+from pynput.keyboard import Controller
 from general_task import *
-from mail.outlook_performance_mobcoll_lor import send_outlook_email
+from mail.outlook_performance_cash_in import send_outlook_email
 from services.capslock_checker import capslock_checking
 from services.config import load_config, wait_timer, logger, get_month_id
 from services.duration_counter import (
@@ -11,7 +11,8 @@ from services.duration_counter import (
     stop_counter,
     get_execution_duration,
 )
-from remover.remover_performance_mobcoll_lor import clear_submission_folder
+
+from remover.remover_performance_cash_in import clear_submission_folder
 from screen_keeper import (
     find_screen_keeper_process,
     stop_screen_keeper,
@@ -19,100 +20,109 @@ from screen_keeper import (
 )
 
 # ───────── RUNTIME INITIALISATION
+pyautogui.FAILSAFE = False
 CONFIG = load_config()
 keyboard = Controller()
 
 
 # ───────── CORE WORKFLOW
 def excel_config():
-    logger.info("[SYSTEM] MOBCOLL LOR REPORT EXCEL WORKFLOW")
+    logger.info("[SYSTEM] CASH IN REPORT EXCEL WORKFLOW")
 
     # ──────── OPEN THE SOURCE WORKBOOK
-    os.startfile(CONFIG["WORKSOURCE_MOBCOLL_LOR"])
-    wait_timer(CONFIG["WAIT_TIME"]["TWENTY_SECOND"])
+    os.startfile(CONFIG["WORKSOURCE_PERFORMANCE_CASH_IN"])
+    wait_timer(CONFIG["WAIT_TIME"]["FIFTEEN_SECOND"])
     maximize_app_window()
-    switch_to_first_sheet()
-    switch_to_first_cells()
 
     # ──────── REFRESH ALL DATA CONNECTIONS
+    switch_to_first_sheet()
     refresh_excel_data()
-    wait_timer(CONFIG["WAIT_TIME"]["TWOHALF_MINUTE"])
-    entering_operation()
+    wait_timer(CONFIG["WAIT_TIME"]["THREE_MINUTE"])
+    move_cursor_figure_eight()
+    scroller_page()
+    wait_timer(CONFIG["WAIT_TIME"]["ONE_MINUTE"])
     switch_to_first_cells()
 
     # ──────── NAVIGATE TO THE TARGET SHEET
-    for _ in range(2):
+    for _ in range(5):
         switch_to_right_sheet()
+
+    # ──────── EXTRACT THE TARGET SHEET INTO NEW WORKBOOK
     select_sheet_down()
     move_or_copy_menu()
     move_or_copy_as_newbook()
-    wait_timer(CONFIG["WAIT_TIME"]["THIRTY_SECOND"])
+    wait_timer(CONFIG["WAIT_TIME"]["FIFTEEN_SECOND"])
 
     # ──────── SEVER ALL EXTERNAL LINKS
+    switch_to_first_sheet()
     break_excel_link()
 
     # ──────── CAPTURE THE TABLE AS AN IMAGE
-    switch_to_first_sheet()
     capturing_report_picture()
 
     # ──────── SAVE THE NEW WORKBOOK
     save_new_book()
-    pyautogui.write(CONFIG["SUB_MOBCOLL_LOR"])
+    pyautogui.write(CONFIG["SUB_PERFORMANCE_CASH_IN"])
     confirm()
 
     # ──────── ASSIGN THE STANDARDISED FILENAME
-    wait_timer(CONFIG["WAIT_TIME"]["FIVE_SECOND"])
     set_new_book_name()
-    yesterday = datetime.now() - timedelta(days=1)
-    lor_day = yesterday.strftime("%d")
-    year = yesterday.strftime("%Y")
-    month_eng = yesterday.strftime("%B")
+    today = datetime.now()
+    report_day = today.strftime("%d")
+    month_eng = today.strftime("%B")
     month_idn_title = get_month_id(month_eng, case="title")
-    lor_filename = f"Summary Mobcoll LOR Periode {lor_day} {month_idn_title} {year}"
-    pyautogui.write(lor_filename, interval=0.05)
+    report_filename = (
+        f"Report Performance Cash In Today vs N-1 ({report_day} {month_idn_title})"
+    )
+    pyautogui.write(report_filename, interval=0.05)
     confirm()
-    wait_timer(CONFIG["WAIT_TIME"]["FIVE_SECOND"])
+    wait_timer(CONFIG["WAIT_TIME"]["THREE_SECOND"])
+
+    # ──────── CLOSE THE EXPORTED WORKBOOK
     closing_tab()
-    wait_timer(CONFIG["WAIT_TIME"]["FIVE_SECOND"])
+    wait_timer(CONFIG["WAIT_TIME"]["THREE_SECOND"])
 
     # ──────── SAVE AND CLOSE THE SOURCE FILE
     switch_to_first_sheet()
     switch_to_first_cells()
     save_file()
-    wait_timer(CONFIG["WAIT_TIME"]["FIVE_SECOND"])
+    wait_timer(CONFIG["WAIT_TIME"]["TEN_SECOND"])
     closing_tab()
-    wait_timer(CONFIG["WAIT_TIME"]["FIVE_SECOND"])
-
-    logger.info("[SYSTEM] MOBCOLL LOR WORKFLOW COMPLETE")
 
 
 def send_email():
     # ──────── DEFINE RECIPIENTS AND SUBJECT LINE
     outlook_recipients = ["asset.mgmt@sfi.co.id"]
     secondary_recipients = ["collho.3@sfi.co.id", "herberth.simbolon@sfi.co.id"]
-    yesterday = datetime.now() - timedelta(days=1)
-    year = yesterday.strftime("%Y")
-    month_eng = yesterday.strftime("%B")
+    today = datetime.now()
+    report_day = today.strftime("%d")
+    report_year = today.strftime("%Y")
+    month_eng = today.strftime("%B")
     month_idn_title = get_month_id(month_eng, case="title")
-    subject_email = f"Summary Update Mobcoll LOR | Periode {month_idn_title} {year}"
+
+    subject_email = (
+        f"Report Performance Cash In Today ({report_day} {month_idn_title}) vs N-1"
+    )
 
     # ──────── SET EMAIL BODY
     core_email = f"""Dear All,
 
 Dengan hormat,
-Berikut terlampir Summary Update Penugasan dan Kunjungan PIC LOR pada Periode {month_idn_title} {year}
 
-Catatan
+Berikut terlampir Report Performance Cash In Today ({report_day} {month_idn_title} {report_year}) vs N-1.
+
+Catatan:
 - Laporan ini dihasilkan secara otomatis dan disusun oleh sistem.
-Harap diperhatikan serta dapat dievaluasi kembali.
+Seluruh data harap diperhatikan dan dievaluasi kembali.
+
 """
 
     footer_template = """
 
 
 Hormat kami,
-Asset Management Division.
-Collection HO - PT Suzuki Finance Indonesia.
+Asset Management Division
+Collection HO - PT Suzuki Finance Indonesia
 """
 
     # ──────── DISPATCH THE EMAIL VIA OUTLOOK
@@ -131,17 +141,17 @@ Collection HO - PT Suzuki Finance Indonesia.
 
 # ───────── ENTRY POINT
 if __name__ == "__main__":
-    logger.info("[SYSTEM] START MOBCOLL LOR REPORT")
+    logger.info("[SYSTEM] START CASH IN REPORT")
 
     # ──────── INITIALISE THE REPORT RUN
     start_counter()
     capslock_checking()
     wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
-    clear_submission_folder(target_folder=CONFIG["SUB_MOBCOLL_LOR"])
-    wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
     find_screen_keeper_process()
     wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
     stop_screen_keeper()
+    wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
+    clear_submission_folder(target_folder=CONFIG["SUB_PERFORMANCE_CASH_IN"])
     wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
 
     # ──────── EXECUTE THE AUTOMATION WORKFLOW
@@ -149,7 +159,7 @@ if __name__ == "__main__":
     wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
 
     send_email()
-    logger.info("[SYSTEM] MOBCOLL LOR REPORT SENT")
+    logger.info("[SYSTEM] CASH IN REPORT SENT")
 
     # ──────── FINALISE AND RESTORE THE ENVIRONMENT
     stop_counter()
