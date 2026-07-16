@@ -31,11 +31,12 @@ def excel_config():
 
     # ──────── OPEN THE SOURCE WORKBOOK
     os.startfile(CONFIG["WORKSOURCE_PERFORMANCE_AR_TOD"])
-    wait_timer(CONFIG["WAIT_TIME"]["TWENTYFIVE_SECOND"])
+    wait_timer(CONFIG["WAIT_TIME"]["TWENTY_SECOND"])
     maximize_app_window()
 
     wait_timer(CONFIG["WAIT_TIME"]["FIVE_SECOND"])
-    switch_to_first_sheet()
+    for _ in range(4):
+        switch_to_first_sheet()
     switch_to_first_cells()
     move_cell_horizontal()
 
@@ -43,7 +44,7 @@ def excel_config():
     refresh_excel_data()
     wait_timer(CONFIG["WAIT_TIME"]["TWO_MINUTE"])
     move_cell_horizontal()
-    wait_timer(CONFIG["WAIT_TIME"]["ONE_MINUTE"])
+    wait_timer(CONFIG["WAIT_TIME"]["TWO_MINUTE"])
     entering_operation()
 
     # ──────── NAVIGATE TO THE TARGET SHEET
@@ -57,11 +58,23 @@ def excel_config():
     select_sheet_down()
     move_or_copy_menu()
     move_or_copy_as_newbook()
-    wait_timer(CONFIG["WAIT_TIME"]["THREE_SECOND"])
+    wait_timer(CONFIG["WAIT_TIME"]["THREEHALF_MINUTE"])
+    move_cursor_figure_eight()
+    handle_move_copy_process()
+    wait_timer(CONFIG["WAIT_TIME"]["THREEHALF_MINUTE"])
+    handle_move_copy_process()
+    move_cursor_figure_eight()
 
     # ──────── SEVER ALL EXTERNAL LINKS
     switch_to_first_sheet()
+    move_cursor_figure_eight()
     break_excel_link()
+    wait_timer(CONFIG["WAIT_TIME"]["TWO_MINUTE"])
+    handle_breaklink_process()
+    wait_timer(CONFIG["WAIT_TIME"]["TWO_MINUTE"])
+    handle_breaklink_process()
+    move_cursor_figure_eight()
+    escaping()
 
     # ──────── CAPTURE THE TABLE AS AN IMAGE
     switch_to_first_cells()
@@ -84,11 +97,12 @@ def excel_config():
     tod_report_filename = f"Summary Performance TOD {tod_report_day} {month_idn_title}"
     pyautogui.write(tod_report_filename, interval=0.05)
     confirm()
-    wait_timer(CONFIG["WAIT_TIME"]["TWENTY_SECOND"])
+    wait_timer(CONFIG["WAIT_TIME"]["THIRTY_SECOND"])
 
-    # ──────── CLOSE THE EXPORTED WORKBOOK
+    # ── CLOSE WORKBOOKS ───────────────────────────────────────────────────────
+    move_cursor_figure_eight()
     closing_tab()
-    wait_timer(CONFIG["WAIT_TIME"]["FIVE_SECOND"])
+    wait_timer(CONFIG["WAIT_TIME"]["THIRTY_SECOND"])
 
     # ──────── SAVE AND CLOSE THE SOURCE FILE
     switch_to_first_cells()

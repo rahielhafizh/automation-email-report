@@ -137,7 +137,7 @@ def close_unsave() -> None:
     wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
     logger.info("[SYSTEM] CLOSE WORKBOOK WITHOUT SAVING")
     pyautogui.hotkey("alt", "f4")
-    wait_timer(CONFIG["WAIT_TIME"]["TEN_SECOND"])
+    wait_timer(CONFIG["WAIT_TIME"]["THREE_SECOND"])
     pyautogui.hotkey("tab")
     wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
     pyautogui.hotkey("enter")
@@ -630,12 +630,12 @@ def select_sheet_down() -> None:
         pynputKeyboard.press(Key.ctrl)
         pynputKeyboard.press(Key.shift)
         pynputKeyboard.press(Key.page_down)
-        wait_timer(CONFIG["WAIT_TIME"]["HALF_SECOND"])
+        wait_timer(CONFIG["WAIT_TIME"]["TENTH_SECOND"])
         pynputKeyboard.release(Key.page_down)
         pynputKeyboard.release(Key.shift)
         pynputKeyboard.release(Key.ctrl)
-        wait_timer(CONFIG["WAIT_TIME"]["HALF_SECOND"])
-    wait_timer(CONFIG["WAIT_TIME"]["HALF_SECOND"])
+        wait_timer(CONFIG["WAIT_TIME"]["TENTH_SECOND"])
+    wait_timer(CONFIG["WAIT_TIME"]["TENTH_SECOND"])
 
 
 def select_sheet_half_down() -> None:
@@ -645,11 +645,11 @@ def select_sheet_half_down() -> None:
         pynputKeyboard.press(Key.ctrl)
         pynputKeyboard.press(Key.shift)
         pynputKeyboard.press(Key.page_down)
-        wait_timer(CONFIG["WAIT_TIME"]["HALF_SECOND"])
+        wait_timer(CONFIG["WAIT_TIME"]["TENTH_SECOND"])
         pynputKeyboard.release(Key.page_down)
         pynputKeyboard.release(Key.shift)
         pynputKeyboard.release(Key.ctrl)
-        wait_timer(CONFIG["WAIT_TIME"]["HALF_SECOND"])
+        wait_timer(CONFIG["WAIT_TIME"]["TENTH_SECOND"])
     wait_timer(CONFIG["WAIT_TIME"]["ONE_SECOND"])
 
 
@@ -658,9 +658,9 @@ def select_sheet_half_up() -> None:
     logger.info("[SYSTEM] EXTEND SELECTION UPWARD PARTIAL")
     for _ in range(5):
         pynputKeyboard.press(Key.ctrl)
-        wait_timer(CONFIG["WAIT_TIME"]["HALF_SECOND"])
+        wait_timer(CONFIG["WAIT_TIME"]["TENTH_SECOND"])
         pynputKeyboard.press(Key.shift)
-        wait_timer(CONFIG["WAIT_TIME"]["HALF_SECOND"])
+        wait_timer(CONFIG["WAIT_TIME"]["TENTH_SECOND"])
         pynputKeyboard.press(Key.page_up)
         wait_timer(CONFIG["WAIT_TIME"]["HALF_SECOND"])
         pynputKeyboard.release(Key.page_up)

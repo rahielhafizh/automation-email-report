@@ -138,7 +138,7 @@ def build_email_footer() -> List[str]:
 
 
 def format_pic_line(pic_name: str, pic_role: str, expired_date: Any) -> str:
-    return f"👮 {format_name_title_case(pic_name)}  💼 {pic_role}\n📅 Masa Berlaku SPPI : {format_date_indonesian(expired_date)}\n"
+    return f"Nama : {format_name_title_case(pic_name)}  💼 {pic_role}\n📅 Batas Masa Berlaku SPPI : {format_date_indonesian(expired_date)}\n"
 
 
 def get_email_subject(branch_name: str) -> str:

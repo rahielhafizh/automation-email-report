@@ -55,7 +55,7 @@ def excel_config():
     # ──────── EXTRACT THE TARGET SHEET INTO A STANDALONE WORKBOOK
     move_or_copy_menu()
     move_or_copy_as_newbook()
-    wait_timer(CONFIG["WAIT_TIME"]["ONE_MINUTE"])
+    wait_timer(CONFIG["WAIT_TIME"]["THIRTY_SECOND"])
 
     # ──────── SEVER ALL EXTERNAL LINKS
     break_excel_link()

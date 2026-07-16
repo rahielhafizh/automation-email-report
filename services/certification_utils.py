@@ -41,7 +41,7 @@ def format_date_indonesian(date_value: Any) -> str:
     return f"{day} {month_indonesian} {year}"
 
 
-def format_name_title_case(name: Optional[str]) -> str:
+def format_name_title_case(name: Optional[str]) -> Optional[str]:
     if not name or not isinstance(name, str):
         return name
 
@@ -136,17 +136,15 @@ def filter_expiring_certifications(
                 filtered_data.append(row)
 
     elif filter_mode == "SPECIFIC_DATE_RANGE":
-        start_date = filter_config.get("START_DATE")
-        end_date = filter_config.get("END_DATE")
+        start_date_raw = filter_config.get("START_DATE")
+        end_date_raw = filter_config.get("END_DATE")
 
-        if start_date:
-            start_date = parse_date(start_date)
-        else:
+        start_date = parse_date(start_date_raw) if start_date_raw else None
+        end_date = parse_date(end_date_raw) if end_date_raw else None
+
+        if start_date is None:
             start_date = today
-
-        if end_date:
-            end_date = parse_date(end_date)
-        else:
+        if end_date is None:
             end_date = today + timedelta(days=30)
 
         for row in rows:
@@ -214,7 +212,7 @@ def format_pic_line(pic_name: str, pic_role: str, expired_date: Any) -> str:
     pic_name_formatted = format_name_title_case(pic_name)
     expired_date_str = format_date_indonesian(expired_date)
 
-    return f"👮 {pic_name_formatted}  💼 {pic_role}\n📅 Masa Berlaku SPPI : {expired_date_str}"
+    return f"Nama : {pic_name_formatted}  💼 {pic_role}\n📅 Batas Masa Berlaku SPPI : {expired_date_str}"
 
 
 def get_email_subject(branch_name: str) -> str:

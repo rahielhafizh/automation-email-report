@@ -53,7 +53,7 @@ def excel_config():
     move_or_copy_as_newbook()
     wait_timer(CONFIG["WAIT_TIME"]["TWOHALF_MINUTE"])
     handle_move_copy_process()
-    wait_timer(CONFIG["WAIT_TIME"]["TWOHALF_MINUTE"])
+    wait_timer(CONFIG["WAIT_TIME"]["TWO_MINUTE"])
     handle_move_copy_process()
     move_cursor_figure_eight()
 

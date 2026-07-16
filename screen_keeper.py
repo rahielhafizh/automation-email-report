@@ -159,7 +159,7 @@ class ScreenKeeperService:
         listener = mouse.Listener(on_click=self.right_click)
         listener.start()
         logger.info("[SCREEN] SCREEN KEEPER STARTED")
-        logger.warning("[SCREEN] PRESS RIGHT-CLICK 3 TIMES QUICKLY TO STOP")
+        logger.warning("[SCREEN] PRESS RIGHT-CLICK 3 TIMES TO STOP")
 
         try:
             while not self.state.stop_flag:

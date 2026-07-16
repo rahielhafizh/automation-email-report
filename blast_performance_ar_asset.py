@@ -12,7 +12,7 @@ from services.duration_counter import (
     start_counter,
     stop_counter,
 )
-from mail.outlook_performance_recovery_wo import send_outlook_email
+from mail.outlook_performance_ar_asset import send_outlook_email
 from screen_keeper import (
     find_screen_keeper_process,
     stop_screen_keeper,
@@ -34,11 +34,7 @@ def excel_config():
     logger.info("[EXCEL] NAVIGATE TO TARGET SHEET")
     for _ in range(3):
         switch_to_first_sheet()
-    for _ in range(
-        
-        
-        
-        14):
+    for _ in range(14):
         switch_to_right_sheet()
 
     # ── REFRESH DATA ──────────────────────────────────────────────────────────
@@ -53,7 +49,7 @@ def excel_config():
 
     # ── COPY SHEET TO NEW WORKBOOK ────────────────────────────────────────────
     logger.info("[EXCEL] MOVE AND COPY WORKBOOK")
-    for _ in range(3):
+    for _ in range(5):
         select_sheet_down()
 
     move_or_copy_menu()
@@ -77,9 +73,9 @@ def excel_config():
     logger.info("[EXCEL] BREAK EXTERNAL LINKS")
     move_cursor_figure_eight()
     break_excel_link()
-    wait_timer(CONFIG["WAIT_TIME"]["TWOHALF_MINUTE"])
+    wait_timer(CONFIG["WAIT_TIME"]["THREE_MINUTE"])
     handle_breaklink_process()
-    wait_timer(CONFIG["WAIT_TIME"]["TWOHALF_MINUTE"])
+    wait_timer(CONFIG["WAIT_TIME"]["THREE_MINUTE"])
     handle_breaklink_process()
     move_cursor_figure_eight()
     escaping()
