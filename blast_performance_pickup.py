@@ -40,6 +40,8 @@ def excel_config():
     wait_timer(CONFIG["WAIT_TIME"]["FIFTY_SECOND"])
     entering_operation()
     switch_to_first_cells()
+    save_file()
+    wait_timer(CONFIG["WAIT_TIME"]["TEN_SECOND"])
 
     # ──────── CONVERT THE SUMMARY TABLE TO STATIC VALUES
     switch_to_last_sheet()
